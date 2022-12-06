@@ -1,0 +1,21 @@
+lockfileVersion: 5.4
+
+specifiers:
+  pathe: ^1.0.0
+  ufo: ^1.0.1
+
+dependencies:
+  pathe: 1.0.0
+
+devDependencies:
+  ufo: 1.0.1
+
+packages:
+
+  /pathe/1.0.0:
+    resolution: {integrity: sha512-nPdMG0Pd09HuSsr7QOKUXO2Jr9eqaDiZvDwdyIhNG5SHYujkQHYKDfGQkulBxvbDHz8oHLsTgKN86LSwYzSHAg==}
+    dev: false
+
+  /ufo/1.0.1:
+    resolution: {integrity: sha512-boAm74ubXHY7KJQZLlXrtMz52qFvpsbOxDcZOnw/Wf+LS4Mmyu7JxmzD4tDLtUQtmZECypJ0FrCz4QIe6dvKRA==}
+    dev: true

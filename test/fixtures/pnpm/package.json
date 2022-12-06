@@ -1,0 +1,12 @@
+{
+  "name": "fixture-pnpm",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "pathe": "^1.0.0"
+  },
+  "packageManager": "pnpm@7.18.0",
+  "devDependencies": {
+    "ufo": "^1.0.1"
+  }
+}

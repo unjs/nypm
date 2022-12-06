@@ -1,0 +1,11 @@
+{
+  "name": "fixture-default",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "pathe": "^1.0.0"
+  },
+  "devDependencies": {
+    "ufo": "^1.0.1"
+  }
+}
