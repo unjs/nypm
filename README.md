@@ -83,6 +83,7 @@ NYPM is inspired from previous attempts and projects for unifying package manage
 - [unjs/lmify](https://github.com/unjs/lmify)
 - [antfu/ni](https://github.com/antfu/ni)
 - [antfu/install-pkg](https://github.com/antfu/install-pkg)
+- [egoist/dum](https://github.com/egoist/dum)
 - [nodejs/corepack](https://github.com/nodejs/corepack)
 
 ## License
