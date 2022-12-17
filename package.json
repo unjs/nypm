@@ -29,11 +29,11 @@
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
-    "@types/node": "^18.11.15",
+    "@types/node": "^18.11.16",
     "@vitest/coverage-c8": "^0.25.8",
     "changelogen": "^0.4.0",
     "corepack": "^0.15.2",
-    "eslint": "^8.29.0",
+    "eslint": "^8.30.0",
     "eslint-config-unjs": "^0.0.3",
     "jiti": "^1.16.0",
     "pathe": "^1.0.0",
