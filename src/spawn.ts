@@ -1,10 +1,6 @@
 import { spawn } from "node:child_process";
 import { resolve } from "pathe";
-
-export interface RunCommandOptions {
-  cwd?: string;
-  silent?: boolean;
-}
+import type { RunCommandOptions } from "./types";
 
 export function runCorepack (pm: string, argv: string[], options: RunCommandOptions = {}): Promise<true> {
   return runCommand("corepack", [pm, ...argv], options);

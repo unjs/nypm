@@ -1,7 +1,8 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import { join, normalize } from "pathe";
-import type { PackageManagerName } from "./types";
+import { join } from "pathe";
+import { _findup } from "./_utils";
+import type { PackageManagerName, DetectPackageManagerOptions } from "./types";
 
 const packageManagerLocks: Record<string, PackageManagerName> = {
   "yarn.lock": "yarn",
@@ -9,13 +10,8 @@ const packageManagerLocks: Record<string, PackageManagerName> = {
   "pnpm-lock.yaml": "pnpm"
 };
 
-export interface DetectPackageManagerOptions {
-  ignoreLockFile?: boolean;
-  ignorePackageJSON?: boolean;
-}
-
 export async function detectPackageManager (cwd: string, options: DetectPackageManagerOptions = {}): Promise<{ name: PackageManagerName, version?: string }> {
-  const detected = await findup(cwd, async (path) => {
+  const detected = await _findup(cwd, async (path) => {
     if (!options.ignorePackageJSON) {
       const packageJSONPath = join(path, "package.json");
       if (existsSync(packageJSONPath)) {
@@ -34,21 +30,10 @@ export async function detectPackageManager (cwd: string, options: DetectPackageM
       }
     }
   });
+
   return {
     name: "npm",
     version: "latest", // TODO
     ...detected
   };
-}
-
-async function findup<T> (cwd: string, match: (path: string) => T | Promise<T>): Promise<T | undefined> {
-  const segments = normalize(cwd).split("/");
-  while (segments.length > 0) {
-    const path = segments.join("/");
-    const result = await match(path);
-    if (result) {
-      return result;
-    }
-    segments.pop();
-  }
 }
