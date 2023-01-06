@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { expect, it, describe, vi } from "vitest";
+import { expect, it, describe } from "vitest";
 import {
   detectPackageManager,
   addDependency,
