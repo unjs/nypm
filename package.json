@@ -38,10 +38,10 @@
     "jiti": "^1.16.2",
     "pathe": "^1.0.0",
     "typescript": "^4.9.4",
-    "unbuild": "^1.0.2",
+    "unbuild": "^1.1.1",
     "vitest": "^0.27.1"
   },
-  "packageManager": "pnpm@7.24.3",
+  "packageManager": "pnpm@7.25.0",
   "engines": {
     "node": "^14.16.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   }
