@@ -21,7 +21,7 @@ describe("detectPackageManager", () => {
   it("should return default", async () => {
     const fixtureDirectory = resolveFixtureDirectory("default");
     const detected = await detectPackageManager(fixtureDirectory, { ignoreLockFile: true, ignorePackageJSON: true });
-    expect(detected).toMatchObject({ name: "npm", version: expect.any(String) });
+    expect(detected).toMatchObject({ name: 'npm', command: 'npm', lockFile: 'package-lock.json', version: expect.any(String) });
   });
 });
 
