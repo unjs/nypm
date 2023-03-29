@@ -17,10 +17,12 @@ const fixtures = [
   {
     name: "yarn-classic",
     pm: "yarn",
+    majorVersion: "1",
   },
   {
     name: "yarn-berry",
     pm: "yarn",
+    majorVersion: "3",
   },
 ];
 
@@ -40,7 +42,7 @@ describe("detectPackageManager", () => {
         });
         expect(detected).toMatchObject({
           name: fixture.pm,
-          version: expect.any(String),
+          majorVersion: fixture.majorVersion || expect.any(String),
         });
       });
     });

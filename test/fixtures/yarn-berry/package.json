@@ -5,7 +5,7 @@
   "dependencies": {
     "pathe": "^1.1.0"
   },
-  "packageManager": "yarn@1.22.19",
+  "packageManager": "yarn@3.5.0",
   "devDependencies": {
     "ufo": "^1.1.1"
   }

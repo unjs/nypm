@@ -21,7 +21,7 @@ const packageManagers: PackageManager[] = [
   {
     name: "yarn",
     command: "yarn",
-    majorVersion: "2.0.0",
+    majorVersion: "3.0.0",
     lockFile: "yarn.lock",
     files: [".yarnrc.yml"],
   },
