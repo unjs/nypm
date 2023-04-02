@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { expect, it, describe } from "vitest";
-import { detectPackageManager, addDependency } from "../src";
+import { detectPackageManager, addDependency, getPackageInfo } from "../src";
 
 const resolveFixtureDirectory = (name: string) =>
   fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
@@ -23,6 +23,13 @@ const fixtures = [
     pm: "yarn",
   },
 ];
+
+describe("getPackageInfo", () => {
+  it("should get package info", async () => {
+    const pkg = await getPackageInfo("pathe");
+    expect(pkg._id).toBe("pathe");
+  });
+})
 
 describe("detectPackageManager", () => {
   for (const fixture of fixtures) {

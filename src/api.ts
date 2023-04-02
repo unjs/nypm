@@ -1,6 +1,7 @@
+import { ofetch } from 'ofetch'
 import { detectPackageManager } from "./detect";
 import { runCorepack } from "./spawn";
-import { PackageManager } from "./types";
+import { Package, PackageManager } from "./types";
 
 export interface APICallOptions {
   cwd: string;
@@ -15,6 +16,16 @@ export async function addDependency (name: string, _options: AddDependencyOption
   const argv = [options.dev ? "-D" : ""].filter(Boolean);
   await runCorepack(options.packageManager.command, [command, ...argv, name], { cwd: options.cwd, silent: options.silent });
   return {};
+}
+
+export async function getPackageInfo (name: string): Promise<Package> {
+  const pkg = await ofetch(`https://registry.npmjs.org/${name}`, {
+    onResponseError({ request, response }) {
+      console.error('Could not fetch package: ' + name + "\n", request, response.status)
+    }
+  });
+
+  return pkg;
 }
 
 async function _resolveOptions<T extends APICallOptions> (options: Partial<T> = {}): Promise<T> {
