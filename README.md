@@ -61,10 +61,20 @@ Import:
 
 ```js
 // ESM
-import { detectPackageManager, addDependency } from "nypm";
+import {
+  detectPackageManager,
+  addDependency,
+  addDevDependency,
+  removeDependendency,
+} from "nypm";
 
 // CommonJS
-const { detectPackageManager, addDependency } = require("nypm");
+const {
+  detectPackageManager,
+  addDependency,
+  addDevDependency,
+  removeDependendency,
+} = require("nypm");
 ```
 
 ## 💻 Development

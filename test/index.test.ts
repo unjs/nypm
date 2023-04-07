@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { expect, it, describe } from "vitest";
-import { detectPackageManager, addDependency } from "../src";
+import { detectPackageManager, addDependency, removeDependency } from "../src";
 
 const resolveFixtureDirectory = (name: string) =>
   fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
@@ -56,6 +56,14 @@ describe("api", () => {
       it("addDependency", async () => {
         expect(
           await addDependency("pathe", {
+            cwd: fixtureDirectory,
+            silent: false,
+          })
+        ).toBeTruthy();
+      }, 30_000);
+      it("removeDependency", async () => {
+        expect(
+          await removeDependency("pathe", {
             cwd: fixtureDirectory,
             silent: false,
           })

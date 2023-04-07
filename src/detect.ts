@@ -27,10 +27,21 @@ const packageManagers: PackageManager[] = [
   },
 ];
 
-export interface DetectPackageManagerOptions {
+export type DetectPackageManagerOptions = {
+  /**
+   * Whether to ignore the lock file
+   *
+   * @default false
+   */
   ignoreLockFile?: boolean;
+
+  /**
+   * Whether to ignore the package.json file
+   *
+   * @default false
+   */
   ignorePackageJSON?: boolean;
-}
+};
 
 export async function detectPackageManager(
   cwd: string,
