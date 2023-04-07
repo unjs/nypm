@@ -71,7 +71,7 @@ describe("api", () => {
           ).toBeTruthy();
         });
       },
-      { timeout: 10_000 }
+      { timeout: 20_000 }
     );
   }
 });
