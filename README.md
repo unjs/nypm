@@ -19,7 +19,7 @@
 
 ✅ **Auto-installs and use exactly expected version** of package manager using [nodejs/corepack](https://github.com/nodejs/corepack)
 
-✅ **Zero dependency** and low overhead implementation
+✅ **Minimal** implementation
 
 nypm, detects package manager type and version and converts command into package manager CLI arguments. It then uses corepack to execute package manager's command (and download it if necessary).
 
@@ -61,10 +61,10 @@ Import:
 
 ```js
 // ESM
-import { detectPackageManager, addDependency } from 'nypm'
+import { detectPackageManager, addDependency } from "nypm";
 
 // CommonJS
-const { detectPackageManager, addDependency } = require('nypm')
+const { detectPackageManager, addDependency } = require("nypm");
 ```
 
 ## 💻 Development
@@ -93,14 +93,12 @@ Made with 💛
 Published under [MIT License](./LICENSE).
 
 <!-- Badges -->
+
 [npm-version-src]: https://img.shields.io/npm/v/nypm?style=flat-square
 [npm-version-href]: https://npmjs.com/package/nypm
-
 [npm-downloads-src]: https://img.shields.io/npm/dm/nypm?style=flat-square
 [npm-downloads-href]: https://npmjs.com/package/nypm
-
 [github-actions-src]: https://img.shields.io/github/workflow/status/unjs/nypm/ci/main?style=flat-square
 [github-actions-href]: https://github.com/unjs/nypm/actions?query=workflow%3Aci
-
 [codecov-src]: https://img.shields.io/codecov/c/gh/unjs/nypm/main?style=flat-square
 [codecov-href]: https://codecov.io/gh/unjs/nypm
