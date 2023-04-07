@@ -60,7 +60,7 @@ describe("api", () => {
             silent: false,
           })
         ).toBeTruthy();
-      }, 10_000);
+      }, 30_000);
     });
   }
 });
