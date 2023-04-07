@@ -55,10 +55,14 @@ describe("api", () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
       it("addDependency", async () => {
         expect(
-          await addDependency("pathe", { cwd: fixtureDirectory })
+          await addDependency("pathe", { cwd: fixtureDirectory, silent: false })
         ).toBeTruthy();
         expect(
-          await addDependency("ufo", { cwd: fixtureDirectory, dev: true })
+          await addDependency("ufo", {
+            cwd: fixtureDirectory,
+            dev: true,
+            silent: false,
+          })
         ).toBeTruthy();
       });
     });
