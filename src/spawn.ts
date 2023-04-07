@@ -6,21 +6,30 @@ export interface RunCommandOptions {
   silent?: boolean;
 }
 
-export function runCorepack (pm: string, argv: string[], options: RunCommandOptions = {}): Promise<true> {
+export function runCorepack(
+  pm: string,
+  argv: string[],
+  options: RunCommandOptions = {}
+): Promise<boolean> {
+  if (pm === "npm") {
+    return runCommand("npm", argv, options);
+  }
   return runCommand("corepack", [pm, ...argv], options);
 }
 
-function runCommand (command: string, argv: string[], options: RunCommandOptions = {}): Promise<true> {
-  const child = spawn(command, argv, {
-    cwd: resolve(options.cwd || process.cwd()),
-    stdio: options.silent ? "ignore" : "inherit"
-  });
-  return new Promise((resolve, reject) => {
-    child.on("exit", (code) => {
-      if (code !== 0) {
-        return reject(new Error(`${command} ${argv.join(" ")} failed (exit code: ${code})`));
-      }
-      return resolve(true);
+async function runCommand(
+  command: string,
+  argv: string[],
+  options: RunCommandOptions = {}
+): Promise<boolean> {
+  const { execa } = await import("execa");
+  try {
+    await execa(command, argv, {
+      cwd: resolve(options.cwd || process.cwd()),
+      stdio: options.silent ? "ignore" : "inherit",
     });
-  });
+  } catch {
+    return false;
+  }
+  return true;
 }
