@@ -11,6 +11,9 @@ export function runCorepack(
   argv: string[],
   options: RunCommandOptions = {}
 ): Promise<boolean> {
+  if (pm === "npm") {
+    return runCommand("npm", argv, options);
+  }
   return runCommand("corepack", [pm, ...argv], options);
 }
 
