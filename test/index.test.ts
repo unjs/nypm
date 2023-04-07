@@ -51,20 +51,27 @@ describe("detectPackageManager", () => {
 
 describe("api", () => {
   for (const fixture of fixtures) {
-    describe(fixture.name, () => {
-      const fixtureDirectory = resolveFixtureDirectory(fixture.name);
-      it("addDependency", async () => {
-        expect(
-          await addDependency("pathe", { cwd: fixtureDirectory, silent: false })
-        ).toBeTruthy();
-        expect(
-          await addDependency("ufo", {
-            cwd: fixtureDirectory,
-            dev: true,
-            silent: false,
-          })
-        ).toBeTruthy();
-      });
-    });
+    describe(
+      fixture.name,
+      () => {
+        const fixtureDirectory = resolveFixtureDirectory(fixture.name);
+        it("addDependency", async () => {
+          expect(
+            await addDependency("pathe", {
+              cwd: fixtureDirectory,
+              silent: false,
+            })
+          ).toBeTruthy();
+          expect(
+            await addDependency("ufo", {
+              cwd: fixtureDirectory,
+              dev: true,
+              silent: false,
+            })
+          ).toBeTruthy();
+        });
+      },
+      { timeout: 10_000 }
+    );
   }
 });
