@@ -1,9 +1,8 @@
 {
-  "name": "fixture-yarn",
   "private": true,
   "version": "0.0.0",
-  "workspaces": [
-    "packages/*"
-  ],
+  "devDependencies": {
+    "ufo": "^1.1.1"
+  },
   "packageManager": "yarn@3.5.0"
 }

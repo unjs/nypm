@@ -19,15 +19,23 @@ export type OperationOptions = {
 
   /**
    * The package manager info to use (auto detected)
-   *
    */
   packageManager?: PackageManager;
 
   /**
    * Whether to add the dependency as a dev dependency
+   *
    * @default false
    */
   dev?: boolean;
+
+  /**
+   * Whether to use the workspace package manager
+   * Only works only with yarn@2+, pnpm and npm
+   *
+   * @default false
+   */
+  workspace?: boolean;
 };
 
 /**
@@ -44,6 +52,9 @@ export async function addDependency(
 
   const args = [
     options.packageManager.name === "npm" ? "install" : "add",
+    options.workspace
+      ? (options.packageManager.name === "yarn" ? "-W" : "-w")
+    : "",
     options.dev ? "-D" : "",
     name,
   ].filter(Boolean);
@@ -76,7 +87,7 @@ export async function addDevDependency(
  */
 export async function removeDependency(
   name: string,
-  _options: OperationOptions = {}
+  _options: Exclude<OperationOptions, "workspace"> = {}
 ) {
   const options = await _resolveOptions(_options);
 
