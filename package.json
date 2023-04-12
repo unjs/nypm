@@ -24,7 +24,7 @@
     "dev": "vitest dev",
     "lint": "eslint --ext .ts,.js,.mjs,.cjs .",
     "prepack": "unbuild",
-    "release": "npm version patch && npm publish --tag 0.1.x",
+    "release": "npm version patch && git push --follow-tags && npm publish --tag 0.1.x",
     "test": "pnpm lint && vitest run --coverage"
   },
   "dependencies": {
