@@ -1,9 +1,9 @@
 {
-  "name": "fixture-npm",
+  "name": "workspace-a",
   "private": true,
   "version": "0.0.0",
-  "workspaces": [
-    "packages/workspace-a"
-  ],
+  "devDependencies": {
+    "ufo": "^1.1.1"
+  },
   "packageManager": "npm@9.1.3"
 }

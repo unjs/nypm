@@ -58,6 +58,7 @@ describe("api", () => {
           await addDependency("pathe", {
             cwd: fixtureDirectory,
             silent: false,
+            workspace: true,
           })
         ).toBeTruthy();
       }, 30_000);

@@ -9,3 +9,9 @@ __metadata:
   resolution: "fixture-yarn@workspace:."
   languageName: unknown
   linkType: soft
+
+"workspace-a-2ddc4d@workspace:packages/workspace-a":
+  version: 0.0.0-use.local
+  resolution: "workspace-a-2ddc4d@workspace:packages/workspace-a"
+  languageName: unknown
+  linkType: soft
