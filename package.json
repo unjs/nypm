@@ -28,7 +28,8 @@
     "test": "pnpm lint && vitest run --coverage"
   },
   "dependencies": {
-    "execa": "^7.1.1"
+    "execa": "^7.1.1",
+    "sort-package-json": "^2.4.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",

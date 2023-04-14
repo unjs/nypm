@@ -1,6 +1,8 @@
 import { fileURLToPath } from "node:url";
-import { expect, it, describe } from "vitest";
-import { detectPackageManager, addDependency, removeDependency } from "../src";
+import * as path from "node:path";
+import * as fs from "node:fs";
+import { expect, it, describe, beforeAll, afterAll } from "vitest";
+import { detectPackageManager, addDependency, removeDependency, sortPackageJSON, } from "../src";
 
 const resolveFixtureDirectory = (name: string) =>
   fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
@@ -72,4 +74,33 @@ describe("api", () => {
       }, 30_000);
     });
   }
+});
+
+describe("sortDependencies", () => {
+    const fixtureDirectory = resolveFixtureDirectory("sort");
+    const packageJsonPath = path.join(fixtureDirectory, "package.json");
+    const backupPackageJsonPath = path.join(fixtureDirectory, "package.json.bak");
+
+    beforeAll(() => {
+        fs.copyFileSync(packageJsonPath, backupPackageJsonPath);
+    });
+
+    it("should sort dependencies", () => {
+        const expectedPackageJson = {
+            name: "not-sorted-project",
+            version: "1.0.0",
+            dependencies: {
+                "sort-object-keys": "1.0.0",
+                "sort-package-json": "1.0.0"
+            }
+        };
+        expect(sortPackageJSON(packageJsonPath)).toBeTruthy();
+
+        const data = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        expect(data).toStrictEqual(expectedPackageJson);
+    }, 30_000);
+
+    afterAll(() => {
+        fs.renameSync(backupPackageJsonPath, packageJsonPath);
+    });
 });
