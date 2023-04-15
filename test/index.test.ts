@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import * as path from "node:path";
-import * as fs from "node:fs";
+import * as fs from "node:fs/promises";
 import { expect, it, describe, beforeAll, afterAll } from "vitest";
 import { detectPackageManager, addDependency, removeDependency, sortPackageJSON, } from "../src";
 
@@ -81,11 +81,11 @@ describe("sortDependencies", () => {
     const packageJsonPath = path.join(fixtureDirectory, "package.json");
     const backupPackageJsonPath = path.join(fixtureDirectory, "package.json.bak");
 
-    beforeAll(() => {
-        fs.copyFileSync(packageJsonPath, backupPackageJsonPath);
+    beforeAll(async () => {
+        await fs.copyFile(packageJsonPath, backupPackageJsonPath);
     });
 
-    it("should sort dependencies", () => {
+    it("should sort dependencies", async () => {
         const expectedPackageJson = {
             name: "not-sorted-project",
             version: "1.0.0",
@@ -94,13 +94,13 @@ describe("sortDependencies", () => {
                 "sort-package-json": "1.0.0"
             }
         };
-        expect(sortPackageJSON(packageJsonPath)).toBeTruthy();
+        expect(await sortPackageJSON(packageJsonPath)).toBeTruthy();
 
-        const data = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+        const data = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
         expect(data).toStrictEqual(expectedPackageJson);
     }, 30_000);
 
-    afterAll(() => {
-        fs.renameSync(backupPackageJsonPath, packageJsonPath);
+    afterAll(async () => {
+        await fs.rename(backupPackageJsonPath, packageJsonPath);
     });
 });

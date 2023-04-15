@@ -1,4 +1,4 @@
-import * as fs from "node:fs";
+import * as fs from "node:fs/promises";
 import  { sortPackageJson } from 'sort-package-json'
 import { detectPackageManager } from "./detect";
 import { runCorepack } from "./spawn";
@@ -126,9 +126,10 @@ async function _resolveOptions(
  *
  * @param path - Path to the package.json file
  */
-export function sortPackageJSON(path: string ) {
-  const sortedJson = sortPackageJson(fs.readFileSync(path, 'utf8'))
-  fs.writeFileSync(path, sortedJson, 'utf8')
+export async function sortPackageJSON(path: string) {
+  const content= await fs.readFile(path, 'utf8')
+  const sortedJson = sortPackageJson(content)
+  await fs.writeFile(path, sortedJson, 'utf8')
   return {};
 }
 
