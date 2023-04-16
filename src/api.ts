@@ -53,8 +53,10 @@ export async function addDependency(
   const args = [
     options.packageManager.name === "npm" ? "install" : "add",
     options.workspace
-      ? (options.packageManager.name === "yarn" ? "-W" : "-w")
-    : "",
+      ? (options.packageManager.name === "yarn"
+        ? "-W"
+        : "-w")
+      : "",
     options.dev ? "-D" : "",
     name,
   ].filter(Boolean);
@@ -102,6 +104,18 @@ export async function removeDependency(
     silent: options.silent,
   });
   return {};
+}
+
+export async function ensurePackageInstalled(
+  name: string,
+  _options: OperationOptions = {}
+) {
+  try {
+    await addDependency(name, _options);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 type NonPartial<T> = { [P in keyof T]-?: T[P] };
