@@ -31,11 +31,11 @@
     "execa": "^7.1.1"
   },
   "devDependencies": {
-    "@types/node": "^18.15.12",
+    "@types/node": "^18.16.1",
     "@vitest/coverage-c8": "^0.30.1",
     "changelogen": "^0.5.3",
     "corepack": "^0.17.2",
-    "eslint": "^8.38.0",
+    "eslint": "^8.39.0",
     "eslint-config-unjs": "^0.1.0",
     "jiti": "^1.18.2",
     "pathe": "^1.1.0",
