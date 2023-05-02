@@ -31,7 +31,7 @@
     "execa": "^7.1.1"
   },
   "devDependencies": {
-    "@types/node": "^18.16.2",
+    "@types/node": "^18.16.3",
     "@vitest/coverage-c8": "^0.30.1",
     "changelogen": "^0.5.3",
     "corepack": "^0.17.2",
@@ -43,7 +43,7 @@
     "unbuild": "^1.2.1",
     "vitest": "^0.30.1"
   },
-  "packageManager": "pnpm@8.3.1",
+  "packageManager": "pnpm@8.4.0",
   "engines": {
     "node": "^14.16.0 || ^16.10.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   }
