@@ -1,6 +1,7 @@
-lockfileVersion: "6.0"
+lockfileVersion: '6.0'
 
 importers:
+
   .: {}
 
   packages/workspace-a:
@@ -10,9 +11,7 @@ importers:
         version: 1.1.1
 
 packages:
+
   /ufo@1.1.1:
-    resolution:
-      {
-        integrity: sha512-MvlCc4GHrmZdAllBc0iUDowff36Q9Ndw/UzqmEKyrfSzokTd9ZCy1i+IIk5hrYKkjoYVQyNbrw7/F8XJ2rEwTg==,
-      }
+    resolution: {integrity: sha512-MvlCc4GHrmZdAllBc0iUDowff36Q9Ndw/UzqmEKyrfSzokTd9ZCy1i+IIk5hrYKkjoYVQyNbrw7/F8XJ2rEwTg==}
     dev: true
