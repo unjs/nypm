@@ -53,8 +53,10 @@ export async function addDependency(
   const args = [
     options.packageManager.name === "npm" ? "install" : "add",
     options.workspace
-      ? (options.packageManager.name === "yarn" ? "-W" : "-w")
-    : "",
+      ? options.packageManager.name === "yarn" // eslint-disable-line unicorn/no-nested-ternary
+        ? "-W"
+        : "-w"
+      : "",
     options.dev ? "-D" : "",
     name,
   ].filter(Boolean);
