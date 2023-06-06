@@ -1,6 +1,27 @@
 # Changelog
 
 
+## v0.2.1
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.2.0...v0.2.1)
+
+
+### 🩹 Fixes
+
+  - **pkg:** Allow installing in node 20 ([#67](https://github.com/unjs/nypm/pull/67))
+  - **pkg:** Simplify upper node version constraint ([#70](https://github.com/unjs/nypm/pull/70))
+
+### 🏡 Chore
+
+  - Update dev deps ([e975b93](https://github.com/unjs/nypm/commit/e975b93))
+  - Format with prettier ([b5d55ff](https://github.com/unjs/nypm/commit/b5d55ff))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Damian Głowala 
+- Daniel Roe <daniel@roe.dev>
+
 ## v0.2.0
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.1.0...v0.2.0)
