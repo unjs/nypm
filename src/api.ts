@@ -4,34 +4,34 @@ import { PackageManager } from "./types";
 
 export type OperationOptions = {
   /**
-   * The directory to run the command in
+   * The directory to run the command in.
    *
    * @default process.cwd()
    */
   cwd?: string;
 
   /**
-   * Whether to run the command in silent mode
+   * Whether to run the command in silent mode.
    *
    * @default false
    */
   silent?: boolean;
 
   /**
-   * The package manager info to use (auto detected)
+   * The package manager info to use (auto-detected).
    */
   packageManager?: PackageManager;
 
   /**
-   * Whether to add the dependency as a dev dependency
+   * Whether to add the dependency as dev dependency.
    *
    * @default false
    */
   dev?: boolean;
 
   /**
-   * Whether to use the workspace package manager
-   * Only works only with yarn@2+, pnpm and npm
+   * Whether to use the workspace package manager.
+   * Works only with yarn@2+, pnpm and npm.
    *
    * @default false
    */
@@ -39,10 +39,26 @@ export type OperationOptions = {
 };
 
 /**
- * Add Dependency to the project
+ * Installs project dependencies.
  *
- * @param name- Name of the dependency to add
- * @param _options - Options to pass to the API call
+ * @param _options - Options to pass to the API call.
+ */
+export async function installDependencies(
+  _options: Exclude<OperationOptions, "dev" | "workspace"> = {}
+) {
+  const options = await _resolveOptions(_options);
+
+  return await runCorepack(options.packageManager.command, ["install"], {
+    cwd: options.cwd,
+    silent: options.silent,
+  });
+}
+
+/**
+ * Adds dependency to the project.
+ *
+ * @param name - Name of the dependency to add.
+ * @param _options - Options to pass to the API call.
  */
 export async function addDependency(
   name: string,
@@ -69,10 +85,10 @@ export async function addDependency(
 }
 
 /**
- * Add a dev dependency to the project
+ * Adds dev dependency to the project.
  *
- * @param name - Name of the dependency to add
- * @param _options - Options to pass to the API call
+ * @param name - Name of the dependency to add.
+ * @param _options - Options to pass to the API call.
  */
 export async function addDevDependency(
   name: string,
@@ -82,10 +98,10 @@ export async function addDevDependency(
 }
 
 /**
- * This function removes a dependency from the project
+ * Removes dependency from the project.
  *
- * @param name - Name of the dependency to remove
- * @param _options - Options to pass to the API call
+ * @param name - Name of the dependency to remove.
+ * @param _options - Options to pass to the API call.
  */
 export async function removeDependency(
   name: string,
