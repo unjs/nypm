@@ -44,7 +44,7 @@ export type OperationOptions = {
  * @param _options - Options to pass to the API call.
  */
 export async function installDependencies(
-  _options: Exclude<OperationOptions, "dev" | "workspace"> = {}
+  _options: Omit<OperationOptions, "dev" | "workspace"> = {}
 ) {
   const options = await _resolveOptions(_options);
 
@@ -92,7 +92,7 @@ export async function addDependency(
  */
 export async function addDevDependency(
   name: string,
-  _options: Exclude<OperationOptions, "dev"> = {}
+  _options: Omit<OperationOptions, "dev"> = {}
 ) {
   return await addDependency(name, { ..._options, dev: true });
 }
@@ -105,7 +105,7 @@ export async function addDevDependency(
  */
 export async function removeDependency(
   name: string,
-  _options: Exclude<OperationOptions, "workspace"> = {}
+  _options: Omit<OperationOptions, "workspace"> = {}
 ) {
   const options = await _resolveOptions(_options);
 
