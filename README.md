@@ -50,11 +50,11 @@ Install package:
 # npm
 npm install nypm
 
-# yarn
-yarn add nypm
-
 # pnpm
 pnpm install nypm
+
+# yarn
+yarn add nypm
 ```
 
 Import:
@@ -63,6 +63,7 @@ Import:
 // ESM
 import {
   detectPackageManager,
+  installDependencies,
   addDependency,
   addDevDependency,
   removeDependendency,
@@ -71,6 +72,7 @@ import {
 // CommonJS
 const {
   detectPackageManager,
+  installDependencies,
   addDependency,
   addDevDependency,
   removeDependendency,
