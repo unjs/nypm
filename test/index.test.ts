@@ -1,6 +1,11 @@
 import { fileURLToPath } from "node:url";
 import { expect, it, describe } from "vitest";
-import { detectPackageManager, addDependency, removeDependency } from "../src";
+import {
+  detectPackageManager,
+  addDependency,
+  removeDependency,
+  installDependencies,
+} from "../src";
 
 const resolveFixtureDirectory = (name: string) =>
   fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
@@ -30,12 +35,14 @@ describe("detectPackageManager", () => {
   for (const fixture of fixtures) {
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
+
       it("should detect with lock file", async () => {
         const detected = await detectPackageManager(fixtureDirectory, {
           ignorePackageJSON: true,
         });
         expect(detected).toMatchObject({ name: fixture.pm });
       });
+
       it("should detect with package.json", async () => {
         const detected = await detectPackageManager(fixtureDirectory, {
           ignoreLockFile: true,
@@ -53,6 +60,16 @@ describe("api", () => {
   for (const fixture of fixtures) {
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
+
+      it("installDependencies", async () => {
+        expect(
+          await installDependencies({
+            cwd: fixtureDirectory,
+            silent: false,
+          })
+        ).toBeTruthy();
+      }, 30_000);
+
       it("addDependency", async () => {
         expect(
           await addDependency("pathe", {
@@ -62,6 +79,7 @@ describe("api", () => {
           })
         ).toBeTruthy();
       }, 30_000);
+
       it("removeDependency", async () => {
         expect(
           await removeDependency("pathe", {
