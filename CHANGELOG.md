@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v0.2.2
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.2.1...v0.2.2)
+
+
+### 🚀 Enhancements
+
+  - Allow installing project dependencies ([#72](https://github.com/unjs/nypm/pull/72))
+
+### 🏡 Chore
+
+  - Update lockfile ([3c915d0](https://github.com/unjs/nypm/commit/3c915d0))
+  - Update dependencies ([7e045be](https://github.com/unjs/nypm/commit/7e045be))
+
+### ❤️  Contributors
+
+- Damian Głowala 
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.2.1
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.2.0...v0.2.1)
