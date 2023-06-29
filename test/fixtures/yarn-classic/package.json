@@ -1,10 +1,6 @@
 {
-  "name": "fixture-yarn",
+  "name": "fixture-yarn-classic",
   "private": true,
-  "version": "0.0.0",
-  "dependencies": {},
   "packageManager": "yarn@1.22.19",
-  "devDependencies": {
-    "ufo": "^1.1.1"
-  }
+  "dependencies": {}
 }

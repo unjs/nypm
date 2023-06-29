@@ -1,6 +1,5 @@
 {
   "name": "fixture-pnpm",
   "private": true,
-  "version": "0.0.0",
-  "packageManager": "pnpm@8.1.1"
+  "packageManager": "pnpm@8.6.5"
 }

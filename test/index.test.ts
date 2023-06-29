@@ -1,11 +1,7 @@
 import { fileURLToPath } from "node:url";
-import { expect, it, describe } from "vitest";
-import {
-  detectPackageManager,
-  addDependency,
-  removeDependency,
-  installDependencies,
-} from "../src";
+import { expect, it, describe, vi } from "vitest";
+import { installDependencies, addDependency, removeDependency } from "../src";
+import { detectPackageManager } from "../src/utils/detect-package-manager";
 
 const resolveFixtureDirectory = (name: string) =>
   fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
@@ -40,6 +36,7 @@ describe("detectPackageManager", () => {
         const detected = await detectPackageManager(fixtureDirectory, {
           ignorePackageJSON: true,
         });
+
         expect(detected).toMatchObject({ name: fixture.pm });
       });
 
@@ -47,6 +44,7 @@ describe("detectPackageManager", () => {
         const detected = await detectPackageManager(fixtureDirectory, {
           ignoreLockFile: true,
         });
+
         expect(detected).toMatchObject({
           name: fixture.pm,
           majorVersion: fixture.majorVersion || expect.any(String),
@@ -62,31 +60,38 @@ describe("api", () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
 
       it("installDependencies", async () => {
-        expect(
-          await installDependencies({
-            cwd: fixtureDirectory,
-            silent: false,
-          })
-        ).toBeTruthy();
+        const installDependenciesSpy = vi.fn(installDependencies);
+
+        await installDependenciesSpy({
+          cwd: fixtureDirectory,
+          silent: false,
+        });
+
+        expect(installDependenciesSpy).toHaveReturned();
       }, 30_000);
 
       it("addDependency", async () => {
-        expect(
-          await addDependency("pathe", {
-            cwd: fixtureDirectory,
-            silent: false,
-            workspace: true,
-          })
-        ).toBeTruthy();
+        const addDependencySpy = vi.fn(addDependency);
+
+        await addDependencySpy("pathe", {
+          cwd: fixtureDirectory,
+          silent: false,
+          workspace: "workspace-a",
+        });
+
+        expect(addDependencySpy).toHaveReturned();
       }, 30_000);
 
       it("removeDependency", async () => {
-        expect(
-          await removeDependency("pathe", {
-            cwd: fixtureDirectory,
-            silent: false,
-          })
-        ).toBeTruthy();
+        const removeDependencySpy = vi.fn(removeDependency);
+
+        await removeDependencySpy("pathe", {
+          cwd: fixtureDirectory,
+          silent: false,
+          workspace: "workspace-a",
+        });
+
+        expect(removeDependencySpy).toHaveReturned();
       }, 30_000);
     });
   }

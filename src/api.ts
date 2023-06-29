@@ -1,6 +1,7 @@
-import { detectPackageManager } from "./detect";
-import { runCorepack } from "./spawn";
-import { PackageManager } from "./types";
+import type { PackageManager } from "./types";
+import { executeCommand } from "./utils/execute-command";
+import { resolveOperationOptions } from "./utils/resolve-operation-options";
+import { getWorkspaceArgs } from "./utils/get-workspace-args";
 
 export type OperationOptions = {
   /**
@@ -30,27 +31,25 @@ export type OperationOptions = {
   dev?: boolean;
 
   /**
-   * Whether to use the workspace package manager.
+   * The name of the workspace to use.
    * Works only with yarn@2+, pnpm and npm.
-   *
-   * @default false
    */
-  workspace?: boolean;
+  workspace?: string;
 };
 
 /**
  * Installs project dependencies.
  *
- * @param _options - Options to pass to the API call.
+ * @param options - Options to pass to the API call.
  */
 export async function installDependencies(
-  _options: Omit<OperationOptions, "dev" | "workspace"> = {}
+  options: Partial<Omit<OperationOptions, "dev" | "workspace">> = {}
 ) {
-  const options = await _resolveOptions(_options);
+  const resolvedOptions = await resolveOperationOptions(options);
 
-  return await runCorepack(options.packageManager.command, ["install"], {
-    cwd: options.cwd,
-    silent: options.silent,
+  await executeCommand(resolvedOptions.packageManager.command, ["install"], {
+    cwd: resolvedOptions.cwd,
+    silent: resolvedOptions.silent,
   });
 }
 
@@ -62,26 +61,21 @@ export async function installDependencies(
  */
 export async function addDependency(
   name: string,
-  _options: OperationOptions = {}
+  _options: Partial<OperationOptions> = {}
 ) {
-  const options = await _resolveOptions(_options);
+  const resolvedOptions = await resolveOperationOptions(_options);
 
   const args = [
-    options.packageManager.name === "npm" ? "install" : "add",
-    options.workspace
-      ? options.packageManager.name === "yarn" // eslint-disable-line unicorn/no-nested-ternary
-        ? "-W"
-        : "-w"
-      : "",
-    options.dev ? "-D" : "",
+    resolvedOptions.packageManager.name === "npm" ? "install" : "add",
+    ...getWorkspaceArgs(resolvedOptions),
+    resolvedOptions.dev ? "-D" : "",
     name,
   ].filter(Boolean);
 
-  await runCorepack(options.packageManager.command, args, {
-    cwd: options.cwd,
-    silent: options.silent,
+  await executeCommand(resolvedOptions.packageManager.command, args, {
+    cwd: resolvedOptions.cwd,
+    silent: resolvedOptions.silent,
   });
-  return {};
 }
 
 /**
@@ -92,9 +86,9 @@ export async function addDependency(
  */
 export async function addDevDependency(
   name: string,
-  _options: Omit<OperationOptions, "dev"> = {}
+  _options: Partial<Omit<OperationOptions, "dev">> = {}
 ) {
-  return await addDependency(name, { ..._options, dev: true });
+  await addDependency(name, { ..._options, dev: true });
 }
 
 /**
@@ -105,33 +99,19 @@ export async function addDevDependency(
  */
 export async function removeDependency(
   name: string,
-  _options: Omit<OperationOptions, "workspace"> = {}
+  _options: Partial<OperationOptions> = {}
 ) {
-  const options = await _resolveOptions(_options);
+  const resolvedOptions = await resolveOperationOptions(_options);
 
   const args = [
-    options.packageManager.name === "npm" ? "uninstall" : "remove",
-    options.dev ? "-D" : "",
+    resolvedOptions.packageManager.name === "npm" ? "uninstall" : "remove",
+    ...getWorkspaceArgs(resolvedOptions),
+    resolvedOptions.dev ? "-D" : "",
     name,
   ].filter(Boolean);
 
-  await runCorepack(options.packageManager.command, args, {
-    cwd: options.cwd,
-    silent: options.silent,
+  await executeCommand(resolvedOptions.packageManager.command, args, {
+    cwd: resolvedOptions.cwd,
+    silent: resolvedOptions.silent,
   });
-  return {};
-}
-
-type NonPartial<T> = { [P in keyof T]-?: T[P] };
-
-async function _resolveOptions(
-  options: OperationOptions = {}
-): Promise<NonPartial<OperationOptions>> {
-  options.cwd = options.cwd || process.cwd();
-  options.silent = options.silent ?? process.env.NODE_ENV === "test";
-  if (!options.packageManager) {
-    const detected = await detectPackageManager(options.cwd);
-    options.packageManager = detected;
-  }
-  return options as NonPartial<OperationOptions>;
 }

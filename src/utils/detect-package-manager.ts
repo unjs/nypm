@@ -2,7 +2,23 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { join, normalize } from "pathe";
-import type { PackageManager } from "./types";
+import type { PackageManager } from "../types";
+
+type DetectPackageManagerOptions = {
+  /**
+   * Whether to ignore the lock file
+   *
+   * @default false
+   */
+  ignoreLockFile?: boolean;
+
+  /**
+   * Whether to ignore the package.json file
+   *
+   * @default false
+   */
+  ignorePackageJSON?: boolean;
+};
 
 const packageManagers: PackageManager[] = [
   { name: "npm", command: "npm", lockFile: "package-lock.json" },
@@ -27,21 +43,20 @@ const packageManagers: PackageManager[] = [
   },
 ];
 
-export type DetectPackageManagerOptions = {
-  /**
-   * Whether to ignore the lock file
-   *
-   * @default false
-   */
-  ignoreLockFile?: boolean;
-
-  /**
-   * Whether to ignore the package.json file
-   *
-   * @default false
-   */
-  ignorePackageJSON?: boolean;
-};
+async function findup<T>(
+  cwd: string,
+  match: (path: string) => T | Promise<T>
+): Promise<T | undefined> {
+  const segments = normalize(cwd).split("/");
+  while (segments.length > 0) {
+    const path = segments.join("/");
+    const result = await match(path);
+    if (result) {
+      return result;
+    }
+    segments.pop();
+  }
+}
 
 export async function detectPackageManager(
   cwd: string,
@@ -71,6 +86,7 @@ export async function detectPackageManager(
         }
       }
     }
+
     // 2. Use implicit file detection
     if (!options.ignoreLockFile) {
       for (const packageManager of packageManagers) {
@@ -78,6 +94,7 @@ export async function detectPackageManager(
           packageManager.lockFile,
           ...(packageManager.files || []),
         ].filter(Boolean) as string[];
+
         if (detectionsFiles.some((file) => existsSync(resolve(path, file)))) {
           return {
             ...packageManager,
@@ -86,20 +103,6 @@ export async function detectPackageManager(
       }
     }
   });
-  return detected;
-}
 
-async function findup<T>(
-  cwd: string,
-  match: (path: string) => T | Promise<T>
-): Promise<T | undefined> {
-  const segments = normalize(cwd).split("/");
-  while (segments.length > 0) {
-    const path = segments.join("/");
-    const result = await match(path);
-    if (result) {
-      return result;
-    }
-    segments.pop();
-  }
+  return detected;
 }
