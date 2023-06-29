@@ -8,7 +8,7 @@ export async function executeCommand(
   const { execa } = await import("execa");
   const { resolve } = await import("pathe");
 
-  // workaround issue with segmentation fault when using corepack with npm
+  // work around issue with segmentation fault when using corepack with npm
   // on ubuntu-latest
   const execaArgs: [string, string[]] =
     command === "npm" ? [command, args] : ["corepack", [command, ...args]];
