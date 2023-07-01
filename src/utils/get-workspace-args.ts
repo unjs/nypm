@@ -4,6 +4,10 @@ export function getWorkspaceArgs(
   options: Awaited<ReturnType<typeof resolveOperationOptions>>
 ): string[] {
   if (!options.workspace) {
+    if (options.packageManager.name === "pnpm") {
+      return ["-w"];
+    }
+
     return [];
   }
 

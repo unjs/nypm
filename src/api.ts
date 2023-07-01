@@ -57,13 +57,13 @@ export async function installDependencies(
  * Adds dependency to the project.
  *
  * @param name - Name of the dependency to add.
- * @param _options - Options to pass to the API call.
+ * @param options - Options to pass to the API call.
  */
 export async function addDependency(
   name: string,
-  _options: Partial<OperationOptions> = {}
+  options: Partial<OperationOptions> = {}
 ) {
-  const resolvedOptions = await resolveOperationOptions(_options);
+  const resolvedOptions = await resolveOperationOptions(options);
 
   const args = [
     resolvedOptions.packageManager.name === "npm" ? "install" : "add",
@@ -82,26 +82,28 @@ export async function addDependency(
  * Adds dev dependency to the project.
  *
  * @param name - Name of the dependency to add.
- * @param _options - Options to pass to the API call.
+ * @param options - Options to pass to the API call.
+ *
+ * @deprecated Use {@link addDependency} with `dev: true` instead
  */
 export async function addDevDependency(
   name: string,
-  _options: Partial<Omit<OperationOptions, "dev">> = {}
+  options: Partial<Omit<OperationOptions, "dev">> = {}
 ) {
-  await addDependency(name, { ..._options, dev: true });
+  await addDependency(name, { ...options, dev: true });
 }
 
 /**
  * Removes dependency from the project.
  *
  * @param name - Name of the dependency to remove.
- * @param _options - Options to pass to the API call.
+ * @param options - Options to pass to the API call.
  */
 export async function removeDependency(
   name: string,
-  _options: Partial<OperationOptions> = {}
+  options: Partial<OperationOptions> = {}
 ) {
-  const resolvedOptions = await resolveOperationOptions(_options);
+  const resolvedOptions = await resolveOperationOptions(options);
 
   const args = [
     resolvedOptions.packageManager.name === "npm" ? "uninstall" : "remove",

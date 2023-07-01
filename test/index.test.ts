@@ -1,54 +1,120 @@
 import { fileURLToPath } from "node:url";
 import { expect, it, describe, vi } from "vitest";
-import { installDependencies, addDependency, removeDependency } from "../src";
+import {
+  installDependencies,
+  addDependency,
+  removeDependency,
+  PackageManagerName,
+} from "../src";
 import { detectPackageManager } from "../src/utils/detect-package-manager";
+import { NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG } from "../src/utils/resolve-operation-options";
 
 const resolveFixtureDirectory = (name: string) =>
   fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
 
+type Fixture = {
+  name: string;
+  packageManager?: PackageManagerName;
+  majorVersion?: string;
+};
+
 const fixtures = [
   {
+    name: "empty",
+    packageManager: "pnpm",
+  },
+  {
     name: "npm",
-    pm: "npm",
+    packageManager: "npm",
   },
   {
     name: "pnpm",
-    pm: "pnpm",
+    packageManager: "pnpm",
   },
   {
     name: "yarn-classic",
-    pm: "yarn",
+    packageManager: "yarn",
     majorVersion: "1",
   },
   {
     name: "yarn-berry",
-    pm: "yarn",
+    packageManager: "yarn",
     majorVersion: "3",
   },
-];
+] as const satisfies readonly Fixture[];
+
+const DEFAULT_WORKSPACE = "workspace-a";
 
 describe("detectPackageManager", () => {
   for (const fixture of fixtures) {
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
 
-      it("should detect with lock file", async () => {
-        const detected = await detectPackageManager(fixtureDirectory, {
-          ignorePackageJSON: true,
-        });
+      if (fixture.name === "empty") {
+        it("should detect in parent directory", async () => {
+          const detected = await detectPackageManager(fixtureDirectory, {
+            includeParentDirs: true,
+          });
 
-        expect(detected).toMatchObject({ name: fixture.pm });
-      });
+          expect(detected).toMatchObject({ name: fixture.packageManager });
+        });
+      }
 
       it("should detect with package.json", async () => {
         const detected = await detectPackageManager(fixtureDirectory, {
           ignoreLockFile: true,
         });
 
-        expect(detected).toMatchObject({
-          name: fixture.pm,
-          majorVersion: fixture.majorVersion || expect.any(String),
+        switch (fixture.name) {
+          case "empty": {
+            expect(detected).toBe(undefined);
+
+            break;
+          }
+
+          case "npm":
+          case "pnpm": {
+            expect(detected).toMatchObject({
+              name: fixture.packageManager,
+              majorVersion: expect.any(String),
+            });
+
+            break;
+          }
+
+          case "yarn-berry":
+          case "yarn-classic": {
+            expect(detected).toMatchObject({
+              name: fixture.packageManager,
+              majorVersion: fixture.majorVersion,
+            });
+
+            break;
+          }
+        }
+      });
+
+      it("should detect with lock file", async () => {
+        const detected = await detectPackageManager(fixtureDirectory, {
+          ignorePackageJSON: true,
         });
+
+        switch (fixture.name) {
+          case "empty": {
+            expect(detected).toBe(undefined);
+
+            break;
+          }
+
+          case "npm":
+          case "pnpm":
+          case "yarn-berry":
+          case "yarn-classic": {
+            expect(detected).toMatchObject({ name: fixture.packageManager });
+
+            break;
+          }
+        }
       });
     });
   }
@@ -59,39 +125,106 @@ describe("api", () => {
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
 
-      it("installDependencies", async () => {
+      it("installs dependencies", async () => {
         const installDependenciesSpy = vi.fn(installDependencies);
 
-        await installDependenciesSpy({
-          cwd: fixtureDirectory,
-          silent: false,
-        });
+        const executeInstallDependenciesSpy = () =>
+          installDependenciesSpy({
+            cwd: fixtureDirectory,
+            silent: false,
+          });
 
-        expect(installDependenciesSpy).toHaveReturned();
+        if (fixture.name === "empty") {
+          expect(
+            async () => await executeInstallDependenciesSpy()
+          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+        } else {
+          await executeInstallDependenciesSpy();
+
+          expect(installDependenciesSpy).toHaveReturned();
+        }
       }, 30_000);
 
-      it("addDependency", async () => {
+      it("adds dependency", async () => {
         const addDependencySpy = vi.fn(addDependency);
 
-        await addDependencySpy("pathe", {
-          cwd: fixtureDirectory,
-          silent: false,
-          workspace: "workspace-a",
-        });
+        const executeAddDependencySpy = () =>
+          addDependencySpy("pathe", {
+            cwd: fixtureDirectory,
+            silent: false,
+          });
 
-        expect(addDependencySpy).toHaveReturned();
+        if (fixture.name === "empty") {
+          expect(
+            async () => await executeAddDependencySpy()
+          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+        } else {
+          await executeAddDependencySpy();
+
+          expect(addDependencySpy).toHaveReturned();
+        }
       }, 30_000);
 
-      it("removeDependency", async () => {
+      it("removes dependency", async () => {
         const removeDependencySpy = vi.fn(removeDependency);
 
-        await removeDependencySpy("pathe", {
-          cwd: fixtureDirectory,
-          silent: false,
-          workspace: "workspace-a",
-        });
+        const executeRemoveDependencySpy = () =>
+          removeDependencySpy("pathe", {
+            cwd: fixtureDirectory,
+            silent: false,
+          });
 
-        expect(removeDependencySpy).toHaveReturned();
+        if (fixture.name === "empty") {
+          expect(
+            async () => await executeRemoveDependencySpy()
+          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+        } else {
+          await executeRemoveDependencySpy();
+
+          expect(removeDependencySpy).toHaveReturned();
+        }
+      }, 30_000);
+
+      it("adds dependency to workspace", async () => {
+        const addDependencySpy = vi.fn(addDependency);
+
+        const executeAddDependencySpy = () =>
+          addDependencySpy("pathe", {
+            cwd: fixtureDirectory,
+            silent: false,
+            workspace: DEFAULT_WORKSPACE,
+          });
+
+        if (fixture.name === "empty") {
+          expect(
+            async () => await executeAddDependencySpy()
+          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+        } else {
+          await executeAddDependencySpy();
+
+          expect(addDependencySpy).toHaveReturned();
+        }
+      }, 30_000);
+
+      it("removes dependency from workspace", async () => {
+        const removeDependencySpy = vi.fn(removeDependency);
+
+        const executeRemoveDependencySpy = () =>
+          removeDependencySpy("pathe", {
+            cwd: fixtureDirectory,
+            silent: false,
+            workspace: DEFAULT_WORKSPACE,
+          });
+
+        if (fixture.name === "empty") {
+          expect(
+            async () => await executeRemoveDependencySpy()
+          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+        } else {
+          await executeRemoveDependencySpy();
+
+          expect(removeDependencySpy).toHaveReturned();
+        }
       }, 30_000);
     });
   }

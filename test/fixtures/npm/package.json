@@ -4,5 +4,8 @@
   "workspaces": [
     "packages/workspace-a"
   ],
-  "packageManager": "npm@9.7.2"
+  "packageManager": "npm@9.7.2",
+  "dependencies": {
+    "consola": "3.2.2"
+  }
 }

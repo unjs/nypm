@@ -18,6 +18,13 @@ type DetectPackageManagerOptions = {
    * @default false
    */
   ignorePackageJSON?: boolean;
+
+  /**
+   * Whether to include parent directories
+   *
+   * @default false
+   */
+  includeParentDirs?: boolean;
 };
 
 const packageManagers: PackageManager[] = [
@@ -45,15 +52,19 @@ const packageManagers: PackageManager[] = [
 
 async function findup<T>(
   cwd: string,
-  match: (path: string) => T | Promise<T>
+  match: (path: string) => T | Promise<T>,
+  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {}
 ): Promise<T | undefined> {
   const segments = normalize(cwd).split("/");
+
   while (segments.length > 0) {
     const path = segments.join("/");
     const result = await match(path);
-    if (result) {
+
+    if (result || !options.includeParentDirs) {
       return result;
     }
+
     segments.pop();
   }
 }
@@ -62,47 +73,56 @@ export async function detectPackageManager(
   cwd: string,
   options: DetectPackageManagerOptions = {}
 ): Promise<PackageManager | undefined> {
-  const detected = await findup(cwd, async (path) => {
-    // 1. Use `packageManager` field from package.json
-    if (!options.ignorePackageJSON) {
-      const packageJSONPath = join(path, "package.json");
-      if (existsSync(packageJSONPath)) {
-        const packageJSON = JSON.parse(await readFile(packageJSONPath, "utf8"));
-        if (packageJSON?.packageManager) {
-          const [name, version = "0.0.0"] =
-            packageJSON.packageManager.split("@");
-          const majorVersion = version.split(".")[0];
-          const packageManager =
-            packageManagers.find(
-              (pm) => pm.name === name && pm.majorVersion === majorVersion
-            ) || packageManagers.find((pm) => pm.name === name);
-          return {
-            ...packageManager,
-            name,
-            command: name,
-            version,
-            majorVersion,
-          };
+  const detected = await findup(
+    cwd,
+    async (path) => {
+      // 1. Use `packageManager` field from package.json
+      if (!options.ignorePackageJSON) {
+        const packageJSONPath = join(path, "package.json");
+        if (existsSync(packageJSONPath)) {
+          const packageJSON = JSON.parse(
+            await readFile(packageJSONPath, "utf8")
+          );
+          if (packageJSON?.packageManager) {
+            const [name, version = "0.0.0"] =
+              packageJSON.packageManager.split("@");
+            const majorVersion = version.split(".")[0];
+            const packageManager =
+              packageManagers.find(
+                (pm) => pm.name === name && pm.majorVersion === majorVersion
+              ) || packageManagers.find((pm) => pm.name === name);
+            return {
+              ...packageManager,
+              name,
+              command: name,
+              version,
+              majorVersion,
+            };
+          }
         }
       }
-    }
 
-    // 2. Use implicit file detection
-    if (!options.ignoreLockFile) {
-      for (const packageManager of packageManagers) {
-        const detectionsFiles = [
-          packageManager.lockFile,
-          ...(packageManager.files || []),
-        ].filter(Boolean) as string[];
+      // 2. Use implicit file detection
+      if (!options.ignoreLockFile) {
+        for (const packageManager of packageManagers) {
+          const detectionsFiles = [
+            packageManager.lockFile,
+            ...(packageManager.files || []),
+          ].filter(Boolean) as string[];
 
-        if (detectionsFiles.some((file) => existsSync(resolve(path, file)))) {
-          return {
-            ...packageManager,
-          };
+          if (detectionsFiles.some((file) => existsSync(resolve(path, file)))) {
+            console.log(path);
+            return {
+              ...packageManager,
+            };
+          }
         }
       }
+    },
+    {
+      includeParentDirs: options.includeParentDirs,
     }
-  });
+  );
 
   return detected;
 }

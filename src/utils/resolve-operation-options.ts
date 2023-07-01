@@ -3,6 +3,9 @@ import { detectPackageManager } from "./detect-package-manager";
 
 type NonPartial<T> = { [P in keyof T]-?: T[P] };
 
+export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG =
+  "No package manager auto-detected.";
+
 export async function resolveOperationOptions(
   options: OperationOptions = {}
 ): Promise<
@@ -18,7 +21,7 @@ export async function resolveOperationOptions(
     (await detectPackageManager(options.cwd || process.cwd()));
 
   if (!packageManager) {
-    throw new Error("No package manager auto-detected.");
+    throw new Error(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
   }
 
   return {

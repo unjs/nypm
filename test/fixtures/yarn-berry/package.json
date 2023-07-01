@@ -4,5 +4,8 @@
   "workspaces": [
     "packages/workspace-a"
   ],
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@3.6.1",
+  "dependencies": {
+    "consola": "3.2.2"
+  }
 }

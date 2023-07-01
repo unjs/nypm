@@ -2,5 +2,7 @@
   "name": "fixture-yarn-classic",
   "private": true,
   "packageManager": "yarn@1.22.19",
-  "dependencies": {}
+  "dependencies": {
+    "consola": "3.2.2"
+  }
 }

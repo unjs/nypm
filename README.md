@@ -65,7 +65,7 @@ import {
   detectPackageManager,
   installDependencies,
   addDependency,
-  addDevDependency,
+  addDevDependency, // deprecated
   removeDependendency,
 } from "nypm";
 
@@ -74,7 +74,7 @@ const {
   detectPackageManager,
   installDependencies,
   addDependency,
-  addDevDependency,
+  addDevDependency, // deprecated
   removeDependendency,
 } = require("nypm");
 ```
