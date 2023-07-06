@@ -8,6 +8,13 @@ export function getWorkspaceArgs(
       return ["-w"];
     }
 
+    if (
+      options.packageManager.name === "yarn" &&
+      options.packageManager.majorVersion === "1"
+    ) {
+      return ["-W"];
+    }
+
     return [];
   }
 
@@ -21,10 +28,6 @@ export function getWorkspaceArgs(
     }
 
     case "yarn": {
-      if (options.packageManager.majorVersion === "1") {
-        return ["-W", options.workspace];
-      }
-
       return ["workspace", options.workspace];
     }
   }

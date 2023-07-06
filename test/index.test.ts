@@ -5,6 +5,7 @@ import {
   addDependency,
   removeDependency,
   PackageManagerName,
+  ensureDependencyInstalled,
 } from "../src";
 import { detectPackageManager } from "../src/utils/detect-package-manager";
 import { NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG } from "../src/utils/resolve-operation-options";
@@ -164,6 +165,25 @@ describe("api", () => {
           expect(addDependencySpy).toHaveReturned();
         }
       }, 30_000);
+
+      it("ensures dependency is installed", async () => {
+        const ensureDependencyInstalledSpy = vi.fn(ensureDependencyInstalled);
+
+        const executeEnsureDependencyInstalledSpy = () =>
+          ensureDependencyInstalledSpy("pathe", {
+            cwd: fixtureDirectory,
+          });
+
+        if (fixture.name === "empty") {
+          expect(
+            async () => await executeEnsureDependencyInstalledSpy()
+          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+        } else {
+          await executeEnsureDependencyInstalledSpy();
+
+          expect(ensureDependencyInstalledSpy).toHaveReturned();
+        }
+      });
 
       it("removes dependency", async () => {
         const removeDependencySpy = vi.fn(removeDependency);

@@ -8,6 +8,9 @@ dependencies:
   execa:
     specifier: ^7.1.1
     version: 7.1.1
+  ufo:
+    specifier: ^1.1.2
+    version: 1.1.2
 
 devDependencies:
   '@types/node':
@@ -3588,7 +3591,6 @@ packages:
 
   /ufo@1.1.2:
     resolution: {integrity: sha512-TrY6DsjTQQgyS3E3dBaOXf0TpPD8u9FVrVYmKVegJuFw51n/YB9XPt+U6ydzFG5ZIN7+DIjPbNmXoBj9esYhgQ==}
-    dev: true
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
