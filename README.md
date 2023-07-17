@@ -66,8 +66,8 @@ import {
   installDependencies,
   addDependency,
   addDevDependency, // deprecated
-  removeDependendency,
-} from "nypm";
+  removeDependency
+} from 'nypm'
 
 // CommonJS
 const {
@@ -75,8 +75,8 @@ const {
   installDependencies,
   addDependency,
   addDevDependency, // deprecated
-  removeDependendency,
-} = require("nypm");
+  removeDependency
+} = require('nypm')
 ```
 
 ## 💻 Development
