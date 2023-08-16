@@ -26,7 +26,8 @@
     "lint:fix": "eslint --ext .ts,.js,.mjs,.cjs . --fix && prettier -w src test",
     "prepack": "unbuild",
     "release": "pnpm test && pnpm build && changelogen --release --push && pnpm publish",
-    "test": "pnpm lint && vitest run --coverage"
+    "test": "pnpm lint && pnpm test:types && vitest run --coverage",
+    "test:types": "tsc --noEmit"
   },
   "dependencies": {
     "execa": "^7.2.0",
