@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "execa": "^7.2.0",
+    "ofetch": "^1.1.1",
     "ufo": "^1.2.0"
   },
   "devDependencies": {
