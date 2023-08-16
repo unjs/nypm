@@ -1,10 +1,10 @@
-import { readFile } from "node:fs/promises";
-import { join } from "pathe";
 import {
   executeCommand,
   resolveOperationOptions,
   getWorkspaceArgs,
   doesDependencyExist,
+  fetchNpmPackageInfo,
+  getLocalDependencyConstraint,
 } from "./_utils";
 import type { OperationOptions } from "./types";
 
@@ -17,7 +17,7 @@ import type { OperationOptions } from "./types";
  * @param options.packageManager - The package manager info to use (auto-detected).
  */
 export async function installDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {}
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -40,7 +40,7 @@ export async function installDependencies(
  */
 export async function addDependency(
   name: string,
-  options: OperationOptions = {},
+  options: OperationOptions = {}
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -79,7 +79,7 @@ export async function addDependency(
  */
 export async function addDevDependency(
   name: string,
-  options: Omit<OperationOptions, "dev"> = {},
+  options: Omit<OperationOptions, "dev"> = {}
 ) {
   await addDependency(name, { ...options, dev: true });
 }
@@ -97,7 +97,7 @@ export async function addDevDependency(
  */
 export async function removeDependency(
   name: string,
-  options: OperationOptions = {},
+  options: OperationOptions = {}
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -136,7 +136,7 @@ export async function removeDependency(
  */
 export async function ensureDependencyInstalled(
   name: string,
-  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {},
+  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {}
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -157,90 +157,25 @@ export async function ensureDependencyInstalled(
  */
 export async function updateDependency(
   name: string,
-  _options: OperationOptions & { override?: "major" | "minor" | "atch" } = {},
+  _options: OperationOptions & { override?: "major" | "minor" | "patch" } = {}
 ) {
   const options = (await resolveOperationOptions(_options)) as typeof _options;
-  const latestVersion = await getLatestVersion(name);
-  const existingConstraint = await getDependencyConstraint(name, options);
-  // Determine the new version constraint based on overrides (minor/major bump)
-  let newConstraint = existingConstraint;
-  if (options.override === "minor") {
-    newConstraint = `^${existingConstraint.split(".")[0]}.x`;
-  } else if (options.override === "major") {
-    newConstraint = `^${
-      Number.parseInt(existingConstraint.split(".")[0], 10) + 1
-    }.x`;
-  }
-  // Check if the latest version is higher than the current version
-  const semver = await import("semver").then((r) => r.default || r);
-  if (latestVersion && semver.gt(latestVersion, newConstraint)) {
-    options.dev
-      ? await addDevDependency(`${name}@${latestVersion}`)
-      : await addDependency(`${name}@${latestVersion}`);
-  } else {
-    options.dev
-      ? await addDevDependency(`${name}@${newConstraint}`)
-      : await addDependency(`${name}@${newConstraint}`);
-  }
-  return {};
-}
 
-/**
- * Retrieves the current version constraint for a dependency.
- *
- * @param name - Name of the dependency to retrieve the constraint for.
- * @param options - OperationOptions to retrieve the package manager and other context.
- */
-async function getDependencyConstraint(
-  name: string,
-  options: OperationOptions,
-): Promise<string> {
-  const dependencyType = options.dev ? "devDependencies" : "dependencies";
-  const packageJsonPath = join(options.cwd || process.cwd(), "package.json");
-  const packageJsonContents = await readFile(packageJsonPath, "utf8");
-  const packageJson = JSON.parse(packageJsonContents);
-  const dependencyObject = packageJson[dependencyType];
-  if (!dependencyObject || !dependencyObject[name]) {
-    throw new Error(`Dependency "${name}" not found in ${dependencyType}`);
-  }
-  const currentConstraint = dependencyObject[name];
-  // Handle non-standard version constraints
-  if (["next", "latest"].includes(currentConstraint)) {
-    return currentConstraint; // Keep "next" or "latest" as-is
-  }
-  // Parse version constraint with semantic versioning
-  const versionParts = currentConstraint.split(".");
-  const major = versionParts[0];
-  const minor = versionParts[1];
-  const patchAndRest = versionParts.slice(2).join(".");
-  // Handle beta versions
-  if (patchAndRest.startsWith("-beta")) {
-    const betaVersion = patchAndRest.split("-")[1];
-    return `${major}.${minor}.${betaVersion}-beta`;
-  }
-  // Handle other non-standard constraints (e.g., "3.0.0-beta.0")
-  if (patchAndRest) {
-    return `${major}.${minor}.${patchAndRest}`;
-  }
-  return `${major}.${minor}`;
-}
-
-async function getLatestVersion(
-  packageName: string,
-): Promise<string | undefined> {
-  const { $fetch } = await import("ofetch");
-  const response = await $fetch(
-    `https://registry.npmjs.org/${packageName}/latest`,
-    { parseResponse: JSON.parse },
-  ).catch((error) =>
-    console.error(`Error fetching latest version for ${packageName}:`, error),
+  const currentConstraint = await getLocalDependencyConstraint(
+    name,
+    options.cwd
   );
-  if (response && response.data && response.data.version) {
-    return response.data.version;
-  } else {
-    console.error(
-      `Error fetching latest version for ${packageName}: Invalid response`,
-    );
-  }
-  return undefined;
+
+  const npmLatest = await fetchNpmPackageInfo(name, "latest");
+
+  const version = npmLatest.version;
+
+  // Determine the new version constraint based on overrides (minor/major bump)
+  const newConstraint = { ...currentConstraint };
+
+  await addDependency(`${name}@${newConstraint}`, {
+    dev: currentConstraint?.type === "devDependencies",
+  });
+
+  return {};
 }

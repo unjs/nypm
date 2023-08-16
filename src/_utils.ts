@@ -1,6 +1,8 @@
 import { createRequire } from "node:module";
 import { normalize } from "pathe";
 import { withTrailingSlash } from "ufo";
+import type { PackageJson } from "pkg-types";
+import { readPackageJSON } from "pkg-types";
 import type { OperationOptions } from "./types";
 import type { DetectPackageManagerOptions } from "./package-manager";
 import { detectPackageManager } from "./package-manager";
@@ -8,7 +10,7 @@ import { detectPackageManager } from "./package-manager";
 export async function findup<T>(
   cwd: string,
   match: (path: string) => T | Promise<T>,
-  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {},
+  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {}
 ): Promise<T | undefined> {
   const segments = normalize(cwd).split("/");
 
@@ -27,7 +29,7 @@ export async function findup<T>(
 export async function executeCommand(
   command: string,
   args: string[],
-  options: Pick<OperationOptions, "cwd" | "silent"> = {},
+  options: Pick<OperationOptions, "cwd" | "silent"> = {}
 ): Promise<void> {
   const { execa } = await import("execa");
   const { resolve } = await import("pathe");
@@ -49,7 +51,7 @@ export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG =
   "No package manager auto-detected.";
 
 export async function resolveOperationOptions(
-  options: OperationOptions = {},
+  options: OperationOptions = {}
 ): Promise<
   NonPartial<
     Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dev">
@@ -76,7 +78,7 @@ export async function resolveOperationOptions(
 }
 
 export function getWorkspaceArgs(
-  options: Awaited<ReturnType<typeof resolveOperationOptions>>,
+  options: Awaited<ReturnType<typeof resolveOperationOptions>>
 ): string[] {
   if (!options.workspace) {
     if (options.packageManager.name === "pnpm") {
@@ -113,7 +115,7 @@ export function doesDependencyExist(
   options: Pick<
     Awaited<ReturnType<typeof resolveOperationOptions>>,
     "cwd" | "workspace"
-  >,
+  >
 ) {
   const require = createRequire(withTrailingSlash(options.cwd));
 
@@ -123,5 +125,57 @@ export function doesDependencyExist(
     return resolvedPath.startsWith(options.cwd);
   } catch {
     return false;
+  }
+}
+
+export async function fetchNpmPackageInfo(
+  packageName: string,
+  tagOrVersion: string
+): Promise<PackageJson> {
+  const { $fetch } = await import("ofetch");
+  const response = await $fetch(
+    `https://registry.npmjs.org/${packageName}/${tagOrVersion}`
+  ).catch((error) => {
+    throw new Error(
+      `Cannot fetch package info for ${packageName}@${tagOrVersion} from NPM registry:`,
+      error
+    );
+  });
+  if (response && response.data && response.data.version) {
+    return response;
+  } else {
+    throw new Error(
+      `Error fetching latest version for ${packageName}: Invalid response: ${JSON.stringify(
+        response
+      )}`
+    );
+  }
+}
+
+export async function getLocalDependencyConstraint(
+  name: string,
+  cwd: string = process.cwd()
+): Promise<
+  | undefined
+  | {
+      constraint: string;
+      type?: "dependencies" | "devDependencies" | "peerDependencies";
+    }
+> {
+  const packageJson = await readPackageJSON(cwd);
+  if (!packageJson) {
+    return;
+  }
+
+  for (const type of [
+    "dependencies",
+    "devDependencies",
+    "peerDependencies",
+  ] as const) {
+    const _type = packageJson[type];
+    if (!_type || !_type[name]) {
+      continue;
+    }
+    return { constraint: _type[name], type };
   }
 }
