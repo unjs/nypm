@@ -80,7 +80,6 @@ export async function addDependency(
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.workspace - The name of the workspace to use.
  *
- * @deprecated Use {@link addDependency} with `dev: true` instead
  */
 export async function addDevDependency(
   name: string,

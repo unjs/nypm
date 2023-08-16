@@ -65,18 +65,18 @@ import {
   detectPackageManager,
   installDependencies,
   addDependency,
-  addDevDependency, // deprecated
-  removeDependency
-} from 'nypm'
+  addDevDependency,
+  removeDependency,
+} from "nypm";
 
 // CommonJS
 const {
   detectPackageManager,
   installDependencies,
   addDependency,
-  addDevDependency, // deprecated
-  removeDependency
-} = require('nypm')
+  addDevDependency,
+  removeDependency,
+} = require("nypm");
 ```
 
 ## 💻 Development
