@@ -24,6 +24,8 @@ jobs:
       - run: pnpm install
       - run: pnpm lint
         if: ${{ matrix.os == 'ubuntu-latest' }}
+      - run: pnpm test:types
+        if: ${{ matrix.os == 'ubuntu-latest' }}
       - run: pnpm build
       - run: pnpm vitest --coverage
       - uses: codecov/codecov-action@v3
