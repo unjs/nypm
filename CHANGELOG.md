@@ -1,6 +1,49 @@
 # Changelog
 
 
+## v0.3.0
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.2.2...v0.3.0)
+
+### 💅 Refactors
+
+- ⚠️  Improve library ([#75](https://github.com/unjs/nypm/pull/75))
+
+### 📖 Documentation
+
+- Fix typo ([#77](https://github.com/unjs/nypm/pull/77))
+
+### 🏡 Chore
+
+- Update badge ([#81](https://github.com/unjs/nypm/pull/81))
+- Add autofix ci ([b326b98](https://github.com/unjs/nypm/commit/b326b98))
+- Update ci node veriosion ([b048b6c](https://github.com/unjs/nypm/commit/b048b6c))
+- Always ignore `.npm.loader.mjs` ([7bebeaf](https://github.com/unjs/nypm/commit/7bebeaf))
+- Add `test:types` script ([a8a0c94](https://github.com/unjs/nypm/commit/a8a0c94))
+- Update `.pnp.loader.mjs` snapshot ([10e10b0](https://github.com/unjs/nypm/commit/10e10b0))
+- Update fixtures with autofix ci as well ([c16de18](https://github.com/unjs/nypm/commit/c16de18))
+- Ignore `.pnp.cjs` as well ([c4c79bd](https://github.com/unjs/nypm/commit/c4c79bd))
+
+### 🎨 Styles
+
+- Format with prettier ([bb92395](https://github.com/unjs/nypm/commit/bb92395))
+- Lint with prettier ([f3681a8](https://github.com/unjs/nypm/commit/f3681a8))
+
+### 🤖 CI
+
+- Run lint step only once ([333c077](https://github.com/unjs/nypm/commit/333c077))
+
+#### ⚠️  Breaking Changes
+
+- ⚠️  Improve library ([#75](https://github.com/unjs/nypm/pull/75))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Damian Głowala ([@DamianGlowala](http://github.com/DamianGlowala))
+- Luke Nelson <luke@nelson.zone>
+- Adham Farrag <adham.farrag@hotmail.com>
+
 ## v0.2.2
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.2.1...v0.2.2)
