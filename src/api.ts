@@ -17,7 +17,7 @@ import type { OperationOptions } from "./types";
  * @param options.packageManager - The package manager info to use (auto-detected).
  */
 export async function installDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {}
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -40,7 +40,7 @@ export async function installDependencies(
  */
 export async function addDependency(
   name: string,
-  options: OperationOptions = {}
+  options: OperationOptions = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -79,7 +79,7 @@ export async function addDependency(
  */
 export async function addDevDependency(
   name: string,
-  options: Omit<OperationOptions, "dev"> = {}
+  options: Omit<OperationOptions, "dev"> = {},
 ) {
   await addDependency(name, { ...options, dev: true });
 }
@@ -97,7 +97,7 @@ export async function addDevDependency(
  */
 export async function removeDependency(
   name: string,
-  options: OperationOptions = {}
+  options: OperationOptions = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -136,7 +136,7 @@ export async function removeDependency(
  */
 export async function ensureDependencyInstalled(
   name: string,
-  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {}
+  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -157,7 +157,7 @@ export async function ensureDependencyInstalled(
  */
 export async function updateDependency(
   name: string,
-  _options: OperationOptions & { override?: "major" | "minor" | "atch" } = {}
+  _options: OperationOptions & { override?: "major" | "minor" | "atch" } = {},
 ) {
   const options = (await resolveOperationOptions(_options)) as typeof _options;
   const latestVersion = await getLatestVersion(name);
@@ -193,7 +193,7 @@ export async function updateDependency(
  */
 async function getDependencyConstraint(
   name: string,
-  options: OperationOptions
+  options: OperationOptions,
 ): Promise<string> {
   const dependencyType = options.dev ? "devDependencies" : "dependencies";
   const packageJsonPath = join(options.cwd || process.cwd(), "package.json");
@@ -226,20 +226,20 @@ async function getDependencyConstraint(
 }
 
 async function getLatestVersion(
-  packageName: string
+  packageName: string,
 ): Promise<string | undefined> {
   const { $fetch } = await import("ofetch");
   const response = await $fetch(
     `https://registry.npmjs.org/${packageName}/latest`,
-    { parseResponse: JSON.parse }
+    { parseResponse: JSON.parse },
   ).catch((error) =>
-    console.error(`Error fetching latest version for ${packageName}:`, error)
+    console.error(`Error fetching latest version for ${packageName}:`, error),
   );
   if (response && response.data && response.data.version) {
     return response.data.version;
   } else {
     console.error(
-      `Error fetching latest version for ${packageName}: Invalid response`
+      `Error fetching latest version for ${packageName}: Invalid response`,
     );
   }
   return undefined;
