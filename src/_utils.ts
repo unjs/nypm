@@ -10,7 +10,7 @@ import { detectPackageManager } from "./package-manager";
 export async function findup<T>(
   cwd: string,
   match: (path: string) => T | Promise<T>,
-  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {}
+  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {},
 ): Promise<T | undefined> {
   const segments = normalize(cwd).split("/");
 
@@ -29,7 +29,7 @@ export async function findup<T>(
 export async function executeCommand(
   command: string,
   args: string[],
-  options: Pick<OperationOptions, "cwd" | "silent"> = {}
+  options: Pick<OperationOptions, "cwd" | "silent"> = {},
 ): Promise<void> {
   const { execa } = await import("execa");
   const { resolve } = await import("pathe");
@@ -51,7 +51,7 @@ export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG =
   "No package manager auto-detected.";
 
 export async function resolveOperationOptions(
-  options: OperationOptions = {}
+  options: OperationOptions = {},
 ): Promise<
   NonPartial<
     Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dev">
@@ -78,7 +78,7 @@ export async function resolveOperationOptions(
 }
 
 export function getWorkspaceArgs(
-  options: Awaited<ReturnType<typeof resolveOperationOptions>>
+  options: Awaited<ReturnType<typeof resolveOperationOptions>>,
 ): string[] {
   if (!options.workspace) {
     if (options.packageManager.name === "pnpm") {
@@ -115,7 +115,7 @@ export function doesDependencyExist(
   options: Pick<
     Awaited<ReturnType<typeof resolveOperationOptions>>,
     "cwd" | "workspace"
-  >
+  >,
 ) {
   const require = createRequire(withTrailingSlash(options.cwd));
 
@@ -130,15 +130,15 @@ export function doesDependencyExist(
 
 export async function fetchNpmPackageInfo(
   packageName: string,
-  tagOrVersion: string
+  tagOrVersion: string,
 ): Promise<PackageJson> {
   const { $fetch } = await import("ofetch");
   const response = await $fetch(
-    `https://registry.npmjs.org/${packageName}/${tagOrVersion}`
+    `https://registry.npmjs.org/${packageName}/${tagOrVersion}`,
   ).catch((error) => {
     throw new Error(
       `Cannot fetch package info for ${packageName}@${tagOrVersion} from NPM registry:`,
-      error
+      error,
     );
   });
   if (response && response.data && response.data.version) {
@@ -146,15 +146,15 @@ export async function fetchNpmPackageInfo(
   } else {
     throw new Error(
       `Error fetching latest version for ${packageName}: Invalid response: ${JSON.stringify(
-        response
-      )}`
+        response,
+      )}`,
     );
   }
 }
 
 export async function getLocalDependencyConstraint(
   name: string,
-  cwd: string = process.cwd()
+  cwd: string = process.cwd(),
 ): Promise<
   | undefined
   | {
