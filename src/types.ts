@@ -8,3 +8,11 @@ export type PackageManager = {
   lockFile?: string;
   files?: string[];
 };
+
+export type OperationOptions = {
+  cwd?: string;
+  silent?: boolean;
+  packageManager?: PackageManager;
+  dev?: boolean;
+  workspace?: string;
+};

@@ -6,9 +6,9 @@ import {
   removeDependency,
   PackageManagerName,
   ensureDependencyInstalled,
+  detectPackageManager,
 } from "../src";
-import { detectPackageManager } from "../src/utils/detect-package-manager";
-import { NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG } from "../src/utils/resolve-operation-options";
+import { NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG } from "../src/_utils";
 
 const resolveFixtureDirectory = (name: string) =>
   fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
@@ -137,7 +137,7 @@ describe("api", () => {
 
         if (fixture.name === "empty") {
           expect(
-            async () => await executeInstallDependenciesSpy()
+            async () => await executeInstallDependenciesSpy(),
           ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
         } else {
           await executeInstallDependenciesSpy();
@@ -157,7 +157,7 @@ describe("api", () => {
 
         if (fixture.name === "empty") {
           expect(
-            async () => await executeAddDependencySpy()
+            async () => await executeAddDependencySpy(),
           ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
         } else {
           await executeAddDependencySpy();
@@ -176,7 +176,7 @@ describe("api", () => {
 
         if (fixture.name === "empty") {
           expect(
-            async () => await executeEnsureDependencyInstalledSpy()
+            async () => await executeEnsureDependencyInstalledSpy(),
           ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
         } else {
           await executeEnsureDependencyInstalledSpy();
@@ -196,7 +196,7 @@ describe("api", () => {
 
         if (fixture.name === "empty") {
           expect(
-            async () => await executeRemoveDependencySpy()
+            async () => await executeRemoveDependencySpy(),
           ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
         } else {
           await executeRemoveDependencySpy();
@@ -217,7 +217,7 @@ describe("api", () => {
 
         if (fixture.name === "empty") {
           expect(
-            async () => await executeAddDependencySpy()
+            async () => await executeAddDependencySpy(),
           ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
         } else {
           await executeAddDependencySpy();
@@ -238,7 +238,7 @@ describe("api", () => {
 
         if (fixture.name === "empty") {
           expect(
-            async () => await executeRemoveDependencySpy()
+            async () => await executeRemoveDependencySpy(),
           ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
         } else {
           await executeRemoveDependencySpy();

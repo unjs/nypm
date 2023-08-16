@@ -1,10 +1,10 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
-import { join, normalize } from "pathe";
-import type { PackageManager } from "../types";
+import { join, resolve } from "pathe";
+import { findup } from "./_utils";
+import type { PackageManager } from "./types";
 
-type DetectPackageManagerOptions = {
+export type DetectPackageManagerOptions = {
   /**
    * Whether to ignore the lock file
    *
@@ -27,7 +27,7 @@ type DetectPackageManagerOptions = {
   includeParentDirs?: boolean;
 };
 
-const packageManagers: PackageManager[] = [
+const _packageManagers: PackageManager[] = [
   { name: "npm", command: "npm", lockFile: "package-lock.json" },
   {
     name: "pnpm",
@@ -50,28 +50,9 @@ const packageManagers: PackageManager[] = [
   },
 ];
 
-async function findup<T>(
-  cwd: string,
-  match: (path: string) => T | Promise<T>,
-  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {}
-): Promise<T | undefined> {
-  const segments = normalize(cwd).split("/");
-
-  while (segments.length > 0) {
-    const path = segments.join("/");
-    const result = await match(path);
-
-    if (result || !options.includeParentDirs) {
-      return result;
-    }
-
-    segments.pop();
-  }
-}
-
 export async function detectPackageManager(
   cwd: string,
-  options: DetectPackageManagerOptions = {}
+  options: DetectPackageManagerOptions = {},
 ): Promise<PackageManager | undefined> {
   const detected = await findup(
     cwd,
@@ -81,16 +62,16 @@ export async function detectPackageManager(
         const packageJSONPath = join(path, "package.json");
         if (existsSync(packageJSONPath)) {
           const packageJSON = JSON.parse(
-            await readFile(packageJSONPath, "utf8")
+            await readFile(packageJSONPath, "utf8"),
           );
           if (packageJSON?.packageManager) {
             const [name, version = "0.0.0"] =
               packageJSON.packageManager.split("@");
             const majorVersion = version.split(".")[0];
             const packageManager =
-              packageManagers.find(
-                (pm) => pm.name === name && pm.majorVersion === majorVersion
-              ) || packageManagers.find((pm) => pm.name === name);
+              _packageManagers.find(
+                (pm) => pm.name === name && pm.majorVersion === majorVersion,
+              ) || _packageManagers.find((pm) => pm.name === name);
             return {
               ...packageManager,
               name,
@@ -104,7 +85,7 @@ export async function detectPackageManager(
 
       // 2. Use implicit file detection
       if (!options.ignoreLockFile) {
-        for (const packageManager of packageManagers) {
+        for (const packageManager of _packageManagers) {
           const detectionsFiles = [
             packageManager.lockFile,
             ...(packageManager.files || []),
@@ -121,7 +102,7 @@ export async function detectPackageManager(
     },
     {
       includeParentDirs: options.includeParentDirs,
-    }
+    },
   );
 
   return detected;

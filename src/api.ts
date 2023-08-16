@@ -1,16 +1,10 @@
-import type { PackageManager } from "./types";
-import { executeCommand } from "./utils/execute-command";
-import { resolveOperationOptions } from "./utils/resolve-operation-options";
-import { getWorkspaceArgs } from "./utils/get-workspace-args";
-import { doesDependencyExist } from "./utils/does-dependency-exist";
-
-export type OperationOptions = {
-  cwd?: string;
-  silent?: boolean;
-  packageManager?: PackageManager;
-  dev?: boolean;
-  workspace?: string;
-};
+import {
+  executeCommand,
+  resolveOperationOptions,
+  getWorkspaceArgs,
+  doesDependencyExist,
+} from "./_utils";
+import type { OperationOptions } from "./types";
 
 /**
  * Installs project dependencies.
@@ -21,7 +15,7 @@ export type OperationOptions = {
  * @param options.packageManager - The package manager info to use (auto-detected).
  */
 export async function installDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {}
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -44,7 +38,7 @@ export async function installDependencies(
  */
 export async function addDependency(
   name: string,
-  options: OperationOptions = {}
+  options: OperationOptions = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -83,7 +77,7 @@ export async function addDependency(
  */
 export async function addDevDependency(
   name: string,
-  options: Omit<OperationOptions, "dev"> = {}
+  options: Omit<OperationOptions, "dev"> = {},
 ) {
   await addDependency(name, { ...options, dev: true });
 }
@@ -101,7 +95,7 @@ export async function addDevDependency(
  */
 export async function removeDependency(
   name: string,
-  options: OperationOptions = {}
+  options: OperationOptions = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -140,7 +134,7 @@ export async function removeDependency(
  */
 export async function ensureDependencyInstalled(
   name: string,
-  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {}
+  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
