@@ -1,9 +1,8 @@
 {
   "name": "workspace-a",
   "private": true,
-  "version": "0.0.0",
+  "packageManager": "npm@9.7.2",
   "devDependencies": {
-    "ufo": "^1.1.1"
-  },
-  "packageManager": "npm@9.1.3"
+    "ufo": "1.1.2"
+  }
 }

@@ -1,10 +1,11 @@
 {
-  "name": "fixture-yarn",
+  "name": "fixture-yarn-classic",
   "private": true,
-  "version": "0.0.0",
-  "dependencies": {},
+  "workspaces": [
+    "packages/workspace-a"
+  ],
   "packageManager": "yarn@1.22.19",
-  "devDependencies": {
-    "ufo": "^1.1.1"
+  "dependencies": {
+    "consola": "3.2.2"
   }
 }

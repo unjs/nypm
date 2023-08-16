@@ -1,3 +1,3 @@
 export * from "./types";
-export * from "./detect";
+export * from "./package-manager";
 export * from "./api";

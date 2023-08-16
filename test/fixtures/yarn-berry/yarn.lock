@@ -5,23 +5,32 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"fixture-yarn@workspace:.":
+"consola@npm:3.2.2":
+  version: 3.2.2
+  resolution: "consola@npm:3.2.2"
+  checksum: 3c22102f74b4dc1519ab2a3096b1975a8b767f258027cef9888ca9d999ed79388e390b969474bce0b42aade73cd2689f62ca511e530a06bf842092f8ef1bf7a6
+  languageName: node
+  linkType: hard
+
+"fixture-yarn-berry@workspace:.":
   version: 0.0.0-use.local
-  resolution: "fixture-yarn@workspace:."
+  resolution: "fixture-yarn-berry@workspace:."
+  dependencies:
+    consola: 3.2.2
   languageName: unknown
   linkType: soft
 
-"ufo@npm:^1.1.1":
+"ufo@npm:1.1.2":
   version: 1.1.2
   resolution: "ufo@npm:1.1.2"
   checksum: 83c940a6a23b6d4fc0cd116265bb5dcf88ab34a408ad9196e413270ca607a4781c09b547dc518f43caee128a096f20fe80b5a0e62b4bcc0a868619896106d048
   languageName: node
   linkType: hard
 
-"workspace-a-2ddc4d@workspace:packages/workspace-a":
+"workspace-a@workspace:packages/workspace-a":
   version: 0.0.0-use.local
-  resolution: "workspace-a-2ddc4d@workspace:packages/workspace-a"
+  resolution: "workspace-a@workspace:packages/workspace-a"
   dependencies:
-    ufo: ^1.1.1
+    ufo: 1.1.2
   languageName: unknown
   linkType: soft

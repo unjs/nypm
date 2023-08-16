@@ -1,9 +1,8 @@
 {
-  "name": "fixture-pnpm/workspace-a",
+  "name": "workspace-a",
   "private": true,
-  "version": "0.0.0",
+  "packageManager": "pnpm@8.6.5",
   "devDependencies": {
-    "ufo": "^1.1.1"
-  },
-  "packageManager": "pnpm@8.1.1"
+    "ufo": "1.1.2"
+  }
 }
