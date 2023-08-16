@@ -8,7 +8,7 @@ import { detectPackageManager } from "./package-manager";
 export async function findup<T>(
   cwd: string,
   match: (path: string) => T | Promise<T>,
-  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {}
+  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {},
 ): Promise<T | undefined> {
   const segments = normalize(cwd).split("/");
 
@@ -27,7 +27,7 @@ export async function findup<T>(
 export async function executeCommand(
   command: string,
   args: string[],
-  options: Pick<OperationOptions, "cwd" | "silent"> = {}
+  options: Pick<OperationOptions, "cwd" | "silent"> = {},
 ): Promise<void> {
   const { execa } = await import("execa");
   const { resolve } = await import("pathe");
@@ -49,7 +49,7 @@ export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG =
   "No package manager auto-detected.";
 
 export async function resolveOperationOptions(
-  options: OperationOptions = {}
+  options: OperationOptions = {},
 ): Promise<
   NonPartial<
     Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dev">
@@ -76,7 +76,7 @@ export async function resolveOperationOptions(
 }
 
 export function getWorkspaceArgs(
-  options: Awaited<ReturnType<typeof resolveOperationOptions>>
+  options: Awaited<ReturnType<typeof resolveOperationOptions>>,
 ): string[] {
   if (!options.workspace) {
     if (options.packageManager.name === "pnpm") {
@@ -113,7 +113,7 @@ export function doesDependencyExist(
   options: Pick<
     Awaited<ReturnType<typeof resolveOperationOptions>>,
     "cwd" | "workspace"
-  >
+  >,
 ) {
   const require = createRequire(withTrailingSlash(options.cwd));
 
