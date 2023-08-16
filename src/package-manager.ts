@@ -52,7 +52,7 @@ const _packageManagers: PackageManager[] = [
 
 export async function detectPackageManager(
   cwd: string,
-  options: DetectPackageManagerOptions = {},
+  options: DetectPackageManagerOptions = {}
 ): Promise<PackageManager | undefined> {
   const detected = await findup(
     cwd,
@@ -62,7 +62,7 @@ export async function detectPackageManager(
         const packageJSONPath = join(path, "package.json");
         if (existsSync(packageJSONPath)) {
           const packageJSON = JSON.parse(
-            await readFile(packageJSONPath, "utf8"),
+            await readFile(packageJSONPath, "utf8")
           );
           if (packageJSON?.packageManager) {
             const [name, version = "0.0.0"] =
@@ -70,7 +70,7 @@ export async function detectPackageManager(
             const majorVersion = version.split(".")[0];
             const packageManager =
               _packageManagers.find(
-                (pm) => pm.name === name && pm.majorVersion === majorVersion,
+                (pm) => pm.name === name && pm.majorVersion === majorVersion
               ) || _packageManagers.find((pm) => pm.name === name);
             return {
               ...packageManager,
@@ -102,7 +102,7 @@ export async function detectPackageManager(
     },
     {
       includeParentDirs: options.includeParentDirs,
-    },
+    }
   );
 
   return detected;
