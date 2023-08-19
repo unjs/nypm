@@ -30,7 +30,7 @@
     "test:types": "tsc --noEmit"
   },
   "dependencies": {
-    "execa": "^7.2.0",
+    "execa": "^8.0.1",
     "ufo": "^1.2.0"
   },
   "devDependencies": {
