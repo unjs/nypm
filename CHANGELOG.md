@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v0.3.1
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.0...v0.3.1)
+
+### 🚀 Enhancements
+
+- Add support for bun ([#87](https://github.com/unjs/nypm/pull/87))
+
+### 🏡 Chore
+
+- Apply automated lint fixes ([fa3405a](https://github.com/unjs/nypm/commit/fa3405a))
+- Update dependencies ([c97e030](https://github.com/unjs/nypm/commit/c97e030))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Daniel Roe <daniel@roe.dev>
+
 ## v0.3.0
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.2.2...v0.3.0)
