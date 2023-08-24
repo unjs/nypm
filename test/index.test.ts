@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { expect, it, describe, vi } from "vitest";
+import { isWindows } from "std-env";
 import {
   installDependencies,
   addDependency,
@@ -52,6 +53,11 @@ const DEFAULT_WORKSPACE = "workspace-a";
 
 describe("detectPackageManager", () => {
   for (const fixture of fixtures) {
+    // bun is not yet supported on Windows
+    if (isWindows && fixture.name === "bun") {
+      continue;
+    }
+
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
 
