@@ -11,31 +11,31 @@
 
 ## What does **nypm** do?
 
-✅ Supports **npm, yarn and pnpm** out of the box with a unified API
+✅ Supports **npm, yarn, pnpm and bun** out of the box with a unified API
 
 ✅ Provides an **API interface** to interact with package managers
 
 ✅ **Autodetects** project's package manager using package.json and known lockfiles
 
-✅ **Auto-installs and use exactly expected version** of package manager using [nodejs/corepack](https://github.com/nodejs/corepack)
+✅ **Auto-installs and use exactly expected version** of supported package managers using [nodejs/corepack](https://github.com/nodejs/corepack)
 
 ✅ **Minimal** implementation
 
 nypm, detects package manager type and version and converts command into package manager CLI arguments. It then uses corepack to execute package manager's command (and download it if necessary).
 
 ```
-  +------------------------------------+
-  |                nypm                |
-  +------------------------------------+
-  +------------------------------------+
-  |              Corepack              |
-  +------------------------------------+
-  +---------+  +---------+   +---------+
-  |   npm   |  |  yarn   |   |  pnpm   |
-  +---------+  +---------+   +---------+
-  +------------------------------------+
-  |         Node.js project            |
-  +------------------------------------+
+  +------------------------------------------------+
+  |                nypm                            |
+  +------------------------------------------------+
+  +-----------------------------------+
+  |              Corepack             |
+  +-----------------------------------+
+  +---------+  +---------+  +---------+  +---------+
+  |   npm   |  |  yarn   |  |  pnpm   |  |  bun    |
+  +---------+  +---------+  +---------+  +---------+
+  +------------------------------------------------+
+  |                Node.js project                 |
+  +------------------------------------------------+
 ```
 
 ## CLI Usage
@@ -55,6 +55,9 @@ pnpm install nypm
 
 # yarn
 yarn add nypm
+
+# bun
+bun install nypm
 ```
 
 Import:
