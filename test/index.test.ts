@@ -53,11 +53,6 @@ const DEFAULT_WORKSPACE = "workspace-a";
 
 describe("detectPackageManager", () => {
   for (const fixture of fixtures) {
-    // bun is not yet supported on Windows
-    if (isWindows && fixture.name === "bun") {
-      continue;
-    }
-
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
 
@@ -133,6 +128,11 @@ describe("detectPackageManager", () => {
 
 describe("api", () => {
   for (const fixture of fixtures) {
+    // bun is not yet supported on Windows
+    if (isWindows && fixture.name === "bun") {
+      continue;
+    }
+
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
 
