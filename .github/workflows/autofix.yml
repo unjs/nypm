@@ -22,6 +22,7 @@ jobs:
       - run: pnpm install
       - name: Fix lint issues
         run: pnpm run lint:fix && pnpm vitest run --update
+      - run: git checkout HEAD test/fixtures/bun
       - uses: autofix-ci/action@8caa572fd27b0019a65e4c695447089c8d3138b9
         with:
           commit-message: "chore: apply automated lint fixes"
