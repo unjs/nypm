@@ -33,6 +33,10 @@ const fixtures = [
     packageManager: "pnpm",
   },
   {
+    name: "bun",
+    packageManager: "bun",
+  },
+  {
     name: "yarn-classic",
     packageManager: "yarn",
     majorVersion: "1",

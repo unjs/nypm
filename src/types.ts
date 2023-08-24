@@ -1,4 +1,4 @@
-export type PackageManagerName = "npm" | "yarn" | "pnpm";
+export type PackageManagerName = "npm" | "yarn" | "pnpm" | "bun";
 
 export type PackageManager = {
   name: PackageManagerName;
