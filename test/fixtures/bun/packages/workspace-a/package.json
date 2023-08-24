@@ -1,0 +1,8 @@
+{
+  "name": "fixture-bun/workspace-a",
+  "private": true,
+  "version": "0.0.0",
+  "devDependencies": {
+    "ufo": "^1.1.1"
+  }
+}

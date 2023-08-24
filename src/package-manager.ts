@@ -36,6 +36,11 @@ const _packageManagers: PackageManager[] = [
     files: ["pnpm-workspace.yaml"],
   },
   {
+    name: "bun",
+    command: "bun",
+    lockFile: "bun.lockb",
+  },
+  {
     name: "yarn",
     command: "yarn",
     majorVersion: "1.0.0",

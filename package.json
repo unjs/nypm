@@ -43,6 +43,7 @@
     "jiti": "^1.19.1",
     "pathe": "^1.1.1",
     "prettier": "^3.0.2",
+    "std-env": "^3.4.3",
     "typescript": "^5.1.6",
     "unbuild": "^1.2.1",
     "vitest": "^0.34.1"

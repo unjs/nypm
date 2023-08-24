@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { expect, it, describe, vi } from "vitest";
+import { isWindows } from "std-env";
 import {
   installDependencies,
   addDependency,
@@ -31,6 +32,10 @@ const fixtures = [
   {
     name: "pnpm",
     packageManager: "pnpm",
+  },
+  {
+    name: "bun",
+    packageManager: "bun",
   },
   {
     name: "yarn-classic",
@@ -123,6 +128,11 @@ describe("detectPackageManager", () => {
 
 describe("api", () => {
   for (const fixture of fixtures) {
+    // bun is not yet supported on Windows
+    if (isWindows && fixture.name === "bun") {
+      continue;
+    }
+
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
 

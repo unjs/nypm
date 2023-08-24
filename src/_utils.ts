@@ -35,7 +35,9 @@ export async function executeCommand(
   // work around issue with segmentation fault when using corepack with npm
   // on ubuntu-latest
   const execaArgs: [string, string[]] =
-    command === "npm" ? [command, args] : ["corepack", [command, ...args]];
+    command === "npm" || command === "bun"
+      ? [command, args]
+      : ["corepack", [command, ...args]];
 
   await execa(execaArgs[0], execaArgs[1], {
     cwd: resolve(options.cwd || process.cwd()),
@@ -100,6 +102,10 @@ export function getWorkspaceArgs(
 
     case "pnpm": {
       return ["-F", options.workspace];
+    }
+
+    case "bun": {
+      return [];
     }
 
     case "yarn": {
