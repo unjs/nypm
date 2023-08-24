@@ -6,4 +6,4 @@ coverage
 dist
 types
 .conf*
-bun.lockdb
+bun.lockb
