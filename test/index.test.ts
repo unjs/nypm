@@ -67,8 +67,6 @@ const fixtures = [
   },
 ] as const satisfies readonly Fixture[];
 
-const DEFAULT_WORKSPACE = "workspace-a";
-
 describe("detectPackageManager", () => {
   for (const fixture of fixtures) {
     describe(fixture.name, () => {
@@ -146,10 +144,6 @@ describe("detectPackageManager", () => {
 
 describe("api", () => {
   for (const fixture of fixtures) {
-    if (fixture.name.includes("workspace")) {
-      continue;
-    }
-
     // bun is not yet supported on Windows
     if (isWindows && fixture.name === "bun") {
       continue;
@@ -157,130 +151,135 @@ describe("api", () => {
 
     describe(fixture.name, () => {
       const fixtureDirectory = resolveFixtureDirectory(fixture.name);
+      const isWorkspace = fixture.name.includes("workspace");
 
-      it("installs dependencies", async () => {
-        const installDependenciesSpy = vi.fn(installDependencies);
-
-        const executeInstallDependenciesSpy = () =>
-          installDependenciesSpy({
-            cwd: fixtureDirectory,
-            silent: !process.env.DEBUG,
-          });
-
-        if (fixture.name === "empty") {
-          expect(
-            async () => await executeInstallDependenciesSpy(),
-          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
-        } else {
-          await executeInstallDependenciesSpy();
-
-          expect(installDependenciesSpy).toHaveReturned();
-        }
-      }, 30_000);
-
-      it("adds dependency", async () => {
-        const addDependencySpy = vi.fn(addDependency);
-
-        const executeAddDependencySpy = () =>
-          addDependencySpy("pathe", {
-            cwd: fixtureDirectory,
-            silent: !process.env.DEBUG,
-          });
-
-        if (fixture.name === "empty") {
-          expect(
-            async () => await executeAddDependencySpy(),
-          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
-        } else {
+      if (isWorkspace) {
+        it("adds dependency to the workspace root", async () => {
+          const addDependencySpy = vi.fn(addDependency);
+          const executeAddDependencySpy = () =>
+            addDependencySpy("pathe", {
+              cwd: fixtureDirectory,
+              silent: !process.env.DEBUG,
+              workspace: true,
+            });
           await executeAddDependencySpy();
-
           expect(addDependencySpy).toHaveReturned();
-        }
-      }, 30_000);
+        }, 30_000);
 
-      it("ensures dependency is installed", async () => {
-        const ensureDependencyInstalledSpy = vi.fn(ensureDependencyInstalled);
-
-        const executeEnsureDependencyInstalledSpy = () =>
-          ensureDependencyInstalledSpy("pathe", {
-            cwd: fixtureDirectory,
-          });
-
-        if (fixture.name === "empty") {
-          expect(
-            async () => await executeEnsureDependencyInstalledSpy(),
-          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
-        } else {
-          await executeEnsureDependencyInstalledSpy();
-
-          expect(ensureDependencyInstalledSpy).toHaveReturned();
-        }
-      });
-
-      it("removes dependency", async () => {
-        const removeDependencySpy = vi.fn(removeDependency);
-
-        const executeRemoveDependencySpy = () =>
-          removeDependencySpy("pathe", {
-            cwd: fixtureDirectory,
-            silent: !process.env.DEBUG,
-          });
-
-        if (fixture.name === "empty") {
-          expect(
-            async () => await executeRemoveDependencySpy(),
-          ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
-        } else {
+        it("removes dependency from workspace root", async () => {
+          const removeDependencySpy = vi.fn(removeDependency);
+          const executeRemoveDependencySpy = () =>
+            removeDependencySpy("pathe", {
+              cwd: fixtureDirectory,
+              silent: !process.env.DEBUG,
+              workspace: true,
+            });
           await executeRemoveDependencySpy();
-
           expect(removeDependencySpy).toHaveReturned();
-        }
-      }, 30_000);
+        }, 30_000);
 
-      if (fixture.name.includes("workspace")) {
-        describe("workspace", () => {
-          it("adds dependency to workspace", async () => {
-            const addDependencySpy = vi.fn(addDependency);
+        it("adds dependency to workspace package", async () => {
+          const addDependencySpy = vi.fn(addDependency);
+          const executeAddDependencySpy = () =>
+            addDependencySpy("ufo", {
+              cwd: fixtureDirectory,
+              silent: !process.env.DEBUG,
+              workspace: "./packages/workspace-a",
+            });
+          await executeAddDependencySpy();
+          expect(addDependencySpy).toHaveReturned();
+        }, 30_000);
 
-            const executeAddDependencySpy = () =>
-              addDependencySpy("pathe", {
-                cwd: fixtureDirectory,
-                silent: !process.env.DEBUG,
-                workspace: DEFAULT_WORKSPACE,
-              });
+        // it("removes dependency from workspace package", async () => {
+        //   const removeDependencySpy = vi.fn(removeDependency);
+        //   const executeRemoveDependencySpy = () =>
+        //     removeDependencySpy("ufo", {
+        //       cwd: fixtureDirectory,
+        //       silent: !process.env.DEBUG,
+        //       workspace: "./packages/workspace-a",
+        //     });
+        //   await executeRemoveDependencySpy();
+        //   expect(removeDependencySpy).toHaveReturned();
+        // }, 30_000);
+      } else {
+        it("installs dependencies", async () => {
+          const installDependenciesSpy = vi.fn(installDependencies);
 
-            if (fixture.name === "empty") {
-              expect(
-                async () => await executeAddDependencySpy(),
-              ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
-            } else {
-              await executeAddDependencySpy();
+          const executeInstallDependenciesSpy = () =>
+            installDependenciesSpy({
+              cwd: fixtureDirectory,
+              silent: !process.env.DEBUG,
+            });
 
-              expect(addDependencySpy).toHaveReturned();
-            }
-          }, 30_000);
+          if (fixture.name === "empty") {
+            expect(
+              async () => await executeInstallDependenciesSpy(),
+            ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+          } else {
+            await executeInstallDependenciesSpy();
 
-          it("removes dependency from workspace", async () => {
-            const removeDependencySpy = vi.fn(removeDependency);
+            expect(installDependenciesSpy).toHaveReturned();
+          }
+        }, 30_000);
 
-            const executeRemoveDependencySpy = () =>
-              removeDependencySpy("pathe", {
-                cwd: fixtureDirectory,
-                silent: !process.env.DEBUG,
-                workspace: DEFAULT_WORKSPACE,
-              });
+        it("adds dependency", async () => {
+          const addDependencySpy = vi.fn(addDependency);
 
-            if (fixture.name === "empty") {
-              expect(
-                async () => await executeRemoveDependencySpy(),
-              ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
-            } else {
-              await executeRemoveDependencySpy();
+          const executeAddDependencySpy = () =>
+            addDependencySpy("pathe", {
+              cwd: fixtureDirectory,
+              silent: !process.env.DEBUG,
+            });
 
-              expect(removeDependencySpy).toHaveReturned();
-            }
-          }, 30_000);
+          if (fixture.name === "empty") {
+            expect(
+              async () => await executeAddDependencySpy(),
+            ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+          } else {
+            await executeAddDependencySpy();
+
+            expect(addDependencySpy).toHaveReturned();
+          }
+        }, 30_000);
+
+        it("ensures dependency is installed", async () => {
+          const ensureDependencyInstalledSpy = vi.fn(ensureDependencyInstalled);
+
+          const executeEnsureDependencyInstalledSpy = () =>
+            ensureDependencyInstalledSpy("pathe", {
+              cwd: fixtureDirectory,
+            });
+
+          if (fixture.name === "empty") {
+            expect(
+              async () => await executeEnsureDependencyInstalledSpy(),
+            ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+          } else {
+            await executeEnsureDependencyInstalledSpy();
+
+            expect(ensureDependencyInstalledSpy).toHaveReturned();
+          }
         });
+
+        it("removes dependency", async () => {
+          const removeDependencySpy = vi.fn(removeDependency);
+
+          const executeRemoveDependencySpy = () =>
+            removeDependencySpy("pathe", {
+              cwd: fixtureDirectory,
+              silent: !process.env.DEBUG,
+            });
+
+          if (fixture.name === "empty") {
+            expect(
+              async () => await executeRemoveDependencySpy(),
+            ).rejects.toThrowError(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
+          } else {
+            await executeRemoveDependencySpy();
+
+            expect(removeDependencySpy).toHaveReturned();
+          }
+        }, 30_000);
       }
     });
   }

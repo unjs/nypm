@@ -14,5 +14,5 @@ export type OperationOptions = {
   silent?: boolean;
   packageManager?: PackageManager;
   dev?: boolean;
-  workspace?: string;
+  workspace?: boolean | string;
 };

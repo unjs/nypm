@@ -81,37 +81,36 @@ export function getWorkspaceArgs(
   options: Awaited<ReturnType<typeof resolveOperationOptions>>,
 ): string[] {
   if (!options.workspace) {
-    if (options.packageManager.name === "pnpm") {
-      return ["-w"];
-    }
-
-    if (
-      options.packageManager.name === "yarn" &&
-      options.packageManager.majorVersion === "1"
-    ) {
-      return ["-W"];
-    }
-
     return [];
   }
 
-  switch (options.packageManager.name) {
-    case "npm": {
-      return ["-w", options.workspace];
-    }
+  const workspacePkg =
+    typeof options.workspace === "string" && options.workspace !== ""
+      ? options.workspace
+      : undefined;
 
-    case "pnpm": {
-      return ["-F", options.workspace];
-    }
+  if (options.packageManager.name === "pnpm") {
+    return workspacePkg ? ["--dir", workspacePkg] : ["--workspace-root"];
+  }
 
-    case "bun": {
-      return [];
-    }
+  if (options.packageManager.name === "npm") {
+    return workspacePkg ? ["-w", workspacePkg] : ["--workspaces"];
+  }
 
-    case "yarn": {
-      return ["workspace", options.workspace];
+  if (options.packageManager.name === "yarn") {
+    if (
+      !options.packageManager.majorVersion ||
+      options.packageManager.majorVersion === "1"
+    ) {
+      // Classic
+      return workspacePkg ? ["-W"] : ["-W"];
+    } else {
+      // Berry
+      return workspacePkg ? [] : [];
     }
   }
+
+  return [];
 }
 
 export function doesDependencyExist(
