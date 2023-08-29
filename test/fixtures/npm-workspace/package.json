@@ -1,6 +1,9 @@
 {
-  "name": "fixture-npm",
+  "name": "fixture-npm-workspace",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "packageManager": "npm@9.7.2",
   "dependencies": {
     "consola": "3.2.2"

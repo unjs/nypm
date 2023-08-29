@@ -1,6 +1,9 @@
 {
-  "name": "fixture-bun",
+  "name": "fixture-bun-workspace",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "consola": "3.2.2"
   },

@@ -1,6 +1,9 @@
 {
-  "name": "fixture-yarn-berry",
+  "name": "fixture-yarn-berry-workspace",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "packageManager": "yarn@3.6.1",
   "dependencies": {
     "consola": "3.2.2"

@@ -12,10 +12,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fixture-yarn-berry@workspace:.":
+"fixture-yarn-berry-workspace@workspace:.":
   version: 0.0.0-use.local
-  resolution: "fixture-yarn-berry@workspace:."
+  resolution: "fixture-yarn-berry-workspace@workspace:."
   dependencies:
     consola: 3.2.2
+  languageName: unknown
+  linkType: soft
+
+"workspace-a@workspace:packages/workspace-a":
+  version: 0.0.0-use.local
+  resolution: "workspace-a@workspace:packages/workspace-a"
   languageName: unknown
   linkType: soft
