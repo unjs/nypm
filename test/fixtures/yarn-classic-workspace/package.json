@@ -1,12 +1,11 @@
 {
-  "name": "fixture-yarn-classic",
+  "name": "fixture-yarn-classic-workspace",
   "private": true,
   "workspaces": [
-    "packages/workspace-a"
+    "packages/*"
   ],
   "packageManager": "yarn@1.22.19",
   "dependencies": {
-    "consola": "3.2.2",
-    "ufo": "^1.3.0"
+    "consola": "3.2.2"
   }
 }

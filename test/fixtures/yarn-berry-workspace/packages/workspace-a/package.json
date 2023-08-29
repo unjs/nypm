@@ -1,5 +1,4 @@
 {
   "name": "workspace-a",
-  "private": true,
-  "packageManager": "yarn@3.6.0"
+  "private": true
 }

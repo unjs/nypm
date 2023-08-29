@@ -1,8 +1,4 @@
 {
   "name": "workspace-a",
-  "private": true,
-  "version": "0.0.0",
-  "packageManager": "yarn@1.22.19",
-  "devDependencies": {},
-  "dependencies": {}
+  "private": true
 }

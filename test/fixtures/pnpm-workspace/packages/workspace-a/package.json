@@ -1,8 +1,4 @@
 {
   "name": "workspace-a",
-  "private": true,
-  "packageManager": "pnpm@8.6.5",
-  "devDependencies": {
-    "ufo": "1.1.2"
-  }
+  "private": true
 }

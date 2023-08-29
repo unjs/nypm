@@ -30,6 +30,10 @@ const fixtures = [
     packageManager: "bun",
   },
   {
+    name: "bun-workspace",
+    packageManager: "bun",
+  },
+  {
     name: "npm",
     packageManager: "npm",
   },

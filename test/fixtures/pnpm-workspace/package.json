@@ -1,5 +1,5 @@
 {
-  "name": "fixture-pnpm",
+  "name": "fixture-pnpm-workspace",
   "private": true,
   "packageManager": "pnpm@8.6.5",
   "dependencies": {
