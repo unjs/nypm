@@ -149,7 +149,7 @@ describe("detectPackageManager", () => {
 describe("api", () => {
   for (const fixture of fixtures) {
     // bun is not yet supported on Windows
-    if (isWindows && fixture.name === "bun") {
+    if (isWindows && fixture.packageManager === "bun") {
       continue;
     }
 
