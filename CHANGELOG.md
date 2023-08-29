@@ -1,6 +1,29 @@
 # Changelog
 
 
+## v0.3.2
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.1...v0.3.2)
+
+### 🩹 Fixes
+
+- Remove extra `console.log` ([251c374](https://github.com/unjs/nypm/commit/251c374))
+- Buffer stdio in silent mode ([b81da19](https://github.com/unjs/nypm/commit/b81da19))
+- Pass appropriate workspace args and improve tests ([#90](https://github.com/unjs/nypm/pull/90))
+
+### 🏡 Chore
+
+- Set `git-checks: false` to allow publish ([af83d2d](https://github.com/unjs/nypm/commit/af83d2d))
+- Update dependencies ([84357e0](https://github.com/unjs/nypm/commit/84357e0))
+
+### ✅ Tests
+
+- **bun:** Add `packageManager` field to allow tests passing ([a731666](https://github.com/unjs/nypm/commit/a731666))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.3.1
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.0...v0.3.1)
