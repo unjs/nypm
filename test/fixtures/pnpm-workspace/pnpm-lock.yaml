@@ -12,11 +12,7 @@ importers:
         specifier: 3.2.2
         version: 3.2.2
 
-  packages/workspace-a:
-    devDependencies:
-      ufo:
-        specifier: 1.1.2
-        version: 1.1.2
+  packages/workspace-a: {}
 
   workspace-a: {}
 
@@ -26,7 +22,3 @@ packages:
     resolution: {integrity: sha512-r921u0vbF4lQsoIqYvSSER+yZLPQGijOHrYcWoCNVNBZmn/bRR+xT/DgerTze/nLD9TTGzdDa378TVhx7RDOYg==}
     engines: {node: ^14.18.0 || >=16.10.0}
     dev: false
-
-  /ufo@1.1.2:
-    resolution: {integrity: sha512-TrY6DsjTQQgyS3E3dBaOXf0TpPD8u9FVrVYmKVegJuFw51n/YB9XPt+U6ydzFG5ZIN7+DIjPbNmXoBj9esYhgQ==}
-    dev: true

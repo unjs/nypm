@@ -12,21 +12,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fixture-yarn-berry@workspace:.":
+"fixture-yarn-berry-workspace@workspace:.":
   version: 0.0.0-use.local
-  resolution: "fixture-yarn-berry@workspace:."
+  resolution: "fixture-yarn-berry-workspace@workspace:."
   dependencies:
     consola: 3.2.2
-    ufo: ^1.3.0
   languageName: unknown
   linkType: soft
-
-"ufo@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "ufo@npm:1.3.0"
-  checksum: 01f0be86cd5c205ad1b49ebea985e000a4542c503ee75398302b0f5e4b9a6d9cd8e77af2dc614ab7bea08805fdfd9a85191fb3b5ee3df383cb936cf65e9db30d
-  languageName: node
-  linkType: hard
 
 "workspace-a@workspace:packages/workspace-a":
   version: 0.0.0-use.local
