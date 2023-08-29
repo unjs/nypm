@@ -1,5 +1,4 @@
 import { expect, it, describe, vi } from "vitest";
-import { isWindows } from "std-env";
 import {
   installDependencies,
   addDependency,
@@ -10,11 +9,6 @@ import { fixtures } from "./_shared";
 
 describe("api (workspace)", () => {
   for (const fixture of fixtures.filter((f) => !f.workspace)) {
-    // bun is not yet supported on Windows
-    if (isWindows && fixture.packageManager === "bun") {
-      continue;
-    }
-
     describe(fixture.name, () => {
       it("installs dependencies", async () => {
         const installDependenciesSpy = vi.fn(installDependencies);
