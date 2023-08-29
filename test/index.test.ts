@@ -178,29 +178,34 @@ describe("api", () => {
           expect(removeDependencySpy).toHaveReturned();
         }, 30_000);
 
+        const workspaceRef =
+          fixture.name === "yarn-classic-workspace"
+            ? "./packages/workspace-a"
+            : "workspace-a";
+
         it("adds dependency to workspace package", async () => {
           const addDependencySpy = vi.fn(addDependency);
           const executeAddDependencySpy = () =>
             addDependencySpy("ufo", {
               cwd: fixtureDirectory,
               silent: !process.env.DEBUG,
-              workspace: "./packages/workspace-a",
+              workspace: workspaceRef,
             });
           await executeAddDependencySpy();
           expect(addDependencySpy).toHaveReturned();
         }, 30_000);
 
-        // it("removes dependency from workspace package", async () => {
-        //   const removeDependencySpy = vi.fn(removeDependency);
-        //   const executeRemoveDependencySpy = () =>
-        //     removeDependencySpy("ufo", {
-        //       cwd: fixtureDirectory,
-        //       silent: !process.env.DEBUG,
-        //       workspace: "./packages/workspace-a",
-        //     });
-        //   await executeRemoveDependencySpy();
-        //   expect(removeDependencySpy).toHaveReturned();
-        // }, 30_000);
+        it("removes dependency from workspace package", async () => {
+          const removeDependencySpy = vi.fn(removeDependency);
+          const executeRemoveDependencySpy = () =>
+            removeDependencySpy("ufo", {
+              cwd: fixtureDirectory,
+              silent: !process.env.DEBUG,
+              workspace: workspaceRef,
+            });
+          await executeRemoveDependencySpy();
+          expect(removeDependencySpy).toHaveReturned();
+        }, 30_000);
       } else {
         it("installs dependencies", async () => {
           const installDependenciesSpy = vi.fn(installDependencies);

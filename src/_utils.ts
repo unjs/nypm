@@ -89,10 +89,12 @@ export function getWorkspaceArgs(
       ? options.workspace
       : undefined;
 
+  // pnpm
   if (options.packageManager.name === "pnpm") {
     return workspacePkg ? ["--dir", workspacePkg] : ["--workspace-root"];
   }
 
+  // npm
   if (options.packageManager.name === "npm") {
     return workspacePkg ? ["-w", workspacePkg] : ["--workspaces"];
   }
@@ -102,11 +104,11 @@ export function getWorkspaceArgs(
       !options.packageManager.majorVersion ||
       options.packageManager.majorVersion === "1"
     ) {
-      // Classic
-      return workspacePkg ? ["-W"] : ["-W"];
+      // Yarn classic
+      return workspacePkg ? ["--cwd", workspacePkg] : ["-W"];
     } else {
-      // Berry
-      return workspacePkg ? [] : [];
+      // Yarn berry
+      return workspacePkg ? ["workspace", workspacePkg] : [];
     }
   }
 
