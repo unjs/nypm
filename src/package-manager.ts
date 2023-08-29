@@ -97,7 +97,6 @@ export async function detectPackageManager(
           ].filter(Boolean) as string[];
 
           if (detectionsFiles.some((file) => existsSync(resolve(path, file)))) {
-            console.log(path);
             return {
               ...packageManager,
             };
