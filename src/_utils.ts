@@ -41,7 +41,7 @@ export async function executeCommand(
 
   await execa(execaArgs[0], execaArgs[1], {
     cwd: resolve(options.cwd || process.cwd()),
-    stdio: options.silent ? "ignore" : "inherit",
+    stdio: options.silent ? "pipe" : "inherit",
   });
 }
 
