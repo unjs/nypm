@@ -3,6 +3,6 @@
   "private": true,
   "packageManager": "npm@9.7.2",
   "devDependencies": {
-    "ufo": "1.1.2"
+    "ufo": "^1.1.2"
   }
 }
