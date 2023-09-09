@@ -22,9 +22,6 @@ devDependencies:
   changelogen:
     specifier: ^0.5.5
     version: 0.5.5
-  corepack:
-    specifier: ^0.20.0
-    version: 0.20.0
   eslint:
     specifier: ^8.49.0
     version: 8.49.0
@@ -1517,12 +1514,6 @@ packages:
 
   /convert-source-map@1.9.0:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
-    dev: true
-
-  /corepack@0.20.0:
-    resolution: {integrity: sha512-iMeLFtXB3V3tk22c95hwMcM9pK2MJifdsCh+qxVntHF/Rz3bJBI+WXK3K7mkNl1Lwi2373OTaC6f7OghjtXh2Q==}
-    engines: {node: '>=16.20.0'}
-    hasBin: true
     dev: true
 
   /cross-spawn@7.0.3:
