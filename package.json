@@ -34,7 +34,7 @@
     "test:types": "tsc --noEmit"
   },
   "dependencies": {
-    "citty": "^0.1.3",
+    "citty": "^0.1.4",
     "execa": "^8.0.1",
     "pathe": "^1.1.1",
     "ufo": "^1.3.0"
