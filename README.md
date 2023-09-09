@@ -40,7 +40,23 @@ nypm, detects package manager type and version and converts command into package
 
 ## CLI Usage
 
-[TBA]
+**Install dependencies:**
+
+```sh
+npx nypm@latest i
+```
+
+**Add a dependency:**
+
+```sh
+npx nypm@latest add defu
+```
+
+**Remove a dependency:**
+
+```sh
+npx nypm@latest remove defu
+```
 
 ## API Usage
 
