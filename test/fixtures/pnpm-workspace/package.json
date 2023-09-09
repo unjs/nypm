@@ -3,7 +3,6 @@
   "private": true,
   "packageManager": "pnpm@8.6.5",
   "dependencies": {
-    "consola": "3.2.2",
-    "pathe": "^1.1.1"
+    "consola": "3.2.2"
   }
 }
