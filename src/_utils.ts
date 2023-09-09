@@ -25,15 +25,15 @@ export async function findup<T>(
 }
 
 function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
-  let p: T | Promise<T> | undefined;
+  let v: T | Promise<T> | undefined;
   return () => {
-    if (p === undefined) {
-      p = Promise.resolve(fn()).then((v) => {
-        p = v;
+    if (v === undefined) {
+      v = fn().then((r) => {
+        v = r;
         return v;
       });
     }
-    return p;
+    return v;
   };
 }
 
