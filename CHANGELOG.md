@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.3.3
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.2...v0.3.3)
+
+### 🚀 Enhancements
+
+- Basic `nypm` cli ([#95](https://github.com/unjs/nypm/pull/95))
+
+### 🩹 Fixes
+
+- Fallback to local package manager when corepack not installed ([#94](https://github.com/unjs/nypm/pull/94))
+
+### 🏡 Chore
+
+- Update lockfile ([c32c998](https://github.com/unjs/nypm/commit/c32c998))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.3.2
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.1...v0.3.2)
