@@ -1,6 +1,27 @@
 # Changelog
 
 
+## v0.3.4
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.3...v0.3.4)
+
+### 🚀 Enhancements
+
+- Allow specify `packageManager` by name ([5376aeb](https://github.com/unjs/nypm/commit/5376aeb))
+
+### 🩹 Fixes
+
+- **detectPackageManager:** Check parent dirs by default ([4cf3346](https://github.com/unjs/nypm/commit/4cf3346))
+
+### 🏡 Chore
+
+- Update dependencies ([0df4b12](https://github.com/unjs/nypm/commit/0df4b12))
+- Include `bun.lockdb` in tests ([ffa2aee](https://github.com/unjs/nypm/commit/ffa2aee))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.3.3
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.2...v0.3.3)
