@@ -12,7 +12,7 @@ export type PackageManager = {
 export type OperationOptions = {
   cwd?: string;
   silent?: boolean;
-  packageManager?: PackageManager;
+  packageManager?: PackageManager | PackageManagerName;
   dev?: boolean;
   workspace?: boolean | string;
 };

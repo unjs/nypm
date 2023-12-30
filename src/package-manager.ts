@@ -27,7 +27,7 @@ export type DetectPackageManagerOptions = {
   includeParentDirs?: boolean;
 };
 
-const _packageManagers: PackageManager[] = [
+export const packageManagers: PackageManager[] = [
   { name: "npm", command: "npm", lockFile: "package-lock.json" },
   {
     name: "pnpm",
@@ -53,7 +53,7 @@ const _packageManagers: PackageManager[] = [
     lockFile: "yarn.lock",
     files: [".yarnrc.yml"],
   },
-];
+] as const;
 
 export async function detectPackageManager(
   cwd: string,
@@ -74,9 +74,9 @@ export async function detectPackageManager(
               packageJSON.packageManager.split("@");
             const majorVersion = version.split(".")[0];
             const packageManager =
-              _packageManagers.find(
+              packageManagers.find(
                 (pm) => pm.name === name && pm.majorVersion === majorVersion,
-              ) || _packageManagers.find((pm) => pm.name === name);
+              ) || packageManagers.find((pm) => pm.name === name);
             return {
               ...packageManager,
               name,
@@ -90,7 +90,7 @@ export async function detectPackageManager(
 
       // 2. Use implicit file detection
       if (!options.ignoreLockFile) {
-        for (const packageManager of _packageManagers) {
+        for (const packageManager of packageManagers) {
           const detectionsFiles = [
             packageManager.lockFile,
             ...(packageManager.files || []),

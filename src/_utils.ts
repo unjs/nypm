@@ -1,9 +1,9 @@
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { withTrailingSlash } from "ufo";
-import type { OperationOptions } from "./types";
+import type { OperationOptions, PackageManager } from "./types";
 import type { DetectPackageManagerOptions } from "./package-manager";
-import { detectPackageManager } from "./package-manager";
+import { detectPackageManager, packageManagers } from "./package-manager";
 
 export async function findup<T>(
   cwd: string,
@@ -73,15 +73,17 @@ export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG =
 export async function resolveOperationOptions(
   options: OperationOptions = {},
 ): Promise<
-  NonPartial<
-    Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dev">
-  > &
-    Pick<OperationOptions, "workspace">
+  NonPartial<Pick<OperationOptions, "cwd" | "silent" | "dev">> &
+    Pick<OperationOptions, "workspace"> & {
+      packageManager: PackageManager;
+    }
 > {
   const cwd = options.cwd || process.cwd();
 
   const packageManager =
-    options.packageManager ||
+    (typeof options.packageManager === "string"
+      ? packageManagers.find((pm) => pm.name === options.packageManager)
+      : options.packageManager) ||
     (await detectPackageManager(options.cwd || process.cwd()));
 
   if (!packageManager) {
