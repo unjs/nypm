@@ -105,7 +105,7 @@ export async function detectPackageManager(
       }
     },
     {
-      includeParentDirs: options.includeParentDirs,
+      includeParentDirs: options.includeParentDirs ?? true,
     },
   );
 
