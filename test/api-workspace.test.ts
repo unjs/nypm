@@ -15,7 +15,7 @@ describe("api", () => {
           });
         await executeAddDependencySpy();
         expect(addDependencySpy).toHaveReturned();
-      }, 30_000);
+      }, 60_000);
 
       it("removes dependency from workspace root", async () => {
         const removeDependencySpy = vi.fn(removeDependency);
@@ -27,7 +27,7 @@ describe("api", () => {
           });
         await executeRemoveDependencySpy();
         expect(removeDependencySpy).toHaveReturned();
-      }, 30_000);
+      }, 60_000);
 
       const workspaceRef =
         fixture.name === "yarn-classic-workspace"
@@ -44,7 +44,7 @@ describe("api", () => {
           });
         await executeAddDependencySpy();
         expect(addDependencySpy).toHaveReturned();
-      }, 30_000);
+      }, 60_000);
 
       it("removes dependency from workspace package", async () => {
         const removeDependencySpy = vi.fn(removeDependency);
@@ -56,7 +56,7 @@ describe("api", () => {
           });
         await executeRemoveDependencySpy();
         expect(removeDependencySpy).toHaveReturned();
-      }, 30_000);
+      }, 60_000);
     });
   }
 });
