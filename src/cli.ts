@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { defineCommand, runMain, ArgsDef } from "citty";
-import pkg from "../package.json";
+import { name, version, description } from "../package.json";
 import { addDependency, installDependencies, removeDependency } from "./api";
 
 const operationArgs = {
@@ -61,9 +61,9 @@ const remove = defineCommand({
 
 const main = defineCommand({
   meta: {
-    name: pkg.name,
-    version: pkg.version,
-    description: pkg.description,
+    name,
+    version,
+    description,
   },
   subCommands: {
     install,
