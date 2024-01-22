@@ -37,10 +37,12 @@ export async function installDependencies(
  * @param options.workspace - The name of the workspace to use.
  */
 export async function addDependency(
-  name: string,
+  name: string | string[],
   options: OperationOptions = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
+
+  const names = Array.isArray(name) ? name : [name];
 
   const args = (
     resolvedOptions.packageManager.name === "yarn"
@@ -48,13 +50,13 @@ export async function addDependency(
           ...getWorkspaceArgs(resolvedOptions),
           "add",
           resolvedOptions.dev ? "-D" : "",
-          name,
+          ...names,
         ]
       : [
           resolvedOptions.packageManager.name === "npm" ? "install" : "add",
           ...getWorkspaceArgs(resolvedOptions),
           resolvedOptions.dev ? "-D" : "",
-          name,
+          ...names,
         ]
   ).filter(Boolean);
 
@@ -76,7 +78,7 @@ export async function addDependency(
  *
  */
 export async function addDevDependency(
-  name: string,
+  name: string | string[],
   options: Omit<OperationOptions, "dev"> = {},
 ) {
   await addDependency(name, { ...options, dev: true });

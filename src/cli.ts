@@ -36,8 +36,8 @@ const install = defineCommand({
     },
   },
   run: async ({ args }) => {
-    await (args.name
-      ? addDependency(args.name, args)
+    await (args._.length > 0
+      ? addDependency(args._, args)
       : installDependencies(args));
   },
 });
