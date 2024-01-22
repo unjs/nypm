@@ -1,6 +1,30 @@
 # Changelog
 
 
+## v0.3.6
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.4...v0.3.6)
+
+### 🚀 Enhancements
+
+- Allow installing multiple dependencies ([#107](https://github.com/unjs/nypm/pull/107))
+
+### 📦 Build
+
+- **cli:** Only import required fields from `package.json` to the bundle ([591dd4d](https://github.com/unjs/nypm/commit/591dd4d))
+
+### 🏡 Chore
+
+- Update lockfile ([84d90d7](https://github.com/unjs/nypm/commit/84d90d7))
+
+### 🤖 CI
+
+- Increase timeout for windows ([da4a986](https://github.com/unjs/nypm/commit/da4a986))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.3.4
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.3...v0.3.4)
