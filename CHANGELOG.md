@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v0.3.5
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.4...v0.3.5)
+
+### 🏡 Chore
+
+- Update lockfile ([84d90d7](https://github.com/unjs/nypm/commit/84d90d7))
+
+### 🤖 CI
+
+- Increase timeout for windows ([da4a986](https://github.com/unjs/nypm/commit/da4a986))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.3.4
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.3...v0.3.4)
