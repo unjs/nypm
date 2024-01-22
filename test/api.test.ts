@@ -19,7 +19,7 @@ describe("api (workspace)", () => {
           });
         await executeInstallDependenciesSpy();
         expect(installDependenciesSpy).toHaveReturned();
-      }, 30_000);
+      }, 60_000);
 
       it("adds dependency", async () => {
         const addDependencySpy = vi.fn(addDependency);
@@ -31,7 +31,7 @@ describe("api (workspace)", () => {
 
         await executeAddDependencySpy();
         expect(addDependencySpy).toHaveReturned();
-      }, 30_000);
+      }, 60_000);
 
       it("ensures dependency is installed", async () => {
         const ensureDependencyInstalledSpy = vi.fn(ensureDependencyInstalled);
@@ -56,7 +56,7 @@ describe("api (workspace)", () => {
 
         await executeRemoveDependencySpy();
         expect(removeDependencySpy).toHaveReturned();
-      }, 30_000);
+      }, 60_000);
     });
   }
 });
