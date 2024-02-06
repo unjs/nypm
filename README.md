@@ -9,7 +9,7 @@
 
 ## What does **nypm** do?
 
-✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [Yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/) and [bun](https://bun.sh/package-manager) out of the box with a unified API.
+✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/) and [bun](https://bun.sh/package-manager) out of the box with a unified API.
 
 ✅ Provides an **API interface** to interact with package managers.
 
@@ -31,12 +31,9 @@ nypm, detects package manager type and version and converts command into package
   +---------+  +---------+  +---------+
   |   npm   |  |  yarn   |  |  pnpm   |
   +---------+  +---------+  +---------+
-  +------------------------------------------------+
-  |                Node.js project                 |
-  +------------------------------------------------+
 ```
 
-## CLI Usage
+## `nypm` Command
 
 **Install dependencies:**
 
@@ -85,14 +82,10 @@ Import:
 
 ```js
 // ESM
-import {
-  addDependency,
-} from "nypm";
+import { addDependency } from "nypm";
 
 // CommonJS
-const {
-  addDependency,
-} = require("nypm");
+const { addDependency } = require("nypm");
 ```
 
 <!-- AUTOMD_START generator="jsdocs" -->
