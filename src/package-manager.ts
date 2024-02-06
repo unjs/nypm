@@ -55,6 +55,13 @@ export const packageManagers: PackageManager[] = [
   },
 ] as const;
 
+/**
+ * Detect the package manager used in a directory (and up) by checking various sources:
+ *
+ * 1. Use `packageManager` field from package.json
+ *
+ * 2. Known lock files and other files
+ */
 export async function detectPackageManager(
   cwd: string,
   options: DetectPackageManagerOptions = {},
