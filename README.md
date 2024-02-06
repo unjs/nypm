@@ -5,34 +5,32 @@
 [![Github Actions][github-actions-src]][github-actions-href]
 [![Codecov][codecov-src]][codecov-href]
 
-> Unified Package Manager for Node.js
-
-🚧 This project is under development. Please follow [issues](https://github.com/unjs/nypm/issues) for the roadmap. 🚧
+> Unified Package Manager for Node.js and Bun
 
 ## What does **nypm** do?
 
-✅ Supports **npm, yarn, pnpm and bun** out of the box with a unified API
+✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [Yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/) and [bun](https://bun.sh/package-manager) out of the box with a unified API.
 
-✅ Provides an **API interface** to interact with package managers
+✅ Provides an **API interface** to interact with package managers.
 
-✅ **Autodetects** project's package manager using package.json and known lockfiles
+✅ **Autodetects** project's package manager using `package.json` and known lockfiles.
 
-✅ **Auto-installs and use exactly expected version** of supported package managers using [nodejs/corepack](https://github.com/nodejs/corepack)
+✅ **Auto-installs and use exactly expected version** of supported package managers using [nodejs/corepack](https://github.com/nodejs/corepack) when available.
 
-✅ **Minimal** implementation
+✅ **Minimal** implementation.
 
-nypm, detects package manager type and version and converts command into package manager CLI arguments. It then uses corepack to execute package manager's command (and download it if necessary).
+nypm, detects package manager type and version and converts command into package manager CLI arguments. It then uses corepack or proper command to execute package manager's command and download it if necessary.
 
 ```
   +------------------------------------------------+
   |                nypm                            |
   +------------------------------------------------+
-  +-----------------------------------+
-  |              Corepack             |
-  +-----------------------------------+
-  +---------+  +---------+  +---------+  +---------+
-  |   npm   |  |  yarn   |  |  pnpm   |  |  bun    |
-  +---------+  +---------+  +---------+  +---------+
+  +-----------------------------------+  +---------+
+  |              Corepack             |  |  bun    |
+  +-----------------------------------+  +---------+
+  +---------+  +---------+  +---------+
+  |   npm   |  |  yarn   |  |  pnpm   |
+  +---------+  +---------+  +---------+
   +------------------------------------------------+
   |                Node.js project                 |
   +------------------------------------------------+
@@ -43,60 +41,91 @@ nypm, detects package manager type and version and converts command into package
 **Install dependencies:**
 
 ```sh
-npx nypm@latest i
+npx nypm i
 ```
 
 **Add a dependency:**
 
 ```sh
-npx nypm@latest add defu
+npx nypm add defu
 ```
 
 **Remove a dependency:**
 
 ```sh
-npx nypm@latest remove defu
+npx nypm remove defu
 ```
 
 ## API Usage
 
 Install package:
 
+<!-- AUTOMD_START generator="pm-install" name="nypm" -->
+
 ```sh
+# ✨ Auto-detect
+npx nypm i nypm
+
 # npm
 npm install nypm
-
-# pnpm
-pnpm install nypm
 
 # yarn
 yarn add nypm
 
+# pnpm
+pnpm install nypm
+
 # bun
 bun install nypm
 ```
+
+<!-- AUTOMD_END -->
 
 Import:
 
 ```js
 // ESM
 import {
-  detectPackageManager,
-  installDependencies,
   addDependency,
-  addDevDependency,
-  removeDependency,
 } from "nypm";
 
 // CommonJS
 const {
-  detectPackageManager,
-  installDependencies,
   addDependency,
-  addDevDependency,
-  removeDependency,
 } = require("nypm");
 ```
+
+<!-- AUTOMD_START generator="jsdocs" -->
+
+### `addDependency(name, options)`
+
+Adds dependency to the project.
+
+### `addDevDependency(name, options)`
+
+Adds dev dependency to the project.
+
+### `detectPackageManager(cwd, options)`
+
+Detect the package manager used in a directory (and up) by checking various sources:
+
+1. Use `packageManager` field from package.json
+2. Known lock files and other files
+
+### `ensureDependencyInstalled(name, options)`
+
+Ensures dependency is installed.
+
+### `installDependencies(options)`
+
+Installs project dependencies.
+
+### `removeDependency(name, options)`
+
+Removes dependency from the project.
+
+
+<!-- AUTOMD_END -->
 
 ## 💻 Development
 
