@@ -35,6 +35,7 @@ export async function installDependencies(
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.dev - Whether to add the dependency as dev dependency.
  * @param options.workspace - The name of the workspace to use.
+ * @param options.global - Whether to run the command in global mode.
  */
 export async function addDependency(
   name: string | string[],
@@ -56,6 +57,7 @@ export async function addDependency(
           resolvedOptions.packageManager.name === "npm" ? "install" : "add",
           ...getWorkspaceArgs(resolvedOptions),
           resolvedOptions.dev ? "-D" : "",
+          resolvedOptions.global ? "-g" : "",
           ...names,
         ]
   ).filter(Boolean);
@@ -75,6 +77,7 @@ export async function addDependency(
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.workspace - The name of the workspace to use.
+ * @param options.global - Whether to run the command in global mode.
  *
  */
 export async function addDevDependency(
@@ -94,6 +97,7 @@ export async function addDevDependency(
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.dev - Whether to remove dev dependency.
  * @param options.workspace - The name of the workspace to use.
+ * @param options.global - Whether to run the command in global mode.
  */
 export async function removeDependency(
   name: string,
@@ -104,9 +108,15 @@ export async function removeDependency(
   const args = (
     resolvedOptions.packageManager.name === "yarn"
       ? [
+          resolvedOptions.global
+            ? resolvedOptions.packageManager.majorVersion === "1"
+              ? "dlx"
+              : "global"
+            : "",
           ...getWorkspaceArgs(resolvedOptions),
           "remove",
           resolvedOptions.dev ? "-D" : "",
+          resolvedOptions.global ? "-g" : "",
           name,
         ]
       : [
@@ -115,6 +125,7 @@ export async function removeDependency(
             : "remove",
           ...getWorkspaceArgs(resolvedOptions),
           resolvedOptions.dev ? "-D" : "",
+          resolvedOptions.global ? "-g" : "",
           name,
         ]
   ).filter(Boolean);

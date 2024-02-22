@@ -15,4 +15,5 @@ export type OperationOptions = {
   packageManager?: PackageManager | PackageManagerName;
   dev?: boolean;
   workspace?: boolean | string;
+  global?: boolean;
 };

@@ -34,6 +34,11 @@ const install = defineCommand({
       alias: "D",
       description: "Add as dev dependency",
     },
+    global: {
+      type: "boolean",
+      alias: "g",
+      description: "Add globally",
+    },
   },
   run: async ({ args }) => {
     await (args._.length > 0
