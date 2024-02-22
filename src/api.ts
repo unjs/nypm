@@ -109,9 +109,9 @@ export async function removeDependency(
     resolvedOptions.packageManager.name === "yarn"
       ? [
           resolvedOptions.global
-            ? (resolvedOptions.packageManager.majorVersion === "1"
+            ? resolvedOptions.packageManager.majorVersion === "1"
               ? "dlx"
-              : "global")
+              : "global"
             : "",
           ...getWorkspaceArgs(resolvedOptions),
           "remove",
