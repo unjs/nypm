@@ -1,6 +1,37 @@
 # Changelog
 
 
+## v0.3.7
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.6...v0.3.7)
+
+### 🚀 Enhancements
+
+- Add global mode support ([#113](https://github.com/unjs/nypm/pull/113))
+- Detect based on dlx command as fallback ([#117](https://github.com/unjs/nypm/pull/117))
+
+### 🩹 Fixes
+
+- **yarn:** Handle global for yarn 1.x only ([f5e4a39](https://github.com/unjs/nypm/commit/f5e4a39))
+
+### 📖 Documentation
+
+- Add jsdocs for `detectPackageManager` ([a7dfce7](https://github.com/unjs/nypm/commit/a7dfce7))
+
+### 🏡 Chore
+
+- Update deps ([d44ca3a](https://github.com/unjs/nypm/commit/d44ca3a))
+- Update readme with automd ([d523b47](https://github.com/unjs/nypm/commit/d523b47))
+- Update readme ([b36af77](https://github.com/unjs/nypm/commit/b36af77))
+- Update deps ([9e69e36](https://github.com/unjs/nypm/commit/9e69e36))
+- Fix lint/style issue ([e494591](https://github.com/unjs/nypm/commit/e494591))
+- Update lockfile ([932be41](https://github.com/unjs/nypm/commit/932be41))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Damian Głowala ([@DamianGlowala](http://github.com/DamianGlowala))
+
 ## v0.3.6
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.4...v0.3.6)
