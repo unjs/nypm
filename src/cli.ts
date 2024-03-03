@@ -2,6 +2,9 @@
 import { defineCommand, runMain, ArgsDef } from "citty";
 import { name, version, description } from "../package.json";
 import { addDependency, installDependencies, removeDependency } from "./api";
+import { detectPackageManager } from "./package-manager";
+import { resolve } from "pathe";
+import { consola } from "consola";
 
 const operationArgs = {
   cwd: {
@@ -64,6 +67,29 @@ const remove = defineCommand({
   },
 });
 
+const detect = defineCommand({
+  meta: {
+    description: "Detect the current package manager",
+  },
+  args: {
+    cwd: {
+      type: "string",
+      description: "Current working directory",
+    },
+  },
+  run: async ({ args }) => {
+    const cwd = resolve(args.cwd || ".");
+    const packageManager = await detectPackageManager(cwd);
+    if (!packageManager) {
+      consola.error(`Cannot detect package manager in \`${cwd}\``);
+      return process.exit(1);
+    }
+    consola.log(
+      `Detected package manager in \`${cwd}\`: \`${packageManager.name}@${packageManager.version}\``,
+    );
+  },
+});
+
 const main = defineCommand({
   meta: {
     name,
@@ -75,6 +101,7 @@ const main = defineCommand({
     i: install,
     add: install,
     remove,
+    detect,
   },
 });
 
