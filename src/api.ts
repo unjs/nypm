@@ -108,10 +108,11 @@ export async function removeDependency(
   const args = (
     resolvedOptions.packageManager.name === "yarn"
       ? [
+          // prettier-ignore
           resolvedOptions.global
-            ? resolvedOptions.packageManager.majorVersion === "1"
+            ? (resolvedOptions.packageManager.majorVersion === "1"
               ? "dlx"
-              : "global"
+              : "global")
             : "",
           ...getWorkspaceArgs(resolvedOptions),
           "remove",
