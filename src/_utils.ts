@@ -13,7 +13,7 @@ export async function findup<T>(
   const segments = normalize(cwd).split("/");
 
   while (segments.length > 0) {
-    const path = segments.join("/");
+    const path = segments.join("/") || "/";
     const result = await match(path);
 
     if (result || !options.includeParentDirs) {

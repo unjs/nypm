@@ -76,7 +76,7 @@ export async function detectPackageManager(
   options: DetectPackageManagerOptions = {},
 ): Promise<PackageManager | undefined> {
   const detected = await findup(
-    cwd,
+    resolve(cwd || "."),
     async (path) => {
       // 1. Use `packageManager` field from package.json
       if (!options.ignorePackageJSON) {
