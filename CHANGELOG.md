@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.3.8
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.7...v0.3.8)
+
+### 🚀 Enhancements
+
+- Add `detect` command ([8fe78d1](https://github.com/unjs/nypm/commit/8fe78d1))
+
+### 🩹 Fixes
+
+- Findup until root from user `cwd` ([0309498](https://github.com/unjs/nypm/commit/0309498))
+
+### 🏡 Chore
+
+- Lint ([ee483e9](https://github.com/unjs/nypm/commit/ee483e9))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.3.7
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.6...v0.3.7)
