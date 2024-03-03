@@ -25,10 +25,19 @@ export type DetectPackageManagerOptions = {
    * @default false
    */
   includeParentDirs?: boolean;
+
+  /**
+   * Weather to ignore argv[1] to detect script
+   */
+  ignoreArgv?: boolean;
 };
 
 export const packageManagers: PackageManager[] = [
-  { name: "npm", command: "npm", lockFile: "package-lock.json" },
+  {
+    name: "npm",
+    command: "npm",
+    lockFile: "package-lock.json",
+  },
   {
     name: "pnpm",
     command: "pnpm",
@@ -115,6 +124,21 @@ export async function detectPackageManager(
       includeParentDirs: options.includeParentDirs ?? true,
     },
   );
+
+  if (!detected && !options.ignoreArgv) {
+    // 3. Try to detect based on dlx/exec command
+    // https://github.com/unjs/nypm/issues/116
+    const scriptArg = process.argv[1];
+    if (scriptArg) {
+      for (const packageManager of packageManagers) {
+        // Check /.[name] or /[name] in path
+        const re = new RegExp(`[/\\\\]\\.?${packageManager.command}`);
+        if (re.test(scriptArg)) {
+          return packageManager;
+        }
+      }
+    }
+  }
 
   return detected;
 }
