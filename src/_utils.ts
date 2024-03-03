@@ -73,7 +73,7 @@ export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG =
 export async function resolveOperationOptions(
   options: OperationOptions = {},
 ): Promise<
-  NonPartial<Pick<OperationOptions, "cwd" | "silent" | "dev">> &
+  NonPartial<Pick<OperationOptions, "cwd" | "silent" | "dev" | "global">> &
     Pick<OperationOptions, "workspace"> & {
       packageManager: PackageManager;
     }
@@ -96,6 +96,7 @@ export async function resolveOperationOptions(
     packageManager,
     dev: options.dev ?? false,
     workspace: options.workspace,
+    global: options.global ?? false,
   };
 }
 
