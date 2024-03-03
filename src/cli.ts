@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { defineCommand, runMain, ArgsDef } from "citty";
+import { resolve } from "pathe";
+import { consola } from "consola";
 import { name, version, description } from "../package.json";
 import { addDependency, installDependencies, removeDependency } from "./api";
 import { detectPackageManager } from "./package-manager";
-import { resolve } from "pathe";
-import { consola } from "consola";
 
 const operationArgs = {
   cwd: {
