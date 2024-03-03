@@ -49,6 +49,11 @@ export async function addDependency(
     resolvedOptions.packageManager.name === "yarn"
       ? [
           ...getWorkspaceArgs(resolvedOptions),
+          // Global is not supported in berry: yarnpkg/berry#821
+          resolvedOptions.global &&
+          resolvedOptions.packageManager.majorVersion === "1"
+            ? "global"
+            : "",
           "add",
           resolvedOptions.dev ? "-D" : "",
           ...names,
@@ -108,11 +113,10 @@ export async function removeDependency(
   const args = (
     resolvedOptions.packageManager.name === "yarn"
       ? [
-          // prettier-ignore
-          resolvedOptions.global
-            ? (resolvedOptions.packageManager.majorVersion === "1"
-              ? "dlx"
-              : "global")
+          // Global is not supported in berry: yarnpkg/berry#821
+          resolvedOptions.global &&
+          resolvedOptions.packageManager.majorVersion === "1"
+            ? "global"
             : "",
           ...getWorkspaceArgs(resolvedOptions),
           "remove",
