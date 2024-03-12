@@ -22,15 +22,16 @@ export async function installDependencies(
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  const pmToInstallCommandMap: Record<PackageManagerName, string[]> = {
-    npm: ["ci"],
-    yarn: ["install", "--immutable"],
-    bun: ["install", "--frozen-lockfile"],
-    pnpm: ["install", "--frozen-lockfile"],
-  };
+  const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
+    {
+      npm: ["ci"],
+      yarn: ["install", "--immutable"],
+      bun: ["install", "--frozen-lockfile"],
+      pnpm: ["install", "--frozen-lockfile"],
+    };
 
   const commandArgs = options.frozenLockFile
-    ? pmToInstallCommandMap[resolvedOptions.packageManager.name]
+    ? pmToFrozenLockfileInstallCommand[resolvedOptions.packageManager.name]
     : ["install"];
 
   await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
