@@ -22,7 +22,6 @@ export async function installDependencies(
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  // Needed until https://github.com/unjs/nypm/issues/115 is resolved
   const pmToInstallCommandMap: Record<PackageManagerName, string[]> = {
     npm: ["ci"],
     yarn: ["install", "--immutable"],
