@@ -101,6 +101,9 @@ const main = defineCommand({
     i: install,
     add: install,
     remove,
+    rm: remove,
+    uninstall: remove,
+    un: remove,
     detect,
   },
 });
