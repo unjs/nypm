@@ -6,4 +6,5 @@ coverage
 dist
 types
 .conf*
+.eslintcache
 # bun.lockb
