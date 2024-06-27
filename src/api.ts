@@ -74,38 +74,29 @@ export async function addDependency(
   });
 
   if (options.installPeerDependencies) {
-    const depsToInstall = {
-      dev: [] as string[],
-      prod: [] as string[],
-    };
-    for (const pkg of names) {
-      const pkgName = pkg.match(/^(.[^@]+)/)?.[0];
-      const { name, peerDependencies, peerDependenciesMeta } =
-        await readPackageJSON(pkgName, { url: resolvedOptions.cwd }).catch(
-          () => ({}) as Record<string, undefined>,
-        );
-      if (name === pkgName && peerDependencies) {
-        for (const [peerDependency, version] of Object.entries(
-          peerDependencies,
-        )) {
-          if (peerDependenciesMeta?.[peerDependency]?.optional) {
-            continue;
-          }
-          const key = peerDependenciesMeta?.[peerDependency]?.dev
-            ? "dev"
-            : "prod";
-          depsToInstall[key].push(`${peerDependency}@${version}`);
+    const peerDeps: string[] = [];
+    const peerDevDeps: string[] = [];
+    for (const _name of names) {
+      const pkgName = _name.match(/^(.[^@]+)/)?.[0];
+      const pkg = await readPackageJSON(pkgName, {
+        url: resolvedOptions.cwd,
+      }).catch(() => ({}) as Record<string, undefined>);
+      if (!pkg.peerDependencies || name !== pkgName) {
+        continue;
+      }
+      for (const [peerDependency, version] of Object.entries(
+        pkg.peerDependencies,
+      )) {
+        if (pkg.peerDependenciesMeta?.[peerDependency]?.optional) {
+          continue;
         }
+        // TODO: Make sure peerDependency is not already installed in user project
+        const isDev = pkg.peerDependenciesMeta?.[peerDependency]?.dev;
+        (isDev ? peerDevDeps : peerDeps).push(`${peerDependency}@${version}`);
       }
     }
-    for (const key of ["dev", "prod"] as const) {
-      if (depsToInstall[key].length > 0) {
-        await addDependency(depsToInstall[key], {
-          ...resolvedOptions,
-          dev: key === "dev",
-        });
-      }
-    }
+    await addDependency(peerDeps, { ...resolvedOptions });
+    await addDevDependency(peerDevDeps, { ...resolvedOptions });
   }
 }
 
