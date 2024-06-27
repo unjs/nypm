@@ -1,3 +1,4 @@
+import { readPackageJSON } from "pkg-types";
 import {
   executeCommand,
   resolveOperationOptions,
@@ -71,6 +72,41 @@ export async function addDependency(
     cwd: resolvedOptions.cwd,
     silent: resolvedOptions.silent,
   });
+
+  if (options.installPeerDependencies) {
+    const depsToInstall = {
+      dev: [] as string[],
+      prod: [] as string[],
+    };
+    for (const pkg of names) {
+      const pkgName = pkg.match(/^(.[^@]+)/)?.[0];
+      const { name, peerDependencies, peerDependenciesMeta } =
+        await readPackageJSON(pkgName, { url: resolvedOptions.cwd }).catch(
+          () => ({}) as Record<string, undefined>,
+        );
+      if (name === pkgName && peerDependencies) {
+        for (const [peerDependency, version] of Object.entries(
+          peerDependencies,
+        )) {
+          if (peerDependenciesMeta?.[peerDependency]?.optional) {
+            continue;
+          }
+          const key = peerDependenciesMeta?.[peerDependency]?.dev
+            ? "dev"
+            : "prod";
+          depsToInstall[key].push(`${peerDependency}@${version}`);
+        }
+      }
+    }
+    for (const key in depsToInstall) {
+      if (depsToInstall[key as "dev"]!.length > 0) {
+        await addDependency(depsToInstall[key as "dev"], {
+          ...resolvedOptions,
+          dev: key === "dev",
+        });
+      }
+    }
+  }
 }
 
 /**
