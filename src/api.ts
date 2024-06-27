@@ -98,9 +98,9 @@ export async function addDependency(
         }
       }
     }
-    for (const key in depsToInstall) {
-      if (depsToInstall[key as "dev"]!.length > 0) {
-        await addDependency(depsToInstall[key as "dev"], {
+    for (const key of ["dev", "prod"] as const) {
+      if (depsToInstall[key].length > 0) {
+        await addDependency(depsToInstall[key], {
           ...resolvedOptions,
           dev: key === "dev",
         });
