@@ -92,7 +92,10 @@ export async function addDependency(
           continue;
         }
         // TODO: refactor to getSpecifiedPackageInfo later on
-        if (existingPkg.dependencies?.[peerDependency] || existingPkg.devDependencies?.[peerDependency]) {
+        if (
+          existingPkg.dependencies?.[peerDependency] ||
+          existingPkg.devDependencies?.[peerDependency]
+        ) {
           continue;
         }
         // TODO: Make sure peerDependency is not already installed in user project
