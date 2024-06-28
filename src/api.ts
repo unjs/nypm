@@ -74,6 +74,7 @@ export async function addDependency(
   });
 
   if (options.installPeerDependencies) {
+    const existingPkg = await readPackageJSON(resolvedOptions.cwd);
     const peerDeps: string[] = [];
     const peerDevDeps: string[] = [];
     for (const _name of names) {
@@ -88,6 +89,10 @@ export async function addDependency(
         pkg.peerDependencies,
       )) {
         if (pkg.peerDependenciesMeta?.[peerDependency]?.optional) {
+          continue;
+        }
+        // TODO: refactor to getSpecifiedPackageInfo later on
+        if (existingPkg.dependencies?.[peerDependency] || existingPkg.devDependencies?.[peerDependency]) {
           continue;
         }
         // TODO: Make sure peerDependency is not already installed in user project
