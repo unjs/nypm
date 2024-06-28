@@ -1,6 +1,34 @@
 # Changelog
 
 
+## v0.3.9
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.8...v0.3.9)
+
+### 🚀 Enhancements
+
+- Allow installing peerDeps when using `addDependency` ([#135](https://github.com/unjs/nypm/pull/135))
+- **cli:** Support pnpm (rm, uninstall, un) aliases for removing packages ([#126](https://github.com/unjs/nypm/pull/126))
+- Add option to install dependencies with a frozen lockfile ([#121](https://github.com/unjs/nypm/pull/121))
+
+### 🩹 Fixes
+
+- Use correct flag when getting pnpm workspace args ([#130](https://github.com/unjs/nypm/pull/130))
+
+### 🏡 Chore
+
+- Upgrade non-major deps ([91f062a](https://github.com/unjs/nypm/commit/91f062a))
+- Upgrade to eslint v9 ([57890c8](https://github.com/unjs/nypm/commit/57890c8))
+- Update pnpm to 9x ([1abaddf](https://github.com/unjs/nypm/commit/1abaddf))
+
+### ❤️ Contributors
+
+- Ryan Clements <ryanclementshax@gmail.com>
+- Daniel Waltz ([@danielwaltz](http://github.com/danielwaltz))
+- Damian Głowala ([@DamianGlowala](http://github.com/DamianGlowala))
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Daniel Roe ([@danielroe](http://github.com/danielroe))
+
 ## v0.3.8
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.7...v0.3.8)
