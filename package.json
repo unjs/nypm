@@ -38,6 +38,7 @@
     "consola": "^3.2.3",
     "execa": "^8.0.1",
     "pathe": "^1.1.2",
+    "pkg-types": "^1.1.1",
     "ufo": "^1.4.0"
   },
   "devDependencies": {
