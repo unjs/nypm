@@ -1,3 +1,4 @@
+import { readPackageJSON } from "pkg-types";
 import {
   executeCommand,
   resolveOperationOptions,
@@ -86,6 +87,40 @@ export async function addDependency(
     cwd: resolvedOptions.cwd,
     silent: resolvedOptions.silent,
   });
+
+  if (options.installPeerDependencies) {
+    const existingPkg = await readPackageJSON(resolvedOptions.cwd);
+    const peerDeps: string[] = [];
+    const peerDevDeps: string[] = [];
+    for (const _name of names) {
+      const pkgName = _name.match(/^(.[^@]+)/)?.[0];
+      const pkg = await readPackageJSON(pkgName, {
+        url: resolvedOptions.cwd,
+      }).catch(() => ({}) as Record<string, undefined>);
+      if (!pkg.peerDependencies || name !== pkgName) {
+        continue;
+      }
+      for (const [peerDependency, version] of Object.entries(
+        pkg.peerDependencies,
+      )) {
+        if (pkg.peerDependenciesMeta?.[peerDependency]?.optional) {
+          continue;
+        }
+        // TODO: refactor to getSpecifiedPackageInfo later on
+        if (
+          existingPkg.dependencies?.[peerDependency] ||
+          existingPkg.devDependencies?.[peerDependency]
+        ) {
+          continue;
+        }
+        // TODO: Make sure peerDependency is not already installed in user project
+        const isDev = pkg.peerDependenciesMeta?.[peerDependency]?.dev;
+        (isDev ? peerDevDeps : peerDeps).push(`${peerDependency}@${version}`);
+      }
+    }
+    await addDependency(peerDeps, { ...resolvedOptions });
+    await addDevDependency(peerDevDeps, { ...resolvedOptions });
+  }
 }
 
 /**

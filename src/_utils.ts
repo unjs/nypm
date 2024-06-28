@@ -114,7 +114,7 @@ export function getWorkspaceArgs(
 
   // pnpm
   if (options.packageManager.name === "pnpm") {
-    return workspacePkg ? ["--dir", workspacePkg] : ["--workspace-root"];
+    return workspacePkg ? ["--filter", workspacePkg] : ["--workspace-root"];
   }
 
   // npm
