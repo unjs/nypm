@@ -42,7 +42,7 @@ const install = defineCommand({
       alias: "g",
       description: "Add globally",
     },
-    'frozen-lockfile': {
+    "frozen-lockfile": {
       type: "boolean",
       description: "Install dependencies with frozen lock file",
     },
