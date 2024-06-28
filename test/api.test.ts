@@ -21,6 +21,18 @@ describe("api (workspace)", () => {
         expect(installDependenciesSpy).toHaveReturned();
       }, 60_000);
 
+      it("installs dependencies with lockfile", async () => {
+        const installDependenciesSpy = vi.fn(installDependencies);
+        const executeInstallDependenciesSpy = () =>
+          installDependenciesSpy({
+            cwd: fixture.dir,
+            silent: !process.env.DEBUG,
+            frozenLockFile: true,
+          });
+        await executeInstallDependenciesSpy();
+        expect(installDependenciesSpy).toHaveReturned();
+      }, 60_000);
+
       it("adds dependency", async () => {
         const addDependencySpy = vi.fn(addDependency);
         const executeAddDependencySpy = () =>

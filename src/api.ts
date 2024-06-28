@@ -5,7 +5,7 @@ import {
   getWorkspaceArgs,
   doesDependencyExist,
 } from "./_utils";
-import type { OperationOptions } from "./types";
+import type { OperationOptions, PackageManagerName } from "./types";
 
 /**
  * Installs project dependencies.
@@ -14,13 +14,28 @@ import type { OperationOptions } from "./types";
  * @param options.cwd - The directory to run the command in.
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
+ * @param options.frozenLockFile - Whether to install dependencies with frozen lock file.
  */
 export async function installDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
+    frozenLockFile?: boolean;
+  } = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  await executeCommand(resolvedOptions.packageManager.command, ["install"], {
+  const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
+    {
+      npm: ["ci"],
+      yarn: ["install", "--immutable"],
+      bun: ["install", "--frozen-lockfile"],
+      pnpm: ["install", "--frozen-lockfile"],
+    };
+
+  const commandArgs = options.frozenLockFile
+    ? pmToFrozenLockfileInstallCommand[resolvedOptions.packageManager.name]
+    : ["install"];
+
+  await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
     cwd: resolvedOptions.cwd,
     silent: resolvedOptions.silent,
   });
