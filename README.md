@@ -123,7 +123,7 @@ Removes dependency from the project.
 ## 💻 Development
 
 - Clone this repository
-- Play [Nyan Cat](https://www.youtube.com/watch?v=QH2-TGUlwu4) in the background (really important!)
+- Play [Nyan Cat](https://www.youtube.com/watch?v=2yJgwwDcgV8) in the background (really important!)
 - Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable` (use `npm i -g corepack` for Node.js < 16.10)
 - Install dependencies using `pnpm install`
 - Run interactive tests using `pnpm dev`
