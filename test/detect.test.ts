@@ -13,6 +13,9 @@ describe("detectPackageManager", () => {
         if (fixture.majorVersion) {
           expect(detected?.majorVersion).toBe(fixture.majorVersion);
         }
+        if (fixture.files) {
+          expect(detected?.files).toEqual(fixture.files);
+        }
       });
 
       it.skipIf(fixture.name.includes("berry") /* TODO */)(

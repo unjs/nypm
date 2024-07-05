@@ -8,6 +8,7 @@ export type Fixture = {
   packageManager: PackageManagerName;
   majorVersion?: string;
   workspace: boolean;
+  files?: string[];
 };
 
 export const fixtures = (
@@ -48,11 +49,13 @@ export const fixtures = (
       name: "yarn-berry",
       packageManager: "yarn",
       majorVersion: "3",
+      files: [".yarnrc.yml"],
     },
     {
       name: "yarn-berry-workspace",
       packageManager: "yarn",
       majorVersion: "3",
+      files: [".yarnrc.yml"],
     },
   ] satisfies Partial<Fixture>[]
 )
