@@ -52,13 +52,13 @@ export const packageManagers: PackageManager[] = [
   {
     name: "yarn",
     command: "yarn",
-    majorVersion: "1.0.0",
+    majorVersion: "1",
     lockFile: "yarn.lock",
   },
   {
     name: "yarn",
     command: "yarn",
-    majorVersion: "3.0.0",
+    majorVersion: "3",
     lockFile: "yarn.lock",
     files: [".yarnrc.yml"],
   },
