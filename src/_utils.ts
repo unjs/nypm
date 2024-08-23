@@ -1,3 +1,4 @@
+import process from "node:process";
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { withTrailingSlash } from "ufo";
@@ -37,11 +38,11 @@ function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
   };
 }
 
-const importExeca = cached(() => import("execa").then((r) => r.execa));
+const importTinyexec = cached(() => import("tinyexec").then((r) => r.exec));
 const hasCorepack = cached(async () => {
   try {
-    const execa = await importExeca();
-    await execa("corepack", ["--version"]);
+    const exec = await importTinyexec();
+    await exec("corepack", ["--version"]);
     return true;
   } catch {
     return false;
@@ -58,10 +59,12 @@ export async function executeCommand(
       ? [command, args]
       : ["corepack", [command, ...args]];
 
-  const execa = await importExeca();
-  await execa(execaArgs[0], execaArgs[1], {
-    cwd: resolve(options.cwd || process.cwd()),
-    stdio: options.silent ? "pipe" : "inherit",
+  const exec = await importTinyexec();
+  await exec(execaArgs[0], execaArgs[1], {
+    nodeOptions: {
+      cwd: resolve(options.cwd || process.cwd()),
+      stdio: options.silent ? "pipe" : "inherit",
+    },
   });
 }
 
