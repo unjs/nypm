@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.3.11
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.10...v0.3.11)
+
+### 🩹 Fixes
+
+- Correct yarn detection ([#140](https://github.com/unjs/nypm/pull/140))
+
+### ❤️ Contributors
+
+- Lennart <lekoarts@gmail.com>
+
 ## v0.3.10
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.9...v0.3.10)
