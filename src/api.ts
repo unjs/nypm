@@ -61,6 +61,7 @@ export async function addDependency(
 
   const names = Array.isArray(name) ? name : [name];
 
+  // TOOD: we might filter for empty values too for more safety 
   if (names.length === 0) {
     return;
   }
