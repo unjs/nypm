@@ -1,6 +1,27 @@
 # Changelog
 
 
+## v0.3.10
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.9...v0.3.10)
+
+### 🩹 Fixes
+
+- Do not call `addDependency` with empty array ([#147](https://github.com/unjs/nypm/pull/147))
+
+### 🏡 Chore
+
+- Update link to nyan cat video ([#137](https://github.com/unjs/nypm/pull/137))
+- Apply automated lint fixes ([909ac19](https://github.com/unjs/nypm/commit/909ac19))
+- Update deps ([80b25a6](https://github.com/unjs/nypm/commit/80b25a6))
+- Update vitest config ([8925eec](https://github.com/unjs/nypm/commit/8925eec))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Daniel Roe ([@danielroe](http://github.com/danielroe))
+- Matvey ([@ronanru](http://github.com/ronanru))
+
 ## v0.3.9
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.8...v0.3.9)
