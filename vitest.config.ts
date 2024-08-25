@@ -1,7 +1,11 @@
-import { configDefaults, defineConfig } from "vitest/config";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  test: {
-    watchExclude: [...configDefaults.watchExclude, "test/fixtures/**"]
+  server: {
+    watch: {
+      ignored: [
+        "test/fixtures/**"
+      ]
+    }
   }
 });
