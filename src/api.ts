@@ -61,6 +61,11 @@ export async function addDependency(
 
   const names = Array.isArray(name) ? name : [name];
 
+  // TOOD: we might filter for empty values too for more safety 
+  if (names.length === 0) {
+    return;
+  }
+
   const args = (
     resolvedOptions.packageManager.name === "yarn"
       ? [
@@ -118,8 +123,12 @@ export async function addDependency(
         (isDev ? peerDevDeps : peerDeps).push(`${peerDependency}@${version}`);
       }
     }
-    await addDependency(peerDeps, { ...resolvedOptions });
-    await addDevDependency(peerDevDeps, { ...resolvedOptions });
+    if (peerDeps.length > 0) {
+      await addDependency(peerDeps, { ...resolvedOptions });
+    }
+    if (peerDevDeps.length > 0) {
+      await addDevDependency(peerDevDeps, { ...resolvedOptions });
+    }
   }
 }
 
