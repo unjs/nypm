@@ -42,7 +42,7 @@
     "ufo": "^1.5.4"
   },
   "devDependencies": {
-    "@types/node": "^22.5.0",
+    "@types/node": "^22.5.4",
     "@vitest/coverage-v8": "^2.0.5",
     "automd": "^0.3.8",
     "changelogen": "^0.5.5",
@@ -55,7 +55,7 @@
     "unbuild": "^2.0.0",
     "vitest": "^2.0.5"
   },
-  "packageManager": "pnpm@9.8.0",
+  "packageManager": "pnpm@9.9.0",
   "engines": {
     "node": "^14.16.0 || >=16.10.0"
   }
