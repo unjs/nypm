@@ -14,15 +14,15 @@ importers:
       consola:
         specifier: ^3.2.3
         version: 3.2.3
-      execa:
-        specifier: ^8.0.1
-        version: 8.0.1
       pathe:
         specifier: ^1.1.2
         version: 1.1.2
       pkg-types:
         specifier: ^1.2.0
         version: 1.2.0
+      tinyexec:
+        specifier: ^0.3.0
+        version: 0.3.0
       ufo:
         specifier: ^1.5.4
         version: 1.5.4
@@ -2473,6 +2473,9 @@ packages:
 
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
+
+  tinyexec@0.3.0:
+    resolution: {integrity: sha512-tVGE0mVJPGb0chKhqmsoosjsS+qUnJVGJpZgsHYQcGoPlG3B51R3PouqTgEGH2Dc9jjFyOqOpix6ZHNMXp1FZg==}
 
   tinypool@1.0.1:
     resolution: {integrity: sha512-URZYihUbRPcGv95En+sz6MfghfIc2OJ1sv/RmhWZLouPY0/8Vo80viwPvg3dlaS9fuq7fQMEfgRRK7BBZThBEA==}
@@ -5030,6 +5033,8 @@ snapshots:
   text-table@0.2.0: {}
 
   tinybench@2.9.0: {}
+
+  tinyexec@0.3.0: {}
 
   tinypool@1.0.1: {}
 
