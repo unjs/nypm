@@ -37,15 +37,12 @@ function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
   };
 }
 
-const importExeca = cached(() => import("execa").then((r) => r.execa));
+const importTinyexec = cached(() => import("tinyexec").then((r) => r.x));
 const hasCorepack = cached(async () => {
-  try {
-    const execa = await importExeca();
-    await execa("corepack", ["--version"]);
-    return true;
-  } catch {
-    return false;
-  }
+  const x = await importTinyexec();
+  const result = x("corepack", ["--version"]);
+  await result;
+  return result.exitCode === 0;
 });
 
 export async function executeCommand(
@@ -53,15 +50,17 @@ export async function executeCommand(
   args: string[],
   options: Pick<OperationOptions, "cwd" | "silent"> = {},
 ): Promise<void> {
-  const execaArgs: [string, string[]] =
+  const xArgs: [string, string[]] =
     command === "npm" || command === "bun" || !(await hasCorepack())
       ? [command, args]
       : ["corepack", [command, ...args]];
 
-  const execa = await importExeca();
-  await execa(execaArgs[0], execaArgs[1], {
-    cwd: resolve(options.cwd || process.cwd()),
-    stdio: options.silent ? "pipe" : "inherit",
+  const x = await importTinyexec();
+  await x(xArgs[0], xArgs[1], {
+    nodeOptions: {
+      cwd: resolve(options.cwd || process.cwd()),
+      stdio: options.silent ? "pipe" : "inherit",
+    },
   });
 }
 
