@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.3.12
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.11...v0.3.12)
+
+### 🚀 Enhancements
+
+- Detect `bun.lock` ([#153](https://github.com/unjs/nypm/pull/153))
+
+### 🏡 Chore
+
+- Update dev dependencies ([1ef5ca0](https://github.com/unjs/nypm/commit/1ef5ca0))
+- Update eslint config ([8cd67de](https://github.com/unjs/nypm/commit/8cd67de))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.3.11
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.10...v0.3.11)
