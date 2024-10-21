@@ -54,7 +54,10 @@ export async function executeCommand(
   options: Pick<OperationOptions, "cwd" | "silent"> = {},
 ): Promise<void> {
   const execaArgs: [string, string[]] =
-    command === "npm" || command === "bun" || !(await hasCorepack())
+    command === "npm" ||
+    command === "bun" ||
+    command === "deno" ||
+    !(await hasCorepack())
       ? [command, args]
       : ["corepack", [command, ...args]];
 
