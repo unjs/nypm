@@ -86,11 +86,6 @@ export async function detectPackageManager(
     resolve(cwd || "."),
     async (path) => {
       // 1. Use `packageManager` field from package.json / deno.json
-      const denoJSONPath = join(path, "deno.json");
-      if (existsSync(denoJSONPath)) {
-        return packageManagers.find((pm) => pm.name === "deno");
-      }
-
       if (!options.ignorePackageJSON) {
         const packageJSONPath = join(path, "package.json");
         if (existsSync(packageJSONPath)) {
@@ -113,6 +108,11 @@ export async function detectPackageManager(
               majorVersion,
             };
           }
+        }
+
+        const denoJSONPath = join(path, "deno.json");
+        if (existsSync(denoJSONPath)) {
+          return packageManagers.find((pm) => pm.name === "deno");
         }
       }
 

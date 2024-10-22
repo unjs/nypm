@@ -64,10 +64,7 @@ export async function addDependency(
 
   if (resolvedOptions.packageManager.name === "deno") {
     for (let i = 0; i < names.length; i++) {
-      if (!/^.*?:.+$/.test(names[i])) {
-        console.info(
-          `No prefix found for ${names[i]}. Defaulting to "npm:${names[i]}".`,
-        );
+      if (!/^(npm|jsr|file):.+$/.test(names[i])) {
         names[i] = `npm:${names[i]}`;
       }
     }
