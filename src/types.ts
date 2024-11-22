@@ -3,6 +3,7 @@ export type PackageManagerName = "npm" | "yarn" | "pnpm" | "bun";
 export type PackageManager = {
   name: PackageManagerName;
   command: string;
+  packageRunner?: string;
   version?: string;
   majorVersion?: string;
   lockFile?: string | string[];

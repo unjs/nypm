@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
+import { env, process } from "std-env";
 import { findup } from "./_utils";
 import type { PackageManager } from "./types";
 
@@ -27,8 +28,13 @@ export type DetectPackageManagerOptions = {
   includeParentDirs?: boolean;
 
   /**
-   * Weather to ignore argv[1] to detect script
-   */
+   * Weather to ignore runtime checks to detect package manager or script runner
+  */
+  ignoreRuntime?: boolean;
+
+  /**
+  * Whether to ignore argv[1] to detect package manager or script runner, implied if `ignoreRuntimeChecks` is `true`
+  */
   ignoreArgv?: boolean;
 };
 
@@ -37,23 +43,27 @@ export const packageManagers: PackageManager[] = [
     name: "npm",
     command: "npm",
     lockFile: "package-lock.json",
+    packageRunner: "npx"
   },
   {
     name: "pnpm",
     command: "pnpm",
     lockFile: "pnpm-lock.yaml",
     files: ["pnpm-workspace.yaml"],
+    packageRunner: "pnpm dlx"
   },
   {
     name: "bun",
     command: "bun",
     lockFile: ["bun.lockb", "bun.lock"],
+    packageRunner: "bunx"
   },
   {
     name: "yarn",
     command: "yarn",
     majorVersion: "1",
     lockFile: "yarn.lock",
+    packageRunner: undefined
   },
   {
     name: "yarn",
@@ -61,6 +71,7 @@ export const packageManagers: PackageManager[] = [
     majorVersion: "3",
     lockFile: "yarn.lock",
     files: [".yarnrc.yml"],
+    packageRunner: "yarn dlx"
   },
 ] as const;
 
@@ -127,10 +138,39 @@ export async function detectPackageManager(
     },
   );
 
-  if (!detected && !options.ignoreArgv) {
-    // 3. Try to detect based on dlx/exec command
+  if (!detected && !options.ignoreRuntime) {
+    return detectRuntimePackageManager(options)
+  }
+
+  return detected;
+}
+
+export function detectRuntimePackageManager(options: DetectPackageManagerOptions = {}): PackageManager | undefined {
+  const userAgent = env['npm_config_user_agent']
+
+  const engine = userAgent?.split(' ')?.[0] ?? ''
+
+  const [name, version = '0.0.0'] = engine.split('/')
+
+  if (name) {
+    const majorVersion = version.split(".")[0];
+    const packageManager =
+      packageManagers.find(
+        (pm) => pm.name === name && pm.majorVersion === majorVersion,
+      ) || packageManagers.find((pm) => pm.name === name);
+    if (packageManager) {
+      return {
+        ...packageManager,
+        command: name,
+        version,
+        majorVersion,
+      };
+    }
+  }
+  if (!options.ignoreArgv) {
+    // Fallback to detecting based on argv
     // https://github.com/unjs/nypm/issues/116
-    const scriptArg = process.argv[1];
+    const scriptArg = process.argv?.[1];
     if (scriptArg) {
       for (const packageManager of packageManagers) {
         // Check /.[name] or /[name] in path
@@ -142,5 +182,4 @@ export async function detectPackageManager(
     }
   }
 
-  return detected;
 }
