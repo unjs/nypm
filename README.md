@@ -9,29 +9,17 @@
 
 ## What does **nypm** do?
 
-✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/) and [bun](https://bun.sh/package-manager) out of the box with a unified API.
+✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/) and [bun](https://bun.sh/package-manager) and [deno](https://deno.com/) out of the box with a unified API.
 
 ✅ Provides an **API interface** to interact with package managers.
 
 ✅ **Autodetects** project's package manager using `package.json` and known lockfiles.
 
-✅ **Auto-installs and use exactly expected version** of supported package managers using [nodejs/corepack](https://github.com/nodejs/corepack) when available.
+✅ **Auto-installs and use exactly expected version** of supported package managers (using [nodejs/corepack](https://github.com/nodejs/corepack) for `yarn` and `pnpm` only).
 
 ✅ **Minimal** implementation.
 
 nypm, detects package manager type and version and converts command into package manager CLI arguments. It then uses corepack or proper command to execute package manager's command and download it if necessary.
-
-```
-  +------------------------------------------------+
-  |                nypm                            |
-  +------------------------------------------------+
-  +-----------------------------------+  +---------+
-  |              Corepack             |  |  bun    |
-  +-----------------------------------+  +---------+
-  +---------+  +---------+  +---------+
-  |   npm   |  |  yarn   |  |  pnpm   |
-  +---------+  +---------+  +---------+
-```
 
 ## `nypm` Command
 
@@ -116,7 +104,6 @@ Installs project dependencies.
 ### `removeDependency(name, options)`
 
 Removes dependency from the project.
-
 
 <!-- AUTOMD_END -->
 
