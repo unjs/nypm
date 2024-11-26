@@ -1,11 +1,14 @@
 # 🌈 [nypm](https://www.youtube.com/watch?v=QH2-TGUlwu4)
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![Github Actions][github-actions-src]][github-actions-href]
-[![Codecov][codecov-src]][codecov-href]
+<!-- automd:badges codecov -->
 
-> Unified Package Manager for Node.js and Bun
+[![npm version](https://img.shields.io/npm/v/nypm)](https://npmjs.com/package/nypm)
+[![npm downloads](https://img.shields.io/npm/dm/nypm)](https://npm.chart.dev/nypm)
+[![codecov](https://img.shields.io/codecov/c/gh/unjs/nypm)](https://codecov.io/gh/unjs/nypm)
+
+<!-- /automd -->
+
+Unified Package Manager for Node.js (npm, pnpm, yarn), Bun and Deno
 
 ## What does **nypm** do?
 
@@ -45,11 +48,11 @@ npx nypm remove defu
 
 Install package:
 
-<!-- AUTOMD_START generator="pm-install" name="nypm" -->
+<!-- automd:pm-i -->
 
 ```sh
 # ✨ Auto-detect
-npx nypm i nypm
+npx nypm install nypm
 
 # npm
 npm install nypm
@@ -62,9 +65,12 @@ pnpm install nypm
 
 # bun
 bun install nypm
+
+# deno
+deno install nypm
 ```
 
-<!-- AUTOMD_END -->
+<!-- /automd -->
 
 Import:
 
@@ -75,8 +81,6 @@ import { addDependency } from "nypm";
 // CommonJS
 const { addDependency } = require("nypm");
 ```
-
-<!-- AUTOMD_START generator="jsdocs" -->
 
 ### `addDependency(name, options)`
 
@@ -104,8 +108,6 @@ Installs project dependencies.
 ### `removeDependency(name, options)`
 
 Removes dependency from the project.
-
-<!-- AUTOMD_END -->
 
 ## 💻 Development
 
