@@ -65,7 +65,6 @@ export const packageManagers: PackageManager[] = [
   {
     name: "deno",
     command: "deno",
-    majorVersion: "2",
     lockFile: "deno.lock",
     files: ["deno.json"],
   },
