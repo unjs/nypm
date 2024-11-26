@@ -1,5 +1,7 @@
 {
   "name": "fixture-deno",
   "private": true,
-  "dependencies": { "consola": "3.2.2" }
+  "dependencies": {
+    "consola": "3.2.2"
+  }
 }
