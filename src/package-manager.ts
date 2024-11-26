@@ -47,7 +47,7 @@ export const packageManagers: PackageManager[] = [
   {
     name: "bun",
     command: "bun",
-    lockFile: "bun.lockb",
+    lockFile: ["bun.lockb", "bun.lock"],
   },
   {
     name: "yarn",
@@ -109,8 +109,10 @@ export async function detectPackageManager(
         for (const packageManager of packageManagers) {
           const detectionsFiles = [
             packageManager.lockFile,
-            ...(packageManager.files || []),
-          ].filter(Boolean) as string[];
+            packageManager.files,
+          ]
+            .flat()
+            .filter(Boolean) as string[];
 
           if (detectionsFiles.some((file) => existsSync(resolve(path, file)))) {
             return {
