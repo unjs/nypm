@@ -14,6 +14,14 @@ export type Fixture = {
 export const fixtures = (
   [
     {
+      name: "deno",
+      packageManager: "deno",
+    },
+    {
+      name: "deno-workspace",
+      packageManager: "deno",
+    },
+    {
       name: "bun",
       packageManager: "bun",
     },

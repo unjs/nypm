@@ -29,6 +29,7 @@ export async function installDependencies(
       yarn: ["install", "--immutable"],
       bun: ["install", "--frozen-lockfile"],
       pnpm: ["install", "--frozen-lockfile"],
+      deno: ["install", "--frozen"],
     };
 
   const commandArgs = options.frozenLockFile
@@ -60,6 +61,14 @@ export async function addDependency(
   const resolvedOptions = await resolveOperationOptions(options);
 
   const names = Array.isArray(name) ? name : [name];
+
+  if (resolvedOptions.packageManager.name === "deno") {
+    for (let i = 0; i < names.length; i++) {
+      if (!/^(npm|jsr|file):.+$/.test(names[i])) {
+        names[i] = `npm:${names[i]}`;
+      }
+    }
+  }
 
   // TOOD: we might filter for empty values too for more safety
   if (names.length === 0) {

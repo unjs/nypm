@@ -62,6 +62,12 @@ export const packageManagers: PackageManager[] = [
     lockFile: "yarn.lock",
     files: [".yarnrc.yml"],
   },
+  {
+    name: "deno",
+    command: "deno",
+    lockFile: "deno.lock",
+    files: ["deno.json"],
+  },
 ] as const;
 
 /**
@@ -78,7 +84,7 @@ export async function detectPackageManager(
   const detected = await findup(
     resolve(cwd || "."),
     async (path) => {
-      // 1. Use `packageManager` field from package.json
+      // 1. Use `packageManager` field from package.json / deno.json
       if (!options.ignorePackageJSON) {
         const packageJSONPath = join(path, "package.json");
         if (existsSync(packageJSONPath)) {
@@ -101,6 +107,11 @@ export async function detectPackageManager(
               majorVersion,
             };
           }
+        }
+
+        const denoJSONPath = join(path, "deno.json");
+        if (existsSync(denoJSONPath)) {
+          return packageManagers.find((pm) => pm.name === "deno");
         }
       }
 

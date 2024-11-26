@@ -1,0 +1,7 @@
+{
+  "name": "fixture-deno-workspace",
+  "private": true,
+  "dependencies": {
+    "consola": "3.2.2"
+  }
+}
