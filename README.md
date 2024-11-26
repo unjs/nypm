@@ -1,16 +1,14 @@
-# 🌈 [nypm](https://www.youtube.com/watch?v=QH2-TGUlwu4)
+# 🌈 nypm
 
-<!-- automd:badges codecov -->
+<!-- automd:badges color="yellow" codecov -->
 
-[![npm version](https://img.shields.io/npm/v/nypm)](https://npmjs.com/package/nypm)
-[![npm downloads](https://img.shields.io/npm/dm/nypm)](https://npm.chart.dev/nypm)
-[![codecov](https://img.shields.io/codecov/c/gh/unjs/nypm)](https://codecov.io/gh/unjs/nypm)
+[![npm version](https://img.shields.io/npm/v/nypm?color=yellow)](https://npmjs.com/package/nypm)
+[![npm downloads](https://img.shields.io/npm/dm/nypm?color=yellow)](https://npm.chart.dev/nypm)
+[![codecov](https://img.shields.io/codecov/c/gh/unjs/nypm?color=yellow)](https://codecov.io/gh/unjs/nypm)
 
 <!-- /automd -->
 
-Unified Package Manager for Node.js (npm, pnpm, yarn), Bun and Deno
-
-## What does **nypm** do?
+🌈 Unified Package Manager for Node.js (npm, pnpm, yarn), Bun and Deno.
 
 ✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/) and [bun](https://bun.sh/package-manager) and [deno](https://deno.com/) out of the box with a unified API.
 
@@ -18,13 +16,9 @@ Unified Package Manager for Node.js (npm, pnpm, yarn), Bun and Deno
 
 ✅ **Autodetects** project's package manager using `package.json` and known lockfiles.
 
-✅ **Auto-installs and use exactly expected version** of supported package managers (using [nodejs/corepack](https://github.com/nodejs/corepack) for `yarn` and `pnpm` only).
+✅ **[corepack](https://github.com/nodejs/corepack)** integration for **pnpm** and **yarn**.
 
-✅ **Minimal** implementation.
-
-nypm, detects package manager type and version and converts command into package manager CLI arguments. It then uses corepack or proper command to execute package manager's command and download it if necessary.
-
-## `nypm` Command
+## `nypm` command
 
 **Install dependencies:**
 
@@ -112,8 +106,8 @@ Removes dependency from the project.
 ## 💻 Development
 
 - Clone this repository
-- Play [Nyan Cat](https://www.youtube.com/watch?v=2yJgwwDcgV8) in the background (really important!)
-- Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable` (use `npm i -g corepack` for Node.js < 16.10)
+- Play [Nyan Cat](https://www.nyan.cat/) in the background (really important!)
+- Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable`
 - Install dependencies using `pnpm install`
 - Run interactive tests using `pnpm dev`
 
