@@ -36,8 +36,8 @@
   "dependencies": {
     "citty": "^0.1.6",
     "consola": "^3.2.3",
-    "execa": "^8.0.1",
     "pathe": "^1.1.2",
+    "tinyexec": "^0.3.0",
     "pkg-types": "^1.2.1",
     "ufo": "^1.5.4"
   },
