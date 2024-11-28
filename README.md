@@ -113,7 +113,7 @@ Removes dependency from the project.
 
 ## Related Projects
 
-NYPM is inspired from previous attempts and projects for unifying package manager exeperience.
+NYPM is inspired from previous attempts and projects for unifying package manager experience.
 
 - [pi0/yarnpm](https://github.com/pi0/yarnpm)
 - [unjs/lmify](https://github.com/unjs/lmify)
