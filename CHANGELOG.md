@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.4.1
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.4.0...v0.4.1)
+
+### 🩹 Fixes
+
+- **addDependency:** Compare `name` from resolved `package.json` ([#165](https://github.com/unjs/nypm/pull/165))
+
+### ❤️ Contributors
+
+- Daniel Roe ([@danielroe](http://github.com/danielroe))
+
 ## v0.4.0
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.12...v0.4.0)
