@@ -111,7 +111,7 @@ export async function addDependency(
       const pkg = await readPackageJSON(pkgName, {
         url: resolvedOptions.cwd,
       }).catch(() => ({}) as Record<string, undefined>);
-      if (!pkg.peerDependencies || name !== pkgName) {
+      if (!pkg.peerDependencies || pkg.name !== pkgName) {
         continue;
       }
       for (const [peerDependency, version] of Object.entries(
