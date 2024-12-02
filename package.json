@@ -1,6 +1,6 @@
 {
   "name": "nypm",
-  "version": "0.3.12",
+  "version": "0.4.1",
   "description": "Unified Package Manager for Node.js",
   "repository": "unjs/nypm",
   "license": "MIT",
@@ -36,26 +36,26 @@
   "dependencies": {
     "citty": "^0.1.6",
     "consola": "^3.2.3",
-    "execa": "^8.0.1",
     "pathe": "^1.1.2",
+    "tinyexec": "^0.3.1",
     "pkg-types": "^1.2.1",
     "ufo": "^1.5.4"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "@vitest/coverage-v8": "^2.1.4",
+    "@types/node": "^22.10.0",
+    "@vitest/coverage-v8": "^2.1.6",
     "automd": "^0.3.12",
     "changelogen": "^0.5.7",
-    "eslint": "^9.14.0",
-    "eslint-config-unjs": "^0.4.1",
+    "eslint": "^9.15.0",
+    "eslint-config-unjs": "^0.4.2",
     "jiti": "^2.4.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.4.1",
     "std-env": "^3.8.0",
-    "typescript": "^5.6.3",
+    "typescript": "^5.7.2",
     "unbuild": "^2.0.0",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.6"
   },
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@9.14.2",
   "engines": {
     "node": "^14.16.0 || >=16.10.0"
   }

@@ -1,6 +1,49 @@
 # Changelog
 
 
+## v0.4.1
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.4.0...v0.4.1)
+
+### 🩹 Fixes
+
+- **addDependency:** Compare `name` from resolved `package.json` ([#165](https://github.com/unjs/nypm/pull/165))
+
+### ❤️ Contributors
+
+- Daniel Roe ([@danielroe](http://github.com/danielroe))
+
+## v0.4.0
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.3.12...v0.4.0)
+
+### 🚀 Enhancements
+
+- Experimental support for deno v2 ([#158](https://github.com/unjs/nypm/pull/158))
+
+### 🔥 Performance
+
+- ⚠️  Replace `execa` with `tinyexec` ([#151](https://github.com/unjs/nypm/pull/151))
+
+### 🏡 Chore
+
+- Update deps ([daa25d4](https://github.com/unjs/nypm/commit/daa25d4))
+- Update eslint deps ([141a6a3](https://github.com/unjs/nypm/commit/141a6a3))
+- Update readme ([2c8d761](https://github.com/unjs/nypm/commit/2c8d761))
+- Update readme ([7ba6ebc](https://github.com/unjs/nypm/commit/7ba6ebc))
+- Update tinyexec ([af2db8f](https://github.com/unjs/nypm/commit/af2db8f))
+- Update readme ([171f7c9](https://github.com/unjs/nypm/commit/171f7c9))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Replace `execa` with `tinyexec` ([#151](https://github.com/unjs/nypm/pull/151))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Yasser Lahbibi ([@yassilah](http://github.com/yassilah))
+- Pralkarz ([@ziebam](http://github.com/ziebam))
+
 ## v0.3.12
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.3.11...v0.3.12)

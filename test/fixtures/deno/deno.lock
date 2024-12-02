@@ -1,0 +1,21 @@
+{
+  "version": "4",
+  "specifiers": {
+    "npm:consola@3.2.2": "3.2.2"
+  },
+  "npm": {
+    "consola@3.2.2": {
+      "integrity": "sha512-r921u0vbF4lQsoIqYvSSER+yZLPQGijOHrYcWoCNVNBZmn/bRR+xT/DgerTze/nLD9TTGzdDa378TVhx7RDOYg=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:consola@3.2.2"
+    ],
+    "packageJson": {
+      "dependencies": [
+        "npm:consola@3.2.2"
+      ]
+    }
+  }
+}
