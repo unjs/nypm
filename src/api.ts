@@ -232,3 +232,39 @@ export async function ensureDependencyInstalled(
 
   await addDependency(name, resolvedOptions);
 }
+
+interface SpecifiedPackageInfo {
+  version: string;
+  dev?: boolean;
+  peer?: string | false;
+  optional?: boolean;
+}
+
+/**
+ * Gets information about a dependency requirement from the `package.json` in a user directory.
+ *
+ * @param name - Name of the dependency.
+ * @param options - Options to pass to the API call.
+ * @param options.cwd - The directory to run the command in.
+ */
+export async function getSpecifiedPackageInfo(
+  name: string,
+  options: Pick<OperationOptions, "cwd"> = {},
+) {
+  const resolvedOptions = await resolveOperationOptions(options);
+  const userPkgJson = await readPackageJSON(resolvedOptions.cwd);
+  const dep = userPkgJson.dependencies?.[name];
+  const devDep = userPkgJson.devDependencies?.[name];
+  const peerDep = userPkgJson.peerDependencies?.[name];
+  const version = dep || devDep;
+  if (!version) {
+    return;
+  }
+  const meta: SpecifiedPackageInfo = {
+    version,
+    dev: !!devDep,
+    peer: peerDep || false,
+    optional: !!userPkgJson.peerDependenciesMeta?.[name]?.optional,
+  };
+  return meta;
+}
