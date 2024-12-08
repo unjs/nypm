@@ -4,7 +4,10 @@ import { resolve } from "pathe";
 import { consola } from "consola";
 import { name, version, description } from "../package.json";
 import { addDependency, installDependencies, removeDependency } from "./api";
-import { detectPackageManager } from "./package-manager";
+import {
+  detectPackageManager,
+  detectRuntimePackageManager,
+} from "./package-manager";
 
 const operationArgs = {
   cwd: {
@@ -94,6 +97,22 @@ const detect = defineCommand({
   },
 });
 
+const detectRunner = defineCommand({
+  meta: {
+    description: "Detect the current package runner using runtime checks",
+  },
+  run: () => {
+    const packageManager = detectRuntimePackageManager();
+    if (!packageManager) {
+      consola.error(`Cannot detect package runner`);
+      return process.exit(1);
+    }
+    consola.log(
+      `Detected package runner \`${packageManager.name}@${packageManager.version}\``,
+    );
+  },
+});
+
 const main = defineCommand({
   meta: {
     name,
@@ -109,6 +128,7 @@ const main = defineCommand({
     uninstall: remove,
     un: remove,
     detect,
+    "detect-runner": detectRunner,
   },
 });
 
