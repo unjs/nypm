@@ -1,8 +1,8 @@
 import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
+import { readPackageJSON } from "pkg-types";
 import { findup } from "./_utils";
-import type { PackageManager } from "./types";
+import type { PackageManager, PackageManagerName } from "./types";
 
 export type DetectPackageManagerOptions = {
   /**
@@ -76,6 +76,8 @@ export const packageManagers: PackageManager[] = [
  * 1. Use `packageManager` field from package.json
  *
  * 2. Known lock files and other files
+ *
+ * 3. Try to detect based on dlx/exec command
  */
 export async function detectPackageManager(
   cwd: string,
@@ -88,9 +90,10 @@ export async function detectPackageManager(
       if (!options.ignorePackageJSON) {
         const packageJSONPath = join(path, "package.json");
         if (existsSync(packageJSONPath)) {
-          const packageJSON = JSON.parse(
-            await readFile(packageJSONPath, "utf8"),
-          );
+          // TODO: Remove "as Record..." if https://github.com/unjs/pkg-types/pull/204
+          const packageJSON = (await readPackageJSON(packageJSONPath)) as
+            | Record<"packageManager", string>
+            | undefined;
           if (packageJSON?.packageManager) {
             const [name, version = "0.0.0"] =
               packageJSON.packageManager.split("@");
@@ -99,13 +102,16 @@ export async function detectPackageManager(
               packageManagers.find(
                 (pm) => pm.name === name && pm.majorVersion === majorVersion,
               ) || packageManagers.find((pm) => pm.name === name);
-            return {
-              ...packageManager,
-              name,
-              command: name,
-              version,
-              majorVersion,
-            };
+
+            if (packageManager) {
+              return {
+                ...packageManager,
+                name: name as PackageManagerName,
+                command: name,
+                version,
+                majorVersion,
+              };
+            }
           }
         }
 

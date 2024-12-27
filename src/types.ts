@@ -5,7 +5,7 @@ export type PackageManager = {
   command: string;
   version?: string;
   majorVersion?: string;
-  lockFile?: string | string[];
+  lockFile: string | string[];
   files?: string[];
 };
 
