@@ -103,6 +103,13 @@ Installs project dependencies.
 
 Removes dependency from the project.
 
+### `dedupeDependencies(options)`
+
+Dedupe project dependencies.
+
+> [!NOTE]
+> For `bun` and `deno` it will remove the lockfile and reinstall all dependencies.
+
 ## 💻 Development
 
 - Clone this repository

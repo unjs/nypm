@@ -3,7 +3,12 @@ import { defineCommand, runMain, ArgsDef } from "citty";
 import { resolve } from "pathe";
 import { consola } from "consola";
 import { name, version, description } from "../package.json";
-import { addDependency, installDependencies, removeDependency } from "./api";
+import {
+  addDependency,
+  installDependencies,
+  removeDependency,
+  dedupeDependencies,
+} from "./api";
 import { detectPackageManager } from "./package-manager";
 
 const operationArgs = {
@@ -94,6 +99,29 @@ const detect = defineCommand({
   },
 });
 
+const dedupe = defineCommand({
+  meta: {
+    description: "Dedupe dependencies",
+  },
+  args: {
+    cwd: {
+      type: "string",
+      description: "Current working directory",
+    },
+    silent: {
+      type: "boolean",
+      description: "Run in silent mode",
+    },
+    recreateLockFile: {
+      type: "boolean",
+      description: "Recreate lock file",
+    },
+  },
+  run: async ({ args }) => {
+    await dedupeDependencies(args);
+  },
+});
+
 const main = defineCommand({
   meta: {
     name,
@@ -109,6 +137,7 @@ const main = defineCommand({
     uninstall: remove,
     un: remove,
     detect,
+    dedupe,
   },
 });
 

@@ -7,7 +7,7 @@ import {
 } from "../src";
 import { fixtures } from "./_shared";
 
-describe("api (workspace)", () => {
+describe("api", () => {
   for (const fixture of fixtures.filter((f) => !f.workspace)) {
     describe(fixture.name, () => {
       it("installs dependencies", async () => {
