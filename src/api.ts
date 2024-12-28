@@ -232,3 +232,16 @@ export async function ensureDependencyInstalled(
 
   await addDependency(name, resolvedOptions);
 }
+
+export async function dedupeDependencies(options: OperationOptions = {}) {
+  const resolvedOptions = await resolveOperationOptions(options);
+  if (["bun", "deno"].includes(resolvedOptions.packageManager?.name ?? "")) {
+    throw new Error(
+      `Deduping is currently not supported for \`${resolvedOptions.packageManager?.name ?? "unknown package manager"}\``,
+    );
+  }
+  await executeCommand(resolvedOptions.packageManager.command, ["dedupe"], {
+    cwd: resolvedOptions.cwd,
+    silent: resolvedOptions.silent,
+  });
+}

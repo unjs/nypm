@@ -103,6 +103,13 @@ Installs project dependencies.
 
 Removes dependency from the project.
 
+### `dedupeDependencies(options)`
+
+Dedupe project dependencies.
+
+> [!NOTE]
+> This is currently not supported for `bun` and `deno`.
+
 ## 💻 Development
 
 - Clone this repository
