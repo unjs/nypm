@@ -236,15 +236,16 @@ export async function ensureDependencyInstalled(
   await addDependency(name, resolvedOptions);
 }
 
-export async function dedupeDependencies(options: Pick<OperationOptions, 'cwd' | 'silent'> & {recreateLockfile?: boolean} = {}) {
+export async function dedupeDependencies(
+  options: Pick<OperationOptions, "cwd" | "silent"> & {
+    recreateLockfile?: boolean;
+  } = {},
+) {
   const resolvedOptions = await resolveOperationOptions(options);
-  const isSupported = ["bun", "deno"].includes(resolvedOptions.packageManager?.name ?? "");
+  const isSupported = !["bun", "deno"].includes(
+    resolvedOptions.packageManager.name,
+  );
   const recreateLockfile = options.recreateLockfile ?? !isSupported;
-  if(!isSupported) {
-    consola.log(
-      `Deduping is currently not supported for \`${resolvedOptions.packageManager?.name ?? "unknown package manager"}\`.`,
-    );
-  }
   if (recreateLockfile) {
     consola.log("Removing lockfile(s) and reinstalling dependencies...");
     const lockfiles = Array.isArray(resolvedOptions.packageManager.lockFile)
@@ -255,10 +256,16 @@ export async function dedupeDependencies(options: Pick<OperationOptions, 'cwd' |
         fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
     }
     await installDependencies(resolvedOptions);
-  } else if (isSupported) {
+    return;
+  }
+  if (isSupported) {
     await executeCommand(resolvedOptions.packageManager.command, ["dedupe"], {
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
     });
+    return;
   }
+  throw new Error(
+    `Deduplication is not supported for ${resolvedOptions.packageManager.name}`,
+  );
 }

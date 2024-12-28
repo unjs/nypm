@@ -108,7 +108,7 @@ Removes dependency from the project.
 Dedupe project dependencies.
 
 > [!NOTE]
-> This is currently not supported for `bun` and `deno`.
+> For `bun` and `deno` it will remove the lockfile and reinstall all dependencies.
 
 ## 💻 Development
 
