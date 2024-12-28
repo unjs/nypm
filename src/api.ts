@@ -6,6 +6,9 @@ import {
   doesDependencyExist,
 } from "./_utils";
 import type { OperationOptions, PackageManagerName } from "./types";
+import { consola } from "consola";
+import * as fs from "node:fs";
+import { resolve } from "pathe";
 
 /**
  * Installs project dependencies.
@@ -233,15 +236,29 @@ export async function ensureDependencyInstalled(
   await addDependency(name, resolvedOptions);
 }
 
-export async function dedupeDependencies(options: OperationOptions = {}) {
+export async function dedupeDependencies(options: Pick<OperationOptions, 'cwd' | 'silent'> & {recreateLockfile?: boolean} = {}) {
   const resolvedOptions = await resolveOperationOptions(options);
-  if (["bun", "deno"].includes(resolvedOptions.packageManager?.name ?? "")) {
-    throw new Error(
-      `Deduping is currently not supported for \`${resolvedOptions.packageManager?.name ?? "unknown package manager"}\``,
+  const isSupported = ["bun", "deno"].includes(resolvedOptions.packageManager?.name ?? "");
+  const recreateLockfile = options.recreateLockfile ?? !isSupported;
+  if(!isSupported) {
+    consola.log(
+      `Deduping is currently not supported for \`${resolvedOptions.packageManager?.name ?? "unknown package manager"}\`.`,
     );
   }
-  await executeCommand(resolvedOptions.packageManager.command, ["dedupe"], {
-    cwd: resolvedOptions.cwd,
-    silent: resolvedOptions.silent,
-  });
+  if (recreateLockfile) {
+    consola.log("Removing lockfile(s) and reinstalling dependencies...");
+    const lockfiles = Array.isArray(resolvedOptions.packageManager.lockFile)
+      ? resolvedOptions.packageManager.lockFile
+      : [resolvedOptions.packageManager.lockFile];
+    for (const lockfile of lockfiles) {
+      if (lockfile)
+        fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
+    }
+    await installDependencies(resolvedOptions);
+  } else if (isSupported) {
+    await executeCommand(resolvedOptions.packageManager.command, ["dedupe"], {
+      cwd: resolvedOptions.cwd,
+      silent: resolvedOptions.silent,
+    });
+  }
 }

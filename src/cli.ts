@@ -112,6 +112,10 @@ const dedupe = defineCommand({
       type: "boolean",
       description: "Run in silent mode",
     },
+    recreateLockFile: {
+      type: "boolean",
+      description: "Recreate lock file",
+    },
   },
   run: async ({ args }) => {
     await dedupeDependencies(args);
