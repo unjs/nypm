@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { withTrailingSlash } from "ufo";
+import { x } from "tinyexec";
 import type { OperationOptions, PackageManager } from "./types";
 import type { DetectPackageManagerOptions } from "./package-manager";
 import { detectPackageManager, packageManagers } from "./package-manager";
@@ -37,9 +38,7 @@ function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
   };
 }
 
-const importTinyexec = cached(() => import("tinyexec").then((r) => r.x));
 const hasCorepack = cached(async () => {
-  const x = await importTinyexec();
   try {
     const { exitCode } = await x("corepack", ["--version"]);
     return exitCode === 0;
@@ -61,7 +60,6 @@ export async function executeCommand(
       ? [command, args]
       : ["corepack", [command, ...args]];
 
-  const x = await importTinyexec();
   await x(xArgs[0], xArgs[1], {
     nodeOptions: {
       cwd: resolve(options.cwd || process.cwd()),
