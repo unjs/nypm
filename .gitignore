@@ -7,3 +7,4 @@ dist
 types
 .conf*
 # bun.lockb
+.idea

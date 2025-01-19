@@ -2,7 +2,7 @@ import { expect, it, describe, vi } from "vitest";
 import { addDependency, removeDependency } from "../src";
 import { fixtures } from "./_shared";
 
-describe("api", () => {
+describe("api (workspace)", () => {
   for (const fixture of fixtures.filter((f) => f.workspace)) {
     describe(fixture.name, () => {
       it("adds dependency to the workspace root", async () => {

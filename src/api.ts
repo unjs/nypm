@@ -6,6 +6,8 @@ import {
   doesDependencyExist,
 } from "./_utils";
 import type { OperationOptions, PackageManagerName } from "./types";
+import * as fs from "node:fs";
+import { resolve } from "pathe";
 
 /**
  * Installs project dependencies.
@@ -231,4 +233,37 @@ export async function ensureDependencyInstalled(
   }
 
   await addDependency(name, resolvedOptions);
+}
+
+export async function dedupeDependencies(
+  options: Pick<OperationOptions, "cwd" | "silent"> & {
+    recreateLockfile?: boolean;
+  } = {},
+) {
+  const resolvedOptions = await resolveOperationOptions(options);
+  const isSupported = !["bun", "deno"].includes(
+    resolvedOptions.packageManager.name,
+  );
+  const recreateLockfile = options.recreateLockfile ?? !isSupported;
+  if (recreateLockfile) {
+    const lockfiles = Array.isArray(resolvedOptions.packageManager.lockFile)
+      ? resolvedOptions.packageManager.lockFile
+      : [resolvedOptions.packageManager.lockFile];
+    for (const lockfile of lockfiles) {
+      if (lockfile)
+        fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
+    }
+    await installDependencies(resolvedOptions);
+    return;
+  }
+  if (isSupported) {
+    await executeCommand(resolvedOptions.packageManager.command, ["dedupe"], {
+      cwd: resolvedOptions.cwd,
+      silent: resolvedOptions.silent,
+    });
+    return;
+  }
+  throw new Error(
+    `Deduplication is not supported for ${resolvedOptions.packageManager.name}`,
+  );
 }
