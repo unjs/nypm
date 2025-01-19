@@ -6,7 +6,6 @@ import {
   doesDependencyExist,
 } from "./_utils";
 import type { OperationOptions, PackageManagerName } from "./types";
-import { consola } from "consola";
 import * as fs from "node:fs";
 import { resolve } from "pathe";
 
@@ -247,7 +246,6 @@ export async function dedupeDependencies(
   );
   const recreateLockfile = options.recreateLockfile ?? !isSupported;
   if (recreateLockfile) {
-    consola.log("Removing lockfile(s) and reinstalling dependencies...");
     const lockfiles = Array.isArray(resolvedOptions.packageManager.lockFile)
       ? resolvedOptions.packageManager.lockFile
       : [resolvedOptions.packageManager.lockFile];
