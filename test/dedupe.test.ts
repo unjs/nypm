@@ -2,13 +2,12 @@ import { describe, expect, it, vi } from "vitest";
 import { fixtures } from "./_shared";
 import { dedupeDependencies } from "../src";
 
-
 const { rmSync } = vi.hoisted(() => {
   return { rmSync: vi.fn() };
 });
 
 vi.mock("fs", () => ({
-  ...require('node:fs'),
+  ...require("node:fs"),
   rmSync,
 }));
 
@@ -35,27 +34,31 @@ describe("dedupe", () => {
           await dedupeDependencies({
             cwd: fixture.dir,
             silent: !process.env.DEBUG,
-            recreateLockfile: true
+            recreateLockfile: true,
           });
         await executeDedupeDependenciesSpy();
         expect(dedupeDependenciesSpy).not.toThrow();
       }, 60_000);
 
-      it.skipIf(["bun", "deno"].includes(fixture.packageManager))("lockfile recreation set to false", async () => {
-        const dedupeDependenciesSpy = vi.fn(dedupeDependencies);
-        const executeDedupeDependenciesSpy = async () =>
-          await dedupeDependencies({
-            cwd: fixture.dir,
-            silent: !process.env.DEBUG,
-            recreateLockfile: false
-          });
-        await executeDedupeDependenciesSpy();
-        // if (["bun", "deno"].includes(fixture.packageManager)) {
-        //   expect(dedupeDependenciesSpy).toThrowError();
-        // }else {
+      it.skipIf(["bun", "deno"].includes(fixture.packageManager))(
+        "lockfile recreation set to false",
+        async () => {
+          const dedupeDependenciesSpy = vi.fn(dedupeDependencies);
+          const executeDedupeDependenciesSpy = async () =>
+            await dedupeDependencies({
+              cwd: fixture.dir,
+              silent: !process.env.DEBUG,
+              recreateLockfile: false,
+            });
+          await executeDedupeDependenciesSpy();
+          // if (["bun", "deno"].includes(fixture.packageManager)) {
+          //   expect(dedupeDependenciesSpy).toThrowError();
+          // }else {
           expect(dedupeDependenciesSpy).not.toThrowError();
-        // }
-      }, 60_000);
+          // }
+        },
+        60_000,
+      );
     });
   }
 });
