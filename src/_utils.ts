@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { withTrailingSlash } from "ufo";
-import { x } from "tinyexec"
+import { x } from "tinyexec";
 import type { OperationOptions, PackageManager } from "./types";
 import type { DetectPackageManagerOptions } from "./package-manager";
 import { detectPackageManager, packageManagers } from "./package-manager";
