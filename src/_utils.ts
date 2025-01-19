@@ -40,9 +40,12 @@ function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
 const importTinyexec = cached(() => import("tinyexec").then((r) => r.x));
 const hasCorepack = cached(async () => {
   const x = await importTinyexec();
-  const result = x("corepack", ["--version"]);
-  await result;
-  return result.exitCode === 0;
+  try {
+    const { exitCode } = await x("corepack", ["--version"]);
+    return exitCode === 0;
+  } catch {
+    return false;
+  }
 });
 
 export async function executeCommand(
