@@ -1,6 +1,38 @@
 # Changelog
 
 
+## v0.5.0
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.4.1...v0.5.0)
+
+### 🚀 Enhancements
+
+- Add `dedupeDependencies` utility ([#175](https://github.com/unjs/nypm/pull/175))
+
+### 🔥 Performance
+
+- Avoid lazy import ([#182](https://github.com/unjs/nypm/pull/182))
+
+### 🩹 Fixes
+
+- Correctly detect `corepack` for fallback ([#179](https://github.com/unjs/nypm/pull/179))
+
+### 🏡 Chore
+
+- Fix typo ([#167](https://github.com/unjs/nypm/pull/167))
+- Update deps ([ea8db76](https://github.com/unjs/nypm/commit/ea8db76))
+
+### ✅ Tests
+
+- Increase timeout ([61741f4](https://github.com/unjs/nypm/commit/61741f4))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Robin <robin.kehl@singular-it.de>
+- Will K (pxslip) ([@pxslip](http://github.com/pxslip))
+- Stephan De Vries ([@stephan281094](http://github.com/stephan281094))
+
 ## v0.4.1
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.4.0...v0.4.1)
