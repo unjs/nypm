@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
+import { consola } from "consola";
 import { findup } from "./_utils";
 import type { PackageManager } from "./types";
 
@@ -25,6 +26,13 @@ export type DetectPackageManagerOptions = {
    * @default false
    */
   includeParentDirs?: boolean;
+
+  /**
+   * Whether to disable package manager sanitization warning
+   *
+   * @default false
+   */
+  disableSanitizationWarning?: boolean;
 
   /**
    * Weather to ignore argv[1] to detect script
@@ -70,6 +78,19 @@ export const packageManagers: PackageManager[] = [
   },
 ] as const;
 
+function parsePackageManagerName(name: string, disableWarn: boolean): any {
+  const sanitized = name.replace(/^\W+/, "");
+  if (name !== sanitized) {
+    if (!disableWarn) {
+      consola.warn(
+        `Abnormal characters found in \`packageManager\` field, sanitizing from \`'${name}'\` to \`'${sanitized}'\``,
+      );
+    }
+    return sanitized;
+  }
+  return name;
+}
+
 /**
  * Detect the package manager used in a directory (and up) by checking various sources:
  *
@@ -92,8 +113,12 @@ export async function detectPackageManager(
             await readFile(packageJSONPath, "utf8"),
           );
           if (packageJSON?.packageManager) {
-            const [name, version = "0.0.0"] =
+            const [rawName, version = "0.0.0"] =
               packageJSON.packageManager.split("@");
+            const name = parsePackageManagerName(
+              rawName,
+              !!options.disableSanitizationWarning,
+            );
             const majorVersion = version.split(".")[0];
             const packageManager =
               packageManagers.find(
