@@ -94,7 +94,7 @@ export async function detectPackageManager(
           if (packageJSON?.packageManager) {
             const [rawName, version = "0.0.0"] =
               packageJSON.packageManager.split("@");
-            const [name, sanitizationWarning] =
+            const { name, warning: sanitizationWarning } =
               sanitizePackageManagerName(rawName);
             const majorVersion = version.split(".")[0];
             const packageManager =

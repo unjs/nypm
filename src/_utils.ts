@@ -159,15 +159,18 @@ export function doesDependencyExist(
   }
 }
 
-export function sanitizePackageManagerName(
-  name: string,
-): [any, string | undefined] {
-  const sanitized = name.replace(/^\W+/, "");
-  if (name !== sanitized) {
-    return [
-      sanitized,
-      `Abnormal characters found in \`packageManager\` field, sanitizing from \`'${name}'\` to \`'${sanitized}'\``,
-    ];
+export function sanitizePackageManagerName(name: string): {
+  name: any;
+  warning: string | undefined;
+} {
+  const sanitized = /\w+$/.exec(name)?.[0];
+
+  if (sanitized && name !== sanitized) {
+    return {
+      name: sanitized,
+      warning: `Abnormal characters found in \`packageManager\` field, sanitizing from \`'${name}'\` to \`'${sanitized}'\``,
+    };
   }
-  return [name, undefined];
+
+  return { name, warning: undefined };
 }

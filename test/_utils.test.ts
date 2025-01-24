@@ -13,17 +13,17 @@ describe("internal utils", () => {
   });
 
   describe("parsePackageManagerName", () => {
-    it("preserves valid (unknown) name", () => {
-      const [name, warning] = sanitizePackageManagerName("unknownName@0.0.0");
-      expect(name).toBe("unknownName@0.0.0");
+    it("valid (unknown) name without warning", () => {
+      const { name, warning } = sanitizePackageManagerName("unknownName");
+      expect(name).toBe("unknownName");
       expect(warning).toMatchInlineSnapshot(`undefined`);
     });
 
     it("sanitize abnormal characters with warning", () => {
-      const [name, warning] = sanitizePackageManagerName("~^&#-!yarn@0.0.0");
-      expect(name).toBe("yarn@0.0.0");
+      const { name, warning } = sanitizePackageManagerName("~^&#-!yarn");
+      expect(name).toBe("yarn");
       expect(warning).toMatchInlineSnapshot(
-        `"Abnormal characters found in \`packageManager\` field, sanitizing from \`'~^&#-!yarn@0.0.0'\` to \`'yarn@0.0.0'\`"`,
+        `"Abnormal characters found in \`packageManager\` field, sanitizing from \`'~^&#-!yarn'\` to \`'yarn'\`"`,
       );
     });
   });
