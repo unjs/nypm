@@ -14,16 +14,20 @@ describe("internal utils", () => {
 
   describe("parsePackageManagerName", () => {
     it("valid (unknown) name without warning", () => {
-      const { name, warning } = sanitizePackageManagerName("unknownName");
+      const { name, warnings } = sanitizePackageManagerName("unknownName");
       expect(name).toBe("unknownName");
-      expect(warning).toMatchInlineSnapshot(`undefined`);
+      expect(warnings).toMatchInlineSnapshot(`[]`);
     });
 
     it("sanitize abnormal characters with warning", () => {
-      const { name, warning } = sanitizePackageManagerName("~^&#-!yarn");
+      const { name, warnings } = sanitizePackageManagerName("~^&#-!yarn");
       expect(name).toBe("yarn");
-      expect(warning).toMatchInlineSnapshot(
-        `"Abnormal characters found in \`packageManager\` field, sanitizing from \`'~^&#-!yarn'\` to \`'yarn'\`"`,
+      expect(warnings).toMatchInlineSnapshot(
+        `
+        [
+          "Abnormal characters found in \`packageManager\` field, sanitizing from \`'~^&#-!yarn'\` to \`'yarn'\`",
+        ]
+      `,
       );
     });
   });
