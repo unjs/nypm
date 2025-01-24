@@ -163,16 +163,15 @@ export function sanitizePackageManagerName(name: string): {
   name: any;
   warnings: string[];
 } {
-  const sanitized = /\w+$/.exec(name)?.[0];
+  const sanitized = name.replace(/\W+/, "");
 
-  if (sanitized && name !== sanitized) {
-    return {
-      name: sanitized,
-      warnings: [
-        `Abnormal characters found in \`packageManager\` field, sanitizing from \`'${name}'\` to \`'${sanitized}'\``,
-      ],
-    };
-  }
-
-  return { name, warnings: [] };
+  return {
+    name: sanitized,
+    warnings:
+      name === sanitized
+        ? []
+        : [
+            `Abnormal characters found in \`packageManager\` field, sanitizing from \`'${name}'\` to \`'${sanitized}'\``,
+          ],
+  };
 }
