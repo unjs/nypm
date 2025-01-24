@@ -14,15 +14,15 @@ describe("internal utils", () => {
 
   describe("parsePackageManagerName", () => {
     it("preserves valid (unknown) name", () => {
-      const r = sanitizePackageManagerName("unknownName@0.0.0");
-      expect(r[0]).toBe("unknownName@0.0.0");
-      expect(r[1]).toMatchInlineSnapshot(`undefined`);
+      const [name, warning] = sanitizePackageManagerName("unknownName@0.0.0");
+      expect(name).toBe("unknownName@0.0.0");
+      expect(warning).toMatchInlineSnapshot(`undefined`);
     });
 
     it("sanitize abnormal characters with warning", () => {
-      const r = sanitizePackageManagerName("~^&#-!yarn@0.0.0");
-      expect(r[0]).toBe("yarn@0.0.0");
-      expect(r[1]).toMatchInlineSnapshot(
+      const [name, warning] = sanitizePackageManagerName("~^&#-!yarn@0.0.0");
+      expect(name).toBe("yarn@0.0.0");
+      expect(warning).toMatchInlineSnapshot(
         `"Abnormal characters found in \`packageManager\` field, sanitizing from \`'~^&#-!yarn@0.0.0'\` to \`'yarn@0.0.0'\`"`,
       );
     });
