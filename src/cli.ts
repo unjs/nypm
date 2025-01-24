@@ -85,17 +85,12 @@ const detect = defineCommand({
       type: "string",
       description: "Current working directory",
     },
-    warn: {
-      type: "boolean",
-      description: "Log warnings",
-      default: true,
-    },
   },
   run: async ({ args }) => {
     const cwd = resolve(args.cwd || ".");
     const packageManager = await detectPackageManager(cwd);
 
-    if (args.warn && packageManager?.warnings) {
+    if (packageManager?.warnings) {
       for (const warning of packageManager.warnings) {
         consola.warn(warning);
       }
