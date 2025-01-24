@@ -27,13 +27,6 @@ export type DetectPackageManagerOptions = {
   includeParentDirs?: boolean;
 
   /**
-   * Whether to disable package manager sanitization warning
-   *
-   * @default false
-   */
-  disableSanitizationWarning?: boolean;
-
-  /**
    * Weather to ignore argv[1] to detect script
    */
   ignoreArgv?: boolean;
