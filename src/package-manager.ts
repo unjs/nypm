@@ -103,7 +103,7 @@ export async function detectPackageManager(
               return {
                 name,
                 command: name,
-                version,
+                version: version || "0.0.0",
                 majorVersion,
                 buildMeta: buildMeta,
                 warnings: warnings,
