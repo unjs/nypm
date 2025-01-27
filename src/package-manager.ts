@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
-import { findup, sanitizePackageManagerName } from "./_utils";
+import { findup, parsePackageManagerField } from "./_utils";
 import type { PackageManager } from "./types";
 
 export type DetectPackageManagerOptions = {
@@ -92,22 +92,19 @@ export async function detectPackageManager(
             await readFile(packageJSONPath, "utf8"),
           );
           if (packageJSON?.packageManager) {
-            const [rawName, version = "0.0.0"] =
-              packageJSON.packageManager.split("@");
-            const { name, warnings: sanitizationWarnings } =
-              sanitizePackageManagerName(rawName);
-            const majorVersion = version.split(".")[0];
+            const parsed = parsePackageManagerField(packageJSON.packageManager);
+            const majorVersion = parsed.version?.split(".")[0];
             const packageManager =
               packageManagers.find(
-                (pm) => pm.name === name && pm.majorVersion === majorVersion,
-              ) || packageManagers.find((pm) => pm.name === name);
+                (pm) =>
+                  pm.name === parsed.name &&
+                  (majorVersion ? pm.majorVersion === majorVersion : true),
+              ) || packageManagers.find((pm) => pm.name === parsed.name);
             return {
-              ...packageManager,
-              name,
-              command: name,
-              version,
+              command: parsed.name,
               majorVersion,
-              warnings: sanitizationWarnings,
+              ...parsed,
+              ...packageManager,
             };
           }
         }
