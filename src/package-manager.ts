@@ -98,8 +98,7 @@ export async function detectPackageManager(
               const packageManager =
                 packageManagers.find(
                   (pm) =>
-                    pm.name === p.name &&
-                    (majorVersion ? pm.majorVersion === majorVersion : true),
+                    pm.name === p.name && pm.majorVersion === majorVersion,
                 ) || packageManagers.find((pm) => pm.name === p.name);
               return {
                 command: p.name,
