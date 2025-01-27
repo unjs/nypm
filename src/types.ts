@@ -4,6 +4,7 @@ export type PackageManager = {
   name: PackageManagerName;
   command: string;
   version?: string;
+  buildMeta?: string;
   majorVersion?: string;
   lockFile?: string | string[];
   files?: string[];
