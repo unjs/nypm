@@ -99,7 +99,7 @@ export async function detectPackageManager(
               warnings,
             } = parsePackageManagerField(packageJSON.packageManager);
             if (name) {
-              const majorVersion = version?.split(".")[0];
+              const majorVersion = version.split(".")[0];
               const packageManager =
                 packageManagers.find(
                   (pm) => pm.name === name && pm.majorVersion === majorVersion,
