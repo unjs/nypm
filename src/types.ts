@@ -7,7 +7,6 @@ export type PackageManager = {
   majorVersion?: string;
   lockFile?: string | string[];
   files?: string[];
-  warnings?: string[];
 };
 
 export type OperationOptions = {

@@ -80,7 +80,7 @@ export const packageManagers: PackageManager[] = [
 export async function detectPackageManager(
   cwd: string,
   options: DetectPackageManagerOptions = {},
-): Promise<PackageManager | undefined> {
+): Promise<(PackageManager & { warnings?: string[] }) | undefined> {
   const detected = await findup(
     resolve(cwd || "."),
     async (path) => {
@@ -107,7 +107,7 @@ export async function detectPackageManager(
               command: name,
               version,
               majorVersion,
-              warnings: [...sanitizationWarnings],
+              warnings: sanitizationWarnings,
             };
           }
         }
