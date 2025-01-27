@@ -101,6 +101,7 @@ export async function detectPackageManager(
                     pm.name === p.name && pm.majorVersion === majorVersion,
                 ) || packageManagers.find((pm) => pm.name === p.name);
               return {
+                name: p.name as PackageManager["name"],
                 command: p.name,
                 majorVersion,
                 ...p,
