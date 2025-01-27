@@ -15,6 +15,9 @@ describe("internal utils", () => {
   describe("parsePackageManagerField", () => {
     const cases = {
       "": [""],
+      "-": [""],
+      "*": [""],
+      "^npm": ["npm"],
       npm: ["npm"],
       "unknown-name": ["unknown-name"],
       unknownName: ["unknownName"],

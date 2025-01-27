@@ -159,8 +159,8 @@ export function doesDependencyExist(
   }
 }
 
-export function parsePackageManagerField(packageManager: string): {
-  name: string;
+export function parsePackageManagerField(packageManager?: string): {
+  name?: string;
   version?: string;
   buildMeta?: string;
   warnings?: string[];
@@ -168,14 +168,17 @@ export function parsePackageManagerField(packageManager: string): {
   const [name, _version] = (packageManager || "").split("@");
   const [version, buildMeta] = _version?.split("+") || [];
 
-  const sanitized = name.replace(/\W+/, "");
-
-  let warnings: string[] | undefined;
-  if (name !== sanitized) {
-    warnings = [
-      `Abnormal characters found in \`packageManager\` field, sanitizing from \`${name}\` to \`${sanitized}\``,
-    ];
+  if (
+    name &&
+    name !== "-" &&
+    /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)
+  ) {
+    return { name, version, buildMeta };
   }
 
-  return { name, version, buildMeta, warnings };
+  const sanitized = name.replace(/\W+/g, "");
+  const warnings = [
+    `Abnormal characters found in \`packageManager\` field, sanitizing from \`${name}\` to \`${sanitized}\``,
+  ];
+  return { name: sanitized, version, buildMeta, warnings };
 }
