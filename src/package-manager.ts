@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
-import { findup } from "./_utils";
+import { findup, parsePackageManagerField } from "./_utils";
 import type { PackageManager } from "./types";
 
 export type DetectPackageManagerOptions = {
@@ -80,7 +80,7 @@ export const packageManagers: PackageManager[] = [
 export async function detectPackageManager(
   cwd: string,
   options: DetectPackageManagerOptions = {},
-): Promise<PackageManager | undefined> {
+): Promise<(PackageManager & { warnings?: string[] }) | undefined> {
   const detected = await findup(
     resolve(cwd || "."),
     async (path) => {
@@ -92,20 +92,28 @@ export async function detectPackageManager(
             await readFile(packageJSONPath, "utf8"),
           );
           if (packageJSON?.packageManager) {
-            const [name, version = "0.0.0"] =
-              packageJSON.packageManager.split("@");
-            const majorVersion = version.split(".")[0];
-            const packageManager =
-              packageManagers.find(
-                (pm) => pm.name === name && pm.majorVersion === majorVersion,
-              ) || packageManagers.find((pm) => pm.name === name);
-            return {
-              ...packageManager,
+            const {
               name,
-              command: name,
-              version,
-              majorVersion,
-            };
+              version = "0.0.0",
+              buildMeta,
+              warnings,
+            } = parsePackageManagerField(packageJSON.packageManager);
+            if (name) {
+              const majorVersion = version.split(".")[0];
+              const packageManager =
+                packageManagers.find(
+                  (pm) => pm.name === name && pm.majorVersion === majorVersion,
+                ) || packageManagers.find((pm) => pm.name === name);
+              return {
+                name,
+                command: name,
+                version,
+                majorVersion,
+                buildMeta,
+                warnings,
+                ...packageManager,
+              };
+            }
           }
         }
 

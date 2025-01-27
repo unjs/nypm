@@ -2,7 +2,11 @@ import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { withTrailingSlash } from "ufo";
 import { x } from "tinyexec";
-import type { OperationOptions, PackageManager } from "./types";
+import type {
+  OperationOptions,
+  PackageManager,
+  PackageManagerName,
+} from "./types";
 import type { DetectPackageManagerOptions } from "./package-manager";
 import { detectPackageManager, packageManagers } from "./package-manager";
 
@@ -157,4 +161,33 @@ export function doesDependencyExist(
   } catch {
     return false;
   }
+}
+
+export function parsePackageManagerField(packageManager?: string): {
+  name?: PackageManagerName;
+  version?: string;
+  buildMeta?: string;
+  warnings?: string[];
+} {
+  const [name, _version] = (packageManager || "").split("@");
+  const [version, buildMeta] = _version?.split("+") || [];
+
+  if (
+    name &&
+    name !== "-" &&
+    /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)
+  ) {
+    return { name: name as PackageManagerName, version, buildMeta };
+  }
+
+  const sanitized = name.replace(/\W+/g, "");
+  const warnings = [
+    `Abnormal characters found in \`packageManager\` field, sanitizing from \`${name}\` to \`${sanitized}\``,
+  ];
+  return {
+    name: sanitized as PackageManagerName,
+    version,
+    buildMeta,
+    warnings,
+  };
 }

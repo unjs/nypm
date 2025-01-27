@@ -89,10 +89,18 @@ const detect = defineCommand({
   run: async ({ args }) => {
     const cwd = resolve(args.cwd || ".");
     const packageManager = await detectPackageManager(cwd);
+
+    if (packageManager?.warnings) {
+      for (const warning of packageManager.warnings) {
+        consola.warn(warning);
+      }
+    }
+
     if (!packageManager) {
       consola.error(`Cannot detect package manager in \`${cwd}\``);
       return process.exit(1);
     }
+
     consola.log(
       `Detected package manager in \`${cwd}\`: \`${packageManager.name}@${packageManager.version}\``,
     );
