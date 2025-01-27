@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.5.1
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.5.0...v0.5.1)
+
+### 🚀 Enhancements
+
+- Normalize `packageManager` field when parsing ([#184](https://github.com/unjs/nypm/pull/184))
+
+### 🏡 Chore
+
+- Update deps ([9f041f1](https://github.com/unjs/nypm/commit/9f041f1))
+
+### ❤️ Contributors
+
+- Bobbie Goede <bobbiegoede@gmail.com>
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.5.0
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.4.1...v0.5.0)
