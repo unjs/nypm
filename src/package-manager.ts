@@ -92,19 +92,21 @@ export async function detectPackageManager(
             await readFile(packageJSONPath, "utf8"),
           );
           if (packageJSON?.packageManager) {
-            const p = parsePackageManagerField(packageJSON.packageManager);
-            if (p.name) {
-              const majorVersion = p.version?.split(".")[0];
+            const { name, version, buildMeta, warnings } =
+              parsePackageManagerField(packageJSON.packageManager);
+            if (name) {
+              const majorVersion = version?.split(".")[0];
               const packageManager =
                 packageManagers.find(
-                  (pm) =>
-                    pm.name === p.name && pm.majorVersion === majorVersion,
-                ) || packageManagers.find((pm) => pm.name === p.name);
+                  (pm) => pm.name === name && pm.majorVersion === majorVersion,
+                ) || packageManagers.find((pm) => pm.name === name);
               return {
-                name: p.name,
-                command: p.name,
+                name,
+                command: name,
+                version,
                 majorVersion,
-                ...p,
+                buildMeta: buildMeta,
+                warnings: warnings,
                 ...packageManager,
               };
             }
