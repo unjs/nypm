@@ -16,6 +16,7 @@ describe("internal utils", () => {
     const cases = {
       "": [""],
       npm: ["npm"],
+      "unknown-name": ["unknown-name"],
       unknownName: ["unknownName"],
       "npm@1.2.3": ["npm", "1.2.3"],
       "pnpm@9.15.4+sha512.b2dc20e2fc72b3e": [
