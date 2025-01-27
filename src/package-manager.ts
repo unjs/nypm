@@ -92,8 +92,12 @@ export async function detectPackageManager(
             await readFile(packageJSONPath, "utf8"),
           );
           if (packageJSON?.packageManager) {
-            const { name, version, buildMeta, warnings } =
-              parsePackageManagerField(packageJSON.packageManager);
+            const {
+              name,
+              version = "0.0.0",
+              buildMeta,
+              warnings,
+            } = parsePackageManagerField(packageJSON.packageManager);
             if (name) {
               const majorVersion = version?.split(".")[0];
               const packageManager =
@@ -103,10 +107,10 @@ export async function detectPackageManager(
               return {
                 name,
                 command: name,
-                version: version || "0.0.0",
+                version,
                 majorVersion,
-                buildMeta: buildMeta,
-                warnings: warnings,
+                buildMeta,
+                warnings,
                 ...packageManager,
               };
             }
