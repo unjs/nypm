@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.5.2
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.5.1...v0.5.2)
+
+### 📦 Build
+
+- Update `exports` for typescript compatibility ([#186](https://github.com/unjs/nypm/pull/186))
+
+### ❤️ Contributors
+
+- Tyler Butler ([@tylerbutler](http://github.com/tylerbutler))
+
 ## v0.5.1
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.5.0...v0.5.1)
