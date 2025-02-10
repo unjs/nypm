@@ -267,3 +267,15 @@ export async function dedupeDependencies(
     `Deduplication is not supported for ${resolvedOptions.packageManager.name}`,
   );
 }
+
+export async function runScript(
+  name: string,
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
+) {
+  const resolvedOptions = await resolveOperationOptions(options);
+
+  await executeCommand(resolvedOptions.packageManager.command, ["run", name], {
+    cwd: resolvedOptions.cwd,
+    silent: resolvedOptions.silent,
+  });
+}

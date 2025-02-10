@@ -8,6 +8,7 @@ import {
   installDependencies,
   removeDependency,
   dedupeDependencies,
+  runScript,
 } from "./api";
 import { detectPackageManager } from "./package-manager";
 
@@ -130,6 +131,23 @@ const dedupe = defineCommand({
   },
 });
 
+const run = defineCommand({
+  meta: {
+    description: "Run script",
+  },
+  args: {
+    name: {
+      type: "positional",
+      description: "Script name",
+      required: true,
+    },
+    ...operationArgs,
+  },
+  run: async ({ args }) => {
+    await runScript(args.name, args);
+  },
+});
+
 const main = defineCommand({
   meta: {
     name,
@@ -146,6 +164,7 @@ const main = defineCommand({
     un: remove,
     detect,
     dedupe,
+    run,
   },
 });
 
