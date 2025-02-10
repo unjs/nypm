@@ -4,6 +4,7 @@ import {
   addDependency,
   removeDependency,
   ensureDependencyInstalled,
+  runScript,
 } from "../src";
 import { fixtures } from "./_shared";
 
@@ -68,6 +69,19 @@ describe("api", () => {
 
         await executeRemoveDependencySpy();
         expect(removeDependencySpy).toHaveReturned();
+      }, 60_000);
+
+      it("runs script", async () => {
+        const runScriptSpy = vi.fn(runScript);
+
+        const executeRunScriptSpy = () =>
+          runScriptSpy("test-script", {
+            cwd: fixture.dir,
+            silent: !process.env.DEBUG,
+          });
+
+        await executeRunScriptSpy();
+        expect(runScriptSpy).toHaveReturned();
       }, 60_000);
     });
   }
