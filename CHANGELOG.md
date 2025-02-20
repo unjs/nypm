@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v0.5.4
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.5.2...v0.5.4)
+
+### 🩹 Fixes
+
+- Stackblitz does not supports corepack ([#192](https://github.com/unjs/nypm/pull/192))
+
+### 🏡 Chore
+
+- Update deps ([06d8430](https://github.com/unjs/nypm/commit/06d8430))
+- Update ci ([254c257](https://github.com/unjs/nypm/commit/254c257))
+- **release:** V0.5.3 ([64a5d9a](https://github.com/unjs/nypm/commit/64a5d9a))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.5.3
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.5.2...v0.5.3)
