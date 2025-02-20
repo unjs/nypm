@@ -43,6 +43,9 @@ function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
 }
 
 const hasCorepack = cached(async () => {
+  if (globalThis.process?.versions?.webcontainer) {
+    return false;
+  }
   try {
     const { exitCode } = await x("corepack", ["--version"]);
     return exitCode === 0;
