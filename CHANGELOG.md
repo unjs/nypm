@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v0.5.3
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.5.2...v0.5.3)
+
+### 🏡 Chore
+
+- Update deps ([06d8430](https://github.com/unjs/nypm/commit/06d8430))
+- Update ci ([254c257](https://github.com/unjs/nypm/commit/254c257))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v0.5.2
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.5.1...v0.5.2)
