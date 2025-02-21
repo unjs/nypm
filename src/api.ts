@@ -277,7 +277,7 @@ export async function runScript(
   const args = [
     resolvedOptions.packageManager.name === "deno" ? "task" : "run",
     name,
-  ]
+  ];
 
   await executeCommand(resolvedOptions.packageManager.command, args, {
     cwd: resolvedOptions.cwd,
