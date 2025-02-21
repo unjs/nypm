@@ -1,6 +1,9 @@
 {
   "name": "fixture-bun",
   "private": true,
+  "scripts": {
+    "test-script": "node ../../create-test-file.js"
+  },
   "dependencies": {
     "consola": "3.2.2"
   },

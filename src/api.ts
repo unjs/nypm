@@ -274,7 +274,12 @@ export async function runScript(
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  await executeCommand(resolvedOptions.packageManager.command, ["run", name], {
+  const args = [
+    resolvedOptions.packageManager.name === "deno" ? "task" : "run",
+    name,
+  ];
+
+  await executeCommand(resolvedOptions.packageManager.command, args, {
     cwd: resolvedOptions.cwd,
     silent: resolvedOptions.silent,
   });
