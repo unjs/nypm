@@ -1,6 +1,9 @@
 {
   "name": "fixture-pnpm",
   "private": true,
+  "scripts": {
+    "test-script": "node ../../create-test-file.js"
+  },
   "packageManager": "pnpm@8.6.5",
   "dependencies": {
     "consola": "3.2.2"
