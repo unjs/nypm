@@ -60,6 +60,11 @@ export const fixtures = (
       files: [".yarnrc.yml"],
     },
     {
+      name: "yarn-berry-v4",
+      packageManager: "yarn",
+      majorVersion: "4",
+    },
+    {
       name: "yarn-berry-workspace",
       packageManager: "yarn",
       majorVersion: "3",
