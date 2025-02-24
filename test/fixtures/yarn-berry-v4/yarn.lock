@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fixture-yarn-berry@workspace:.":
+"fixture-yarn-berry-v4@workspace:.":
   version: 0.0.0-use.local
-  resolution: "fixture-yarn-berry@workspace:."
+  resolution: "fixture-yarn-berry-v4@workspace:."
   dependencies:
     consola: 3.2.2
   languageName: unknown
