@@ -105,13 +105,13 @@ export async function detectPackageManager(
                   (pm) => pm.name === name && pm.majorVersion === majorVersion,
                 ) || packageManagers.find((pm) => pm.name === name);
               return {
+                ...packageManager,
                 name,
                 command: name,
                 version,
                 majorVersion,
                 buildMeta,
                 warnings,
-                ...packageManager,
               };
             }
           }
