@@ -1,6 +1,9 @@
 {
   "name": "fixture-yarn-classic",
   "private": true,
+  "scripts": {
+    "test-script": "node -e \"fs.writeFileSync('test-file.txt','test','utf8')\""
+  },
   "packageManager": "yarn@1.22.19",
   "dependencies": {
     "consola": "3.2.2"

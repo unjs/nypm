@@ -1,11 +1,14 @@
-import { expect, it, describe, vi } from "vitest";
+import { expect, it, describe, vi, afterAll } from "vitest";
 import {
   installDependencies,
   addDependency,
   removeDependency,
   ensureDependencyInstalled,
+  runScript,
 } from "../src";
 import { fixtures } from "./_shared";
+import { join } from "pathe";
+import { existsSync, unlinkSync, rmSync } from "node:fs";
 
 describe("api", () => {
   for (const fixture of fixtures.filter((f) => !f.workspace)) {
@@ -69,6 +72,34 @@ describe("api", () => {
         await executeRemoveDependencySpy();
         expect(removeDependencySpy).toHaveReturned();
       }, 60_000);
+
+      it("runs script", async () => {
+        const runScriptSpy = vi.fn(runScript);
+
+        const testFilePath = join(fixture.dir, "test-file.txt");
+        rmSync(testFilePath, { force: true });
+
+        const executeRunScriptSpy = () =>
+          runScriptSpy("test-script", {
+            cwd: fixture.dir,
+            silent: !process.env.DEBUG,
+          });
+
+        await executeRunScriptSpy();
+        expect(runScriptSpy).toHaveReturned();
+
+        expect(existsSync(testFilePath)).toBe(true);
+      }, 60_000);
     });
   }
+
+  afterAll(() => {
+    for (const fixture of fixtures.filter((f) => !f.workspace)) {
+      const testFilePath = join(fixture.dir, "test-file.txt");
+
+      if (existsSync(testFilePath)) {
+        unlinkSync(testFilePath);
+      }
+    }
+  });
 });

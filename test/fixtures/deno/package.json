@@ -1,6 +1,9 @@
 {
   "name": "fixture-deno",
   "private": true,
+  "scripts": {
+    "test-script": "node -e \"fs.writeFileSync('test-file.txt','test','utf8')\""
+  },
   "dependencies": {
     "consola": "3.2.2"
   }
