@@ -1,6 +1,5 @@
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
-import { withTrailingSlash } from "ufo";
 import { x } from "tinyexec";
 import type {
   OperationOptions,
@@ -161,7 +160,9 @@ export function doesDependencyExist(
     "cwd" | "workspace"
   >,
 ) {
-  const require = createRequire(withTrailingSlash(options.cwd));
+  const require = createRequire(
+    options.cwd.endsWith("/") ? options.cwd : options.cwd + "/",
+  );
 
   try {
     const resolvedPath = require.resolve(name);
