@@ -8,7 +8,7 @@ import {
 } from "../src";
 import { fixtures } from "./_shared";
 import { join } from "pathe";
-import { existsSync, unlinkSync } from "node:fs";
+import { existsSync, unlinkSync, rmSync } from "node:fs";
 
 describe("api", () => {
   for (const fixture of fixtures.filter((f) => !f.workspace)) {
@@ -76,6 +76,9 @@ describe("api", () => {
       it("runs script", async () => {
         const runScriptSpy = vi.fn(runScript);
 
+        const testFilePath = join(fixture.dir, "test-file.txt");
+        rmSync(testFilePath, { force: true });
+
         const executeRunScriptSpy = () =>
           runScriptSpy("test-script", {
             cwd: fixture.dir,
@@ -84,8 +87,6 @@ describe("api", () => {
 
         await executeRunScriptSpy();
         expect(runScriptSpy).toHaveReturned();
-
-        const testFilePath = join(fixture.dir, "test-file.txt");
 
         expect(existsSync(testFilePath)).toBe(true);
       }, 60_000);
