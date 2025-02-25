@@ -69,11 +69,11 @@ deno install nypm
 Import:
 
 ```js
-// ESM
+// ESM import
 import { addDependency } from "nypm";
 
-// CommonJS
-const { addDependency } = require("nypm");
+// or dynamic import
+const { addDependency } = await import("nypm");
 ```
 
 ### `addDependency(name, options)`
