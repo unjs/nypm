@@ -1,6 +1,46 @@
 # Changelog
 
 
+## v0.6.0
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.5.4...v0.6.0)
+
+### 🚀 Enhancements
+
+- Add `runScript` utility ([#191](https://github.com/unjs/nypm/pull/191))
+
+### 🩹 Fixes
+
+- ⚠️  Check `exitCode` for failed commands ([2d6cfbf](https://github.com/unjs/nypm/commit/2d6cfbf))
+- **dedupeDependencies:** Use `install` for yarn v1 ([8ec61f3](https://github.com/unjs/nypm/commit/8ec61f3))
+- ⚠️  Correctly detect yarn `majorVersion` ([#193](https://github.com/unjs/nypm/pull/193))
+
+### 💅 Refactors
+
+- Remove `ufo` dependency ([b295f7e](https://github.com/unjs/nypm/commit/b295f7e))
+
+### 📦 Build
+
+- ⚠️  Esm-only ([bd06ebc](https://github.com/unjs/nypm/commit/bd06ebc))
+
+### 🏡 Chore
+
+- Update deps ([8c45496](https://github.com/unjs/nypm/commit/8c45496))
+- Update pkg-types to v2 ([b3169a0](https://github.com/unjs/nypm/commit/b3169a0))
+- Apply automated updates ([f281923](https://github.com/unjs/nypm/commit/f281923))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Check `exitCode` for failed commands ([2d6cfbf](https://github.com/unjs/nypm/commit/2d6cfbf))
+- ⚠️  Correctly detect yarn `majorVersion` ([#193](https://github.com/unjs/nypm/pull/193))
+- ⚠️  Esm-only ([bd06ebc](https://github.com/unjs/nypm/commit/bd06ebc))
+
+### ❤️ Contributors
+
+- Lennart <lekoarts@gmail.com>
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Damian Głowala ([@DamianGlowala](http://github.com/DamianGlowala))
+
 ## v0.5.4
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.5.2...v0.5.4)
