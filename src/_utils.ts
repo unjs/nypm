@@ -67,12 +67,18 @@ export async function executeCommand(
       ? [command, args]
       : ["corepack", [command, ...args]];
 
-  await x(xArgs[0], xArgs[1], {
+  const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
     nodeOptions: {
       cwd: resolve(options.cwd || process.cwd()),
       stdio: options.silent ? "pipe" : "inherit",
     },
   });
+
+  if (exitCode !== 0) {
+    throw new Error(
+      `\`${xArgs.flat().join(" ")}\` failed.${options.silent ? ["", stdout, stderr].join("\n") : ""}`,
+    );
+  }
 }
 
 type NonPartial<T> = { [P in keyof T]-?: T[P] };
