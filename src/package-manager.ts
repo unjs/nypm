@@ -52,13 +52,6 @@ export const packageManagers: PackageManager[] = [
   {
     name: "yarn",
     command: "yarn",
-    majorVersion: "1",
-    lockFile: "yarn.lock",
-  },
-  {
-    name: "yarn",
-    command: "yarn",
-    majorVersion: "3",
     lockFile: "yarn.lock",
     files: [".yarnrc.yml"],
   },
@@ -105,13 +98,14 @@ export async function detectPackageManager(
                   (pm) => pm.name === name && pm.majorVersion === majorVersion,
                 ) || packageManagers.find((pm) => pm.name === name);
               return {
-                ...packageManager,
                 name,
                 command: name,
                 version,
                 majorVersion,
                 buildMeta,
                 warnings,
+                files: packageManager?.files,
+                lockFile: packageManager?.lockFile,
               };
             }
           }
