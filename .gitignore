@@ -8,3 +8,5 @@ types
 .conf*
 # bun.lockb
 .idea
+
+test-file.txt

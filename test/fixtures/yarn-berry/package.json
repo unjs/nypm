@@ -2,7 +2,7 @@
   "name": "fixture-yarn-berry",
   "private": true,
   "scripts": {
-    "test-script": "node -e 'fs.writeFileSync(`test-file.txt`, `test`, `utf8`)'"
+    "test-script": "node -e fs.writeFileSync('test-file.txt','test','utf8')"
   },
   "packageManager": "yarn@3.6.1",
   "dependencies": {

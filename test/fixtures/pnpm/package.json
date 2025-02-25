@@ -2,7 +2,7 @@
   "name": "fixture-pnpm",
   "private": true,
   "scripts": {
-    "test-script": "node -e 'fs.writeFileSync(`test-file.txt`, `test`, `utf8`)'"
+    "test-script": "node -e fs.writeFileSync('test-file.txt','test','utf8')"
   },
   "packageManager": "pnpm@8.6.5",
   "dependencies": {
