@@ -23,9 +23,6 @@ importers:
       tinyexec:
         specifier: ^0.3.2
         version: 0.3.2
-      ufo:
-        specifier: ^1.5.4
-        version: 1.5.4
     devDependencies:
       '@types/node':
         specifier: ^22.13.5
@@ -57,6 +54,9 @@ importers:
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
+      ufo:
+        specifier: ^1.5.4
+        version: 1.5.4
       unbuild:
         specifier: ^3.3.1
         version: 3.3.1(typescript@5.7.3)

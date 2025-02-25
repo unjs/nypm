@@ -1,6 +1,5 @@
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
-import { withTrailingSlash } from "ufo";
 import { x } from "tinyexec";
 import type {
   OperationOptions,
@@ -67,12 +66,18 @@ export async function executeCommand(
       ? [command, args]
       : ["corepack", [command, ...args]];
 
-  await x(xArgs[0], xArgs[1], {
+  const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
     nodeOptions: {
       cwd: resolve(options.cwd || process.cwd()),
       stdio: options.silent ? "pipe" : "inherit",
     },
   });
+
+  if (exitCode !== 0) {
+    throw new Error(
+      `\`${xArgs.flat().join(" ")}\` failed.${options.silent ? ["", stdout, stderr].join("\n") : ""}`,
+    );
+  }
 }
 
 type NonPartial<T> = { [P in keyof T]-?: T[P] };
@@ -155,7 +160,9 @@ export function doesDependencyExist(
     "cwd" | "workspace"
   >,
 ) {
-  const require = createRequire(withTrailingSlash(options.cwd));
+  const require = createRequire(
+    options.cwd.endsWith("/") ? options.cwd : options.cwd + "/",
+  );
 
   try {
     const resolvedPath = require.resolve(name);

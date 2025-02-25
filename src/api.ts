@@ -257,10 +257,19 @@ export async function dedupeDependencies(
     return;
   }
   if (isSupported) {
-    await executeCommand(resolvedOptions.packageManager.command, ["dedupe"], {
-      cwd: resolvedOptions.cwd,
-      silent: resolvedOptions.silent,
-    });
+    // https://classic.yarnpkg.com/en/docs/cli/dedupe
+    const isyarnv1 =
+      resolvedOptions.packageManager.name === "yarn" &&
+      resolvedOptions.packageManager.majorVersion === "1";
+
+    await executeCommand(
+      resolvedOptions.packageManager.command,
+      [isyarnv1 ? "install" : "dedupe"],
+      {
+        cwd: resolvedOptions.cwd,
+        silent: resolvedOptions.silent,
+      },
+    );
     return;
   }
   throw new Error(

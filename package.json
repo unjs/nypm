@@ -34,8 +34,7 @@
     "consola": "^3.4.0",
     "pathe": "^2.0.3",
     "pkg-types": "^2.0.0",
-    "tinyexec": "^0.3.2",
-    "ufo": "^1.5.4"
+    "tinyexec": "^0.3.2"
   },
   "devDependencies": {
     "@types/node": "^22.13.5",
@@ -48,6 +47,7 @@
     "prettier": "^3.5.2",
     "std-env": "^3.8.0",
     "typescript": "^5.7.3",
+    "ufo": "^1.5.4",
     "unbuild": "^3.3.1",
     "vitest": "^3.0.7"
   },
