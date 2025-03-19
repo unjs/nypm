@@ -34,7 +34,7 @@
     "consola": "^3.4.0",
     "pathe": "^2.0.3",
     "pkg-types": "^2.0.0",
-    "tinyexec": "^0.3.2"
+    "tinyexec": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.5",
