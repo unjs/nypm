@@ -73,7 +73,7 @@ const remove = defineCommand({
     ...operationArgs,
   },
   run: async ({ args }) => {
-    await removeDependency(args.name, args);
+    await removeDependency(args._, args);
   },
 });
 
