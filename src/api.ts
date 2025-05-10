@@ -279,16 +279,18 @@ export async function dedupeDependencies(
 
 export async function runScript(
   name: string,
+  args: string[] = [],
   options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  const args = [
+  const _args = [
     resolvedOptions.packageManager.name === "deno" ? "task" : "run",
     name,
+    ...args,
   ];
 
-  await executeCommand(resolvedOptions.packageManager.command, args, {
+  await executeCommand(resolvedOptions.packageManager.command, _args, {
     cwd: resolvedOptions.cwd,
     silent: resolvedOptions.silent,
   });
