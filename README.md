@@ -107,12 +107,13 @@ Removes dependency from the project.
 
 Dedupe project dependencies.
 
+> [!NOTE]
+> For `bun` and `deno` it will remove the lockfile and reinstall all dependencies.
+
 ### `runScript(name, options)`
 
 Runs a script defined in the `package.json` file.
 
-> [!NOTE]
-> For `bun` and `deno` it will remove the lockfile and reinstall all dependencies.
 
 ## 💻 Development
 
