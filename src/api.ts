@@ -293,3 +293,41 @@ export async function runScript(
     silent: resolvedOptions.silent,
   });
 }
+
+export async function dependencyInfo(
+  name: string,
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
+) {
+  const resolvedOptions = await resolveOperationOptions(options);
+
+  if (["bun", "deno"].includes(resolvedOptions.packageManager.name)) {
+    return [];
+  }
+
+  const args = ["info", name, "--json"].filter(Boolean);
+
+  await executeCommand(resolvedOptions.packageManager.command, args, {
+    cwd: resolvedOptions.cwd,
+    silent: resolvedOptions.silent,
+  }).then(([stdout]) => {
+    if(stdout){
+      const result = JSON.parse(stdout)
+
+      if(!result || typeof result !== 'object') {
+        throw new Error(`Invalid response from ${resolvedOptions.packageManager.name} info command for package "${name}"`);
+      }
+      return {
+        name: result.name,
+        version: result.version,
+        description: result.description,
+        homepage: result.homepage,
+        repository: result.repository,
+        license: result.license,
+        dependencies: result.dependencies || {},
+        devDependencies: result.devDependencies || {},
+        distTags: result['dist-tags'] || [],
+        versions: result.versions || [],
+      }
+    }
+  });
+}

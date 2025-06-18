@@ -57,7 +57,7 @@ export async function executeCommand(
   command: string,
   args: string[],
   options: Pick<OperationOptions, "cwd" | "silent"> = {},
-): Promise<void> {
+): Promise<[string, string]> {
   const xArgs: [string, string[]] =
     command === "npm" ||
     command === "bun" ||
@@ -66,18 +66,31 @@ export async function executeCommand(
       ? [command, args]
       : ["corepack", [command, ...args]];
 
-  const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
+  const exec = x(xArgs[0], xArgs[1], {
     nodeOptions: {
       cwd: resolve(options.cwd || process.cwd()),
-      stdio: options.silent ? "pipe" : "inherit",
+      stdio: "pipe",
     },
   });
+
+  const { stdout, stderr, exitCode } = await exec;
+
+  if(!options.silent) {
+    if(stdout) {
+      console.log(stdout);
+    }
+    if (stderr) {
+      console.error(stderr);
+    }
+  }
 
   if (exitCode !== 0) {
     throw new Error(
       `\`${xArgs.flat().join(" ")}\` failed.${options.silent ? ["", stdout, stderr].join("\n") : ""}`,
     );
   }
+
+  return [stdout, stderr]
 }
 
 type NonPartial<T> = { [P in keyof T]-?: T[P] };
