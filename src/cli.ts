@@ -8,7 +8,8 @@ import {
   installDependencies,
   removeDependency,
   dedupeDependencies,
-  runScript, dependencyInfo
+  runScript,
+  dependencyInfo,
 } from "./api";
 import { detectPackageManager } from "./package-manager";
 

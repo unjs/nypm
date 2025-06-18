@@ -75,8 +75,8 @@ export async function executeCommand(
 
   const { stdout, stderr, exitCode } = await exec;
 
-  if(!options.silent) {
-    if(stdout) {
+  if (!options.silent) {
+    if (stdout) {
       console.log(stdout);
     }
     if (stderr) {
@@ -90,7 +90,7 @@ export async function executeCommand(
     );
   }
 
-  return [stdout, stderr]
+  return [stdout, stderr];
 }
 
 type NonPartial<T> = { [P in keyof T]-?: T[P] };

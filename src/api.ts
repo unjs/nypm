@@ -310,11 +310,13 @@ export async function dependencyInfo(
     cwd: resolvedOptions.cwd,
     silent: resolvedOptions.silent,
   }).then(([stdout]) => {
-    if(stdout){
-      const result = JSON.parse(stdout)
+    if (stdout) {
+      const result = JSON.parse(stdout);
 
-      if(!result || typeof result !== 'object') {
-        throw new Error(`Invalid response from ${resolvedOptions.packageManager.name} info command for package "${name}"`);
+      if (!result || typeof result !== "object") {
+        throw new Error(
+          `Invalid response from ${resolvedOptions.packageManager.name} info command for package "${name}"`,
+        );
       }
       return {
         name: result.name,
@@ -325,9 +327,9 @@ export async function dependencyInfo(
         license: result.license,
         dependencies: result.dependencies || {},
         devDependencies: result.devDependencies || {},
-        distTags: result['dist-tags'] || [],
+        distTags: result["dist-tags"] || [],
         versions: result.versions || [],
-      }
+      };
     }
   });
 }
