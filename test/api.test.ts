@@ -80,7 +80,7 @@ describe("api", () => {
         rmSync(testFilePath, { force: true });
 
         const executeRunScriptSpy = () =>
-          runScriptSpy("test-script", undefined, {
+          runScriptSpy("test-script", {
             cwd: fixture.dir,
             silent: !process.env.DEBUG,
           });

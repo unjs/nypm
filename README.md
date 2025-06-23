@@ -107,7 +107,7 @@ Removes dependency from the project.
 
 Dedupe project dependencies.
 
-### `runScript(name, args, options)`
+### `runScript(name, options)`
 
 Runs a script defined in the `package.json` file.
 
