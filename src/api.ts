@@ -175,10 +175,16 @@ export async function addDevDependency(
  * @param options.global - Whether to run the command in global mode.
  */
 export async function removeDependency(
-  name: string,
+  name: string | string[],
   options: OperationOptions = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
+
+  const names = Array.isArray(name) ? name : [name];
+
+  if (names.length === 0) {
+    return;
+  }
 
   const args = (
     resolvedOptions.packageManager.name === "yarn"
@@ -192,7 +198,7 @@ export async function removeDependency(
           "remove",
           resolvedOptions.dev ? "-D" : "",
           resolvedOptions.global ? "-g" : "",
-          name,
+          ...names,
         ]
       : [
           resolvedOptions.packageManager.name === "npm"
@@ -201,7 +207,7 @@ export async function removeDependency(
           ...getWorkspaceArgs(resolvedOptions),
           resolvedOptions.dev ? "-D" : "",
           resolvedOptions.global ? "-g" : "",
-          name,
+          ...names,
         ]
   ).filter(Boolean);
 
