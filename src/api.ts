@@ -303,13 +303,16 @@ export async function dedupeDependencies(
  */
 export async function runScript(
   name: string,
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> = {},
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
+    args?: string[];
+  } = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
 
   const args = [
     resolvedOptions.packageManager.name === "deno" ? "task" : "run",
     name,
+    ...(options.args || []),
   ];
 
   await executeCommand(resolvedOptions.packageManager.command, args, {
