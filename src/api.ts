@@ -280,7 +280,7 @@ export async function dedupeDependencies(
 export async function runScript(
   name: string,
   options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
-    args?: string[]
+    args?: string[];
   } = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);

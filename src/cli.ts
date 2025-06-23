@@ -146,7 +146,7 @@ const run = defineCommand({
   run: async ({ args, rawArgs }) => {
     await runScript(args.name, {
       ...args,
-      args: rawArgs.slice(1)
+      args: rawArgs.slice(1),
     });
   },
 });
