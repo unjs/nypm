@@ -36,7 +36,7 @@ export function addDependencyCommand(options: {
   dev?: boolean;
   global?: boolean;
   yarnBerry?: boolean;
-  workspace?: boolean | string;
+  workspace?: string;
 }): string {
   const names = Array.isArray(options.name) ? options.name : [options.name];
 
