@@ -64,17 +64,6 @@ export const packageManagers: PackageManager[] = [
 ] as const;
 
 /**
- * Get a package manager spec by name.
- */
-export function getPackageManager(name: PackageManagerName): PackageManager {
-  const pm = packageManagers.find((pm) => pm.name === name);
-  if (!pm) {
-    throw new Error(`Unknown package manager: ${name}`);
-  }
-  return pm;
-}
-
-/**
  * Detect the package manager used in a directory (and up) by checking various sources:
  *
  * 1. Use `packageManager` field from package.json
