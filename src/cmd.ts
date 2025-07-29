@@ -1,5 +1,5 @@
 import type { PackageManagerName } from "./types";
-import { getWorkspaceArgs2 as getWorkspaceArgs } from "./_utils";
+import { fmtCommand, getWorkspaceArgs2 as getWorkspaceArgs } from "./_utils";
 
 /**
  * Get the command to install dependencies with the package manager.
@@ -26,7 +26,7 @@ export function installDependenciesCommand(
     ? pmToFrozenLockfileInstallCommand[packageManager]
     : [installCmd];
 
-  return [packageManager, ...commandArgs].join(" ");
+  return fmtCommand([packageManager, ...commandArgs]);
 }
 
 /**
@@ -72,7 +72,7 @@ export function addDependencyCommand(
         ]
   ).filter(Boolean);
 
-  return [packageManager, ...args].join(" ");
+  return fmtCommand([packageManager, ...args]);
 }
 
 /**
@@ -90,7 +90,7 @@ export function runScriptCommand(
     name,
     ...(options.args || []),
   ];
-  return [packageManager, ...args].join(" ");
+  return fmtCommand([packageManager, ...args]);
 }
 
 export function dlxCommand(
@@ -115,5 +115,5 @@ export function dlxCommand(
     name = `npm:${name}`;
   }
 
-  return [command, name, ...(options.args || [])].join(" ");
+  return fmtCommand([command, name, ...(options.args || [])]);
 }

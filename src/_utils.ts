@@ -191,6 +191,13 @@ export function getWorkspaceArgs2(options: {
   return [];
 }
 
+export function fmtCommand(args: string[]): string {
+  return args
+    .filter(Boolean)
+    .map((arg, i) => (i > 0 && arg.includes(" ") ? `"${arg}"` : arg))
+    .join(" ");
+}
+
 export function doesDependencyExist(
   name: string,
   options: Pick<
