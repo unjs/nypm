@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
 import { findup, parsePackageManagerField } from "./_utils";
-import type { PackageManager, PackageManagerName } from "./types";
+import type { PackageManager } from "./types";
 
 export type DetectPackageManagerOptions = {
   /**
