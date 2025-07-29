@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
 import { findup, parsePackageManagerField } from "./_utils";
-import type { PackageManager } from "./types";
+import type { PackageManager, PackageManagerName } from "./types";
 
 export type DetectPackageManagerOptions = {
   /**
@@ -62,6 +62,17 @@ export const packageManagers: PackageManager[] = [
     files: ["deno.json"],
   },
 ] as const;
+
+/**
+ * Get a package manager spec by name.
+ */
+export function getPackageManager(name: PackageManagerName): PackageManager {
+  const pm = packageManagers.find((pm) => pm.name === name);
+  if (!pm) {
+    throw new Error(`Unknown package manager: ${name}`);
+  }
+  return pm;
+}
 
 /**
  * Detect the package manager used in a directory (and up) by checking various sources:
