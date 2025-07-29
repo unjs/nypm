@@ -155,7 +155,7 @@ export function getWorkspaceArgs(
 }
 
 export function getWorkspaceArgs2(options: {
-  workspace?: string;
+  workspace?: boolean | string;
   packageManager: PackageManagerName;
   yarnBerry?: boolean;
 }): string[] {

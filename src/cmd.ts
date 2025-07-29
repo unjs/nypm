@@ -39,7 +39,7 @@ export function addDependencyCommand(
     dev?: boolean;
     global?: boolean;
     yarnBerry?: boolean;
-    workspace?: string;
+    workspace?: boolean | string;
     short?: boolean;
   } = {},
 ): string {
