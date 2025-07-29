@@ -88,7 +88,7 @@ export async function addDependency(
     }
   }
 
-  // TOODO: we might filter for empty values too for more safety
+  // TODO: we might filter for empty values too for more safety
   if (names.length === 0) {
     return {};
   }
