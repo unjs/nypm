@@ -13,11 +13,11 @@ const fixtures = [
       install: "npm install",
       installShort: "npm i",
       installFrozen: "npm ci",
-      add: "npm install test",
-      addShort: "npm i test",
-      addDev: "npm install -D test",
-      addGlobal: "npm install -g test",
-      addWorkspace: "npm install --workspaces test",
+      add: "npm install name",
+      addShort: "npm i name",
+      addDev: "npm install -D name",
+      addGlobal: "npm install -g name",
+      addWorkspace: "npm install -w workspace name",
       runScript: "npm run test --arg",
       dlx: "npm dlx test --arg",
       dlxShort: "npmx test --arg",
@@ -29,11 +29,11 @@ const fixtures = [
       install: "yarn install",
       installShort: "yarn i",
       installFrozen: "yarn install --immutable",
-      add: "yarn global add test",
-      addShort: "yarn add test",
-      addDev: "yarn add -D test",
-      addGlobal: "yarn global add test",
-      addWorkspace: "yarn workspace test add",
+      add: "yarn add name",
+      addShort: "yarn add name",
+      addDev: "yarn add -D name",
+      addGlobal: "yarn global add name",
+      addWorkspace: "yarn --cwd workspace add name",
       runScript: "yarn run test --arg",
       dlx: "yarn dlx test --arg",
       dlxShort: "yarn dlx test --arg",
@@ -45,11 +45,11 @@ const fixtures = [
       install: "pnpm install",
       installShort: "pnpm i",
       installFrozen: "pnpm install --frozen-lockfile",
-      add: "pnpm add test",
-      addShort: "pnpm add test",
-      addDev: "pnpm add -D test",
-      addGlobal: "pnpm add -g test",
-      addWorkspace: "pnpm --filter test add",
+      add: "pnpm add name",
+      addShort: "pnpm add name",
+      addDev: "pnpm add -D name",
+      addGlobal: "pnpm add -g name",
+      addWorkspace: "pnpm add --filter workspace name",
       runScript: "pnpm run test --arg",
       dlx: "pnpm dlx test --arg",
       dlxShort: "pnpx test --arg",
@@ -61,11 +61,11 @@ const fixtures = [
       install: "bun install",
       installShort: "bun i",
       installFrozen: "bun install --frozen-lockfile",
-      add: "bun add test",
-      addShort: "bun add test",
-      addDev: "bun add -D test",
-      addGlobal: "bun add -g test",
-      addWorkspace: "bun workspace test add",
+      add: "bun add name",
+      addShort: "bun add name",
+      addDev: "bun add -D name",
+      addGlobal: "bun add -g name",
+      addWorkspace: "bun add name", // TODO: workspace not supported
       runScript: "bun run test --arg",
       dlx: "bun x test --arg",
       dlxShort: "bunx test --arg",
@@ -77,11 +77,11 @@ const fixtures = [
       install: "deno install",
       installShort: "deno i",
       installFrozen: "deno install --frozen",
-      add: "deno add npm:test",
-      addShort: "deno i npm:test",
-      addDev: "deno install -D npm:test",
-      addGlobal: "deno install -g npm:test",
-      addWorkspace: "deno install --workspace test",
+      add: "deno add npm:name",
+      addShort: "deno add npm:name",
+      addDev: "deno add -D npm:name",
+      addGlobal: "deno add -g npm:name",
+      addWorkspace: "deno add npm:name", // TODO: workspace not supported
       runScript: "deno task test --arg",
       dlx: "deno run -A npm:test --arg",
       dlxShort: "deno run -A npm:test --arg",
@@ -98,9 +98,7 @@ describe("commands", () => {
         );
 
         expect(
-          installDependenciesCommand(fixture.packageManager, {
-            shortCommand: true,
-          }),
+          installDependenciesCommand(fixture.packageManager, { short: true }),
           "shortCommand",
         ).toBe(fixture.commands.installShort);
 
@@ -117,9 +115,32 @@ describe("commands", () => {
   describe("addDependencyCommand", () => {
     for (const fixture of fixtures) {
       it(fixture.packageManager, () => {
-        expect(addDependencyCommand(fixture.packageManager, "test")).toBe(
+        expect(addDependencyCommand(fixture.packageManager, "name")).toBe(
           fixture.commands.add,
         );
+
+        expect(
+          addDependencyCommand(fixture.packageManager, "name", { short: true }),
+        ).toBe(fixture.commands.addShort);
+
+        expect(
+          addDependencyCommand(fixture.packageManager, "name", { dev: true }),
+          "dev",
+        ).toBe(fixture.commands.addDev);
+
+        expect(
+          addDependencyCommand(fixture.packageManager, "name", {
+            global: true,
+          }),
+          "global",
+        ).toBe(fixture.commands.addGlobal);
+
+        expect(
+          addDependencyCommand(fixture.packageManager, "name", {
+            workspace: "workspace",
+          }),
+          "workspace",
+        ).toBe(fixture.commands.addWorkspace);
       });
     }
   });

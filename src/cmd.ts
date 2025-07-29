@@ -7,11 +7,11 @@ import { getWorkspaceArgs2 as getWorkspaceArgs } from "./_utils";
 export function installDependenciesCommand(
   packageManager: PackageManagerName,
   options: {
-    shortCommand?: boolean;
+    short?: boolean;
     frozenLockFile?: boolean;
   } = {},
 ): string {
-  const installCmd = options.shortCommand ? "i" : "install";
+  const installCmd = options.short ? "i" : "install";
 
   const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
     {
@@ -40,6 +40,7 @@ export function addDependencyCommand(
     global?: boolean;
     yarnBerry?: boolean;
     workspace?: string;
+    short?: boolean;
   } = {},
 ): string {
   const names = Array.isArray(name) ? name : [name];
@@ -57,13 +58,13 @@ export function addDependencyCommand(
       ? [
           ...getWorkspaceArgs({ packageManager, ...options }),
           // Global is not supported in berry: yarnpkg/berry#821
-          options.global && options.yarnBerry ? "" : "global",
+          options.global && !options.yarnBerry ? "global" : "",
           "add",
           options.dev ? "-D" : "",
           ...names,
         ]
       : [
-          packageManager === "npm" ? "install" : "add",
+          packageManager === "npm" ? (options.short ? "i" : "install") : "add",
           ...getWorkspaceArgs({ packageManager, ...options }),
           options.dev ? "-D" : "",
           options.global ? "-g" : "",
@@ -97,14 +98,14 @@ export function dlxCommand(
   name: string,
   options: {
     args?: string[];
-    shortCommand?: boolean;
+    short?: boolean;
   },
 ): string {
   const pmToDlxCommand: Record<PackageManagerName, string> = {
-    npm: options.shortCommand ? "npx" : "npm dlx",
+    npm: options.short ? "npx" : "npm dlx",
     yarn: "yarn dlx",
-    pnpm: options.shortCommand ? "pnpx" : "pnpm dlx",
-    bun: options.shortCommand ? "bunx" : "bun x",
+    pnpm: options.short ? "pnpx" : "pnpm dlx",
+    bun: options.short ? "bunx" : "bun x",
     deno: "deno run -A",
   };
 
