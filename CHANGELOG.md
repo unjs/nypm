@@ -1,6 +1,39 @@
 # Changelog
 
 
+## v0.6.1
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.0...v0.6.1)
+
+### 🚀 Enhancements
+
+- Allow removing multiple packages with one cli command ([#198](https://github.com/unjs/nypm/pull/198))
+- Allow passing args to `runScript` ([#200](https://github.com/unjs/nypm/pull/200))
+- Command generator utils ([#209](https://github.com/unjs/nypm/pull/209))
+- Dry run mode ([#210](https://github.com/unjs/nypm/pull/210))
+
+### 📖 Documentation
+
+- Add missing docstrings ([#205](https://github.com/unjs/nypm/pull/205))
+
+### 🏡 Chore
+
+- Update deps ([a98828d](https://github.com/unjs/nypm/commit/a98828d))
+- Apply automated updates ([bcba81e](https://github.com/unjs/nypm/commit/bcba81e))
+- Update readme ([#196](https://github.com/unjs/nypm/pull/196))
+- Update deps ([5de19b4](https://github.com/unjs/nypm/commit/5de19b4))
+- Update fixture ([883775d](https://github.com/unjs/nypm/commit/883775d))
+- Apply automated updates ([fa17ac5](https://github.com/unjs/nypm/commit/fa17ac5))
+- Update to tinyexec v1 ([395ff3d](https://github.com/unjs/nypm/commit/395ff3d))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Damian Głowala ([@DamianGlowala](https://github.com/DamianGlowala))
+- Matvey <orlition@gmail.com>
+- Abeer0 ([@iiio2](https://github.com/iiio2))
+- Robin <robin.kehl@singular-it.de>
+
 ## v0.6.0
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.5.4...v0.6.0)
