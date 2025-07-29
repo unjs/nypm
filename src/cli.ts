@@ -11,6 +11,7 @@ import {
   runScript,
 } from "./api";
 import { detectPackageManager } from "./package-manager";
+import { OperationResult } from "./types";
 
 const operationArgs = {
   cwd: {
@@ -24,6 +25,10 @@ const operationArgs = {
   silent: {
     type: "boolean",
     description: "Run in silent mode",
+  },
+  dry: {
+    type: "boolean",
+    description: "Run in dry run mode (does not execute commands)",
   },
 } as const satisfies ArgsDef;
 
@@ -54,9 +59,10 @@ const install = defineCommand({
     },
   },
   run: async ({ args }) => {
-    await (args._.length > 0
+    const result = await (args._.length > 0
       ? addDependency(args._, args)
       : installDependencies(args));
+    handleRes(result, args);
   },
 });
 
@@ -73,7 +79,8 @@ const remove = defineCommand({
     ...operationArgs,
   },
   run: async ({ args }) => {
-    await removeDependency(args._, args);
+    const result = await removeDependency(args._, args);
+    handleRes(result, args);
   },
 });
 
@@ -127,7 +134,8 @@ const dedupe = defineCommand({
     },
   },
   run: async ({ args }) => {
-    await dedupeDependencies(args);
+    const result = await dedupeDependencies(args);
+    handleRes(result, args);
   },
 });
 
@@ -144,10 +152,11 @@ const run = defineCommand({
     ...operationArgs,
   },
   run: async ({ args }) => {
-    await runScript(args.name, {
+    const result = await runScript(args.name, {
       ...args,
       args: args._.slice(1),
     });
+    handleRes(result, args);
   },
 });
 
@@ -172,3 +181,14 @@ const main = defineCommand({
 });
 
 runMain(main);
+
+// --- internal utils ---
+
+function handleRes(
+  result: OperationResult,
+  args: { dry?: boolean; silent?: boolean },
+) {
+  if (args.dry && !args.silent) {
+    consola.log(`${result.exec?.command} ${result.exec?.args.join(" ")}`);
+  }
+}

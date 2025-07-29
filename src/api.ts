@@ -5,7 +5,11 @@ import {
   getWorkspaceArgs,
   doesDependencyExist,
 } from "./_utils";
-import type { OperationOptions, PackageManagerName } from "./types";
+import type {
+  OperationOptions,
+  OperationResult,
+  PackageManagerName,
+} from "./types";
 import * as fs from "node:fs";
 import { resolve } from "pathe";
 
@@ -19,10 +23,13 @@ import { resolve } from "pathe";
  * @param options.frozenLockFile - Whether to install dependencies with frozen lock file.
  */
 export async function installDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
+  options: Pick<
+    OperationOptions,
+    "cwd" | "silent" | "packageManager" | "dry"
+  > & {
     frozenLockFile?: boolean;
   } = {},
-) {
+): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
 
   const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
@@ -38,10 +45,19 @@ export async function installDependencies(
     ? pmToFrozenLockfileInstallCommand[resolvedOptions.packageManager.name]
     : ["install"];
 
-  await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
-    cwd: resolvedOptions.cwd,
-    silent: resolvedOptions.silent,
-  });
+  if (!resolvedOptions.dry) {
+    await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
+      cwd: resolvedOptions.cwd,
+      silent: resolvedOptions.silent,
+    });
+  }
+
+  return {
+    exec: {
+      command: resolvedOptions.packageManager.command,
+      args: commandArgs,
+    },
+  };
 }
 
 /**
@@ -59,7 +75,7 @@ export async function installDependencies(
 export async function addDependency(
   name: string | string[],
   options: OperationOptions = {},
-) {
+): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
 
   const names = Array.isArray(name) ? name : [name];
@@ -72,9 +88,9 @@ export async function addDependency(
     }
   }
 
-  // TOOD: we might filter for empty values too for more safety
+  // TODO: we might filter for empty values too for more safety
   if (names.length === 0) {
-    return;
+    return {};
   }
 
   const args = (
@@ -99,12 +115,14 @@ export async function addDependency(
         ]
   ).filter(Boolean);
 
-  await executeCommand(resolvedOptions.packageManager.command, args, {
-    cwd: resolvedOptions.cwd,
-    silent: resolvedOptions.silent,
-  });
+  if (!resolvedOptions.dry) {
+    await executeCommand(resolvedOptions.packageManager.command, args, {
+      cwd: resolvedOptions.cwd,
+      silent: resolvedOptions.silent,
+    });
+  }
 
-  if (options.installPeerDependencies) {
+  if (!resolvedOptions.dry && options.installPeerDependencies) {
     const existingPkg = await readPackageJSON(resolvedOptions.cwd);
     const peerDeps: string[] = [];
     const peerDevDeps: string[] = [];
@@ -141,6 +159,13 @@ export async function addDependency(
       await addDevDependency(peerDevDeps, { ...resolvedOptions });
     }
   }
+
+  return {
+    exec: {
+      command: resolvedOptions.packageManager.command,
+      args,
+    },
+  };
 }
 
 /**
@@ -158,8 +183,8 @@ export async function addDependency(
 export async function addDevDependency(
   name: string | string[],
   options: Omit<OperationOptions, "dev"> = {},
-) {
-  await addDependency(name, { ...options, dev: true });
+): Promise<OperationResult> {
+  return await addDependency(name, { ...options, dev: true });
 }
 
 /**
@@ -177,13 +202,13 @@ export async function addDevDependency(
 export async function removeDependency(
   name: string | string[],
   options: OperationOptions = {},
-) {
+): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
 
   const names = Array.isArray(name) ? name : [name];
 
   if (names.length === 0) {
-    return;
+    return {};
   }
 
   const args = (
@@ -211,10 +236,19 @@ export async function removeDependency(
         ]
   ).filter(Boolean);
 
-  await executeCommand(resolvedOptions.packageManager.command, args, {
-    cwd: resolvedOptions.cwd,
-    silent: resolvedOptions.silent,
-  });
+  if (!resolvedOptions.dry) {
+    await executeCommand(resolvedOptions.packageManager.command, args, {
+      cwd: resolvedOptions.cwd,
+      silent: resolvedOptions.silent,
+    });
+  }
+
+  return {
+    exec: {
+      command: resolvedOptions.packageManager.command,
+      args,
+    },
+  };
 }
 
 /**
@@ -229,7 +263,7 @@ export async function removeDependency(
 export async function ensureDependencyInstalled(
   name: string,
   options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {},
-) {
+): Promise<true | undefined> {
   const resolvedOptions = await resolveOperationOptions(options);
 
   const dependencyExists = doesDependencyExist(name, resolvedOptions);
@@ -251,10 +285,13 @@ export async function ensureDependencyInstalled(
  * @param options.recreateLockfile - Whether to recreate the lockfile instead of deduping.
  */
 export async function dedupeDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
+  options: Pick<
+    OperationOptions,
+    "cwd" | "silent" | "packageManager" | "dry"
+  > & {
     recreateLockfile?: boolean;
   } = {},
-) {
+): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
   const isSupported = !["bun", "deno"].includes(
     resolvedOptions.packageManager.name,
@@ -268,24 +305,29 @@ export async function dedupeDependencies(
       if (lockfile)
         fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
     }
-    await installDependencies(resolvedOptions);
-    return;
+    return await installDependencies(resolvedOptions);
   }
   if (isSupported) {
     // https://classic.yarnpkg.com/en/docs/cli/dedupe
     const isyarnv1 =
       resolvedOptions.packageManager.name === "yarn" &&
       resolvedOptions.packageManager.majorVersion === "1";
-
-    await executeCommand(
-      resolvedOptions.packageManager.command,
-      [isyarnv1 ? "install" : "dedupe"],
-      {
-        cwd: resolvedOptions.cwd,
-        silent: resolvedOptions.silent,
+    if (!resolvedOptions.dry) {
+      await executeCommand(
+        resolvedOptions.packageManager.command,
+        [isyarnv1 ? "install" : "dedupe"],
+        {
+          cwd: resolvedOptions.cwd,
+          silent: resolvedOptions.silent,
+        },
+      );
+    }
+    return {
+      exec: {
+        command: resolvedOptions.packageManager.command,
+        args: [isyarnv1 ? "install" : "dedupe"],
       },
-    );
-    return;
+    };
   }
   throw new Error(
     `Deduplication is not supported for ${resolvedOptions.packageManager.name}`,
@@ -303,10 +345,13 @@ export async function dedupeDependencies(
  */
 export async function runScript(
   name: string,
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
+  options: Pick<
+    OperationOptions,
+    "cwd" | "silent" | "packageManager" | "dry"
+  > & {
     args?: string[];
   } = {},
-) {
+): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
 
   const args = [
@@ -315,8 +360,17 @@ export async function runScript(
     ...(options.args || []),
   ];
 
-  await executeCommand(resolvedOptions.packageManager.command, args, {
-    cwd: resolvedOptions.cwd,
-    silent: resolvedOptions.silent,
-  });
+  if (!resolvedOptions.dry) {
+    await executeCommand(resolvedOptions.packageManager.command, args, {
+      cwd: resolvedOptions.cwd,
+      silent: resolvedOptions.silent,
+    });
+  }
+
+  return {
+    exec: {
+      command: resolvedOptions.packageManager.command,
+      args,
+    },
+  };
 }
