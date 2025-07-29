@@ -10,7 +10,7 @@
 
 🌈 Unified Package Manager for Node.js (npm, pnpm, yarn), Bun and Deno.
 
-✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/) and [bun](https://bun.sh/package-manager) and [deno](https://deno.com/) out of the box with a unified API.
+✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/package-manager) and [deno](https://deno.com/) out of the box with a unified API.
 
 ✅ Provides an **API interface** to interact with package managers.
 
@@ -107,12 +107,13 @@ Removes dependency from the project.
 
 Dedupe project dependencies.
 
+> [!NOTE]
+> For `bun` and `deno` it will remove the lockfile and reinstall all dependencies.
+
 ### `runScript(name, options)`
 
 Runs a script defined in the `package.json` file.
 
-> [!NOTE]
-> For `bun` and `deno` it will remove the lockfile and reinstall all dependencies.
 
 ## 💻 Development
 

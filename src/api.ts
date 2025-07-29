@@ -175,10 +175,16 @@ export async function addDevDependency(
  * @param options.global - Whether to run the command in global mode.
  */
 export async function removeDependency(
-  name: string,
+  name: string | string[],
   options: OperationOptions = {},
 ) {
   const resolvedOptions = await resolveOperationOptions(options);
+
+  const names = Array.isArray(name) ? name : [name];
+
+  if (names.length === 0) {
+    return;
+  }
 
   const args = (
     resolvedOptions.packageManager.name === "yarn"
@@ -192,7 +198,7 @@ export async function removeDependency(
           "remove",
           resolvedOptions.dev ? "-D" : "",
           resolvedOptions.global ? "-g" : "",
-          name,
+          ...names,
         ]
       : [
           resolvedOptions.packageManager.name === "npm"
@@ -201,7 +207,7 @@ export async function removeDependency(
           ...getWorkspaceArgs(resolvedOptions),
           resolvedOptions.dev ? "-D" : "",
           resolvedOptions.global ? "-g" : "",
-          name,
+          ...names,
         ]
   ).filter(Boolean);
 
@@ -235,8 +241,17 @@ export async function ensureDependencyInstalled(
   await addDependency(name, resolvedOptions);
 }
 
+/**
+ * Dedupe dependencies in the project.
+ *
+ * @param options - Options to pass to the API call.
+ * @param options.cwd - The directory to run the command in.
+ * @param options.packageManager - The package manager info to use (auto-detected).
+ * @param options.silent - Whether to run the command in silent mode.
+ * @param options.recreateLockfile - Whether to recreate the lockfile instead of deduping.
+ */
 export async function dedupeDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent"> & {
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
     recreateLockfile?: boolean;
   } = {},
 ) {
@@ -277,6 +292,15 @@ export async function dedupeDependencies(
   );
 }
 
+/**
+ * Runs a script defined in the package.json file.
+ *
+ * @param name - Name of the script to run.
+ * @param options - Options to pass to the API call.
+ * @param options.cwd - The directory to run the command in.
+ * @param options.silent - Whether to run the command in silent mode.
+ * @param options.packageManager - The package manager info to use (auto-detected).
+ */
 export async function runScript(
   name: string,
   options: Pick<OperationOptions, "cwd" | "silent" | "packageManager"> & {
