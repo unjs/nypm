@@ -18,4 +18,10 @@ export type OperationOptions = {
   dev?: boolean;
   workspace?: boolean | string;
   global?: boolean;
+  /** Do not execute actual command */
+  dry?: boolean;
+};
+
+export type OperationResult = {
+  exec?: { command: string; args: string[] };
 };
