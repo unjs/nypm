@@ -115,6 +115,7 @@ export async function resolveOperationOptions(
   };
 }
 
+// TODO: Refactor to simplified version2
 export function getWorkspaceArgs(
   options: Awaited<ReturnType<typeof resolveOperationOptions>>,
 ): string[] {
@@ -151,6 +152,50 @@ export function getWorkspaceArgs(
   }
 
   return [];
+}
+
+export function getWorkspaceArgs2(options: {
+  workspace?: boolean | string;
+  packageManager: PackageManagerName;
+  yarnBerry?: boolean;
+}): string[] {
+  if (!options.workspace) {
+    return [];
+  }
+
+  const workspacePkg =
+    typeof options.workspace === "string" && options.workspace !== ""
+      ? options.workspace
+      : undefined;
+
+  // pnpm
+  if (options.packageManager === "pnpm") {
+    return workspacePkg ? ["--filter", workspacePkg] : ["--workspace-root"];
+  }
+
+  // npm
+  if (options.packageManager === "npm") {
+    return workspacePkg ? ["-w", workspacePkg] : ["--workspaces"];
+  }
+
+  if (options.packageManager === "yarn") {
+    if (options.yarnBerry) {
+      // Yarn berry
+      return workspacePkg ? ["workspace", workspacePkg] : [];
+    } else {
+      // Yarn classic
+      return workspacePkg ? ["--cwd", workspacePkg] : ["-W"];
+    }
+  }
+
+  return [];
+}
+
+export function fmtCommand(args: string[]): string {
+  return args
+    .filter(Boolean)
+    .map((arg, i) => (i > 0 && arg.includes(" ") ? `"${arg}"` : arg))
+    .join(" ");
 }
 
 export function doesDependencyExist(
