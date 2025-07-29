@@ -60,13 +60,13 @@ export function addDependencyCommand(
           // Global is not supported in berry: yarnpkg/berry#821
           options.global && !options.yarnBerry ? "global" : "",
           "add",
-          options.dev ? "-D" : "",
+          options.dev ? (options.short ? "-D" : "--dev") : "",
           ...names,
         ]
       : [
           packageManager === "npm" ? (options.short ? "i" : "install") : "add",
           ...getWorkspaceArgs({ packageManager, ...options }),
-          options.dev ? "-D" : "",
+          options.dev ? (options.short ? "-D" : "--dev") : "",
           options.global ? "-g" : "",
           ...names,
         ]
