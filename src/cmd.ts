@@ -93,6 +93,9 @@ export function runScriptCommand(
   return fmtCommand([packageManager, ...args]);
 }
 
+/**
+ * Get the command to download and execute a package with the package manager.
+ */
 export function dlxCommand(
   packageManager: PackageManagerName,
   name: string,

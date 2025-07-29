@@ -114,6 +114,21 @@ Dedupe project dependencies.
 
 Runs a script defined in the `package.json` file.
 
+### `installDependenciesCommand(<pm>, { short?, frozenLockFile? })`
+
+Get the command to install dependencies with the package manager.
+
+### `addDependencyCommand(<pm>, <name>, { dev?, global?, workspace?, yarnBerry?, short? })`
+
+Get the command to add a dependency with the package manager.
+
+### `runScriptCommand(<pm>, <name>, { args? })`
+
+Get the command to run a script with the package manager.
+
+### `dlxCommand(<pm>, <name>, { args?, short? })`
+
+Get the command to download and execute a package with the package manager.
 
 ## 💻 Development
 
