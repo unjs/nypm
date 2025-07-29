@@ -4,11 +4,13 @@ import { getWorkspaceArgs2 as getWorkspaceArgs } from "./_utils";
 /**
  * Get the command to install dependencies with the package manager.
  */
-export function installDependenciesCommand(options: {
-  packageManager: PackageManagerName;
-  shortCommand?: boolean;
-  frozenLockFile?: boolean;
-}): string {
+export function installDependenciesCommand(
+  packageManager: PackageManagerName,
+  options: {
+    shortCommand?: boolean;
+    frozenLockFile?: boolean;
+  } = {},
+): string {
   const installCmd = options.shortCommand ? "i" : "install";
 
   const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
@@ -21,26 +23,28 @@ export function installDependenciesCommand(options: {
     };
 
   const commandArgs = options.frozenLockFile
-    ? pmToFrozenLockfileInstallCommand[options.packageManager]
+    ? pmToFrozenLockfileInstallCommand[packageManager]
     : [installCmd];
 
-  return [options.packageManager, ...commandArgs].join(" ");
+  return [packageManager, ...commandArgs].join(" ");
 }
 
 /**
  * Get the command to add a dependency with the package manager.
  */
-export function addDependencyCommand(options: {
-  name: string | string[];
-  packageManager: PackageManagerName;
-  dev?: boolean;
-  global?: boolean;
-  yarnBerry?: boolean;
-  workspace?: string;
-}): string {
-  const names = Array.isArray(options.name) ? options.name : [options.name];
+export function addDependencyCommand(
+  packageManager: PackageManagerName,
+  name: string | string[],
+  options: {
+    dev?: boolean;
+    global?: boolean;
+    yarnBerry?: boolean;
+    workspace?: string;
+  } = {},
+): string {
+  const names = Array.isArray(name) ? name : [name];
 
-  if (options.packageManager === "deno") {
+  if (packageManager === "deno") {
     for (let i = 0; i < names.length; i++) {
       if (!/^(npm|jsr|file):.+$/.test(names[i])) {
         names[i] = `npm:${names[i]}`;
@@ -49,9 +53,9 @@ export function addDependencyCommand(options: {
   }
 
   const args = (
-    options.packageManager === "yarn"
+    packageManager === "yarn"
       ? [
-          ...getWorkspaceArgs(options),
+          ...getWorkspaceArgs({ packageManager, ...options }),
           // Global is not supported in berry: yarnpkg/berry#821
           options.global && options.yarnBerry ? "" : "global",
           "add",
@@ -59,39 +63,43 @@ export function addDependencyCommand(options: {
           ...names,
         ]
       : [
-          options.packageManager === "npm" ? "install" : "add",
-          ...getWorkspaceArgs(options),
+          packageManager === "npm" ? "install" : "add",
+          ...getWorkspaceArgs({ packageManager, ...options }),
           options.dev ? "-D" : "",
           options.global ? "-g" : "",
           ...names,
         ]
   ).filter(Boolean);
 
-  return [options.packageManager, ...args].join(" ");
+  return [packageManager, ...args].join(" ");
 }
 
 /**
  * Get the command to run a script with the package manager.
  */
-export function runScriptCommand(options: {
-  name: string;
-  packageManager: PackageManagerName;
-  args?: string[];
-}): string {
+export function runScriptCommand(
+  packageManager: PackageManagerName,
+  name: string,
+  options: {
+    args?: string[];
+  } = {},
+): string {
   const args = [
-    options.packageManager === "deno" ? "task" : "run",
-    options.name,
+    packageManager === "deno" ? "task" : "run",
+    name,
     ...(options.args || []),
   ];
-  return [options.packageManager, ...args].join(" ");
+  return [packageManager, ...args].join(" ");
 }
 
-export function dlxCommand(options: {
-  name: string;
-  packageManager: PackageManagerName;
-  args?: string[];
-  shortCommand?: boolean;
-}): string {
+export function dlxCommand(
+  packageManager: PackageManagerName,
+  name: string,
+  options: {
+    args?: string[];
+    shortCommand?: boolean;
+  },
+): string {
   const pmToDlxCommand: Record<PackageManagerName, string> = {
     npm: options.shortCommand ? "npx" : "npm dlx",
     yarn: "yarn dlx",
@@ -100,10 +108,9 @@ export function dlxCommand(options: {
     deno: "deno run -A",
   };
 
-  const command = pmToDlxCommand[options.packageManager];
+  const command = pmToDlxCommand[packageManager];
 
-  let name = options.name;
-  if (options.packageManager === "deno" && !name.startsWith("npm:")) {
+  if (packageManager === "deno" && !name.startsWith("npm:")) {
     name = `npm:${name}`;
   }
 

@@ -8,7 +8,7 @@ import {
 
 const fixtures = [
   {
-    name: "npm",
+    packageManager: "npm",
     commands: {
       install: "npm install",
       installShort: "npm i",
@@ -24,7 +24,7 @@ const fixtures = [
     },
   },
   {
-    name: "yarn",
+    packageManager: "yarn",
     commands: {
       install: "yarn install",
       installShort: "yarn i",
@@ -40,7 +40,7 @@ const fixtures = [
     },
   },
   {
-    name: "pnpm",
+    packageManager: "pnpm",
     commands: {
       install: "pnpm install",
       installShort: "pnpm i",
@@ -56,7 +56,7 @@ const fixtures = [
     },
   },
   {
-    name: "bun",
+    packageManager: "bun",
     commands: {
       install: "bun install",
       installShort: "bun i",
@@ -72,7 +72,7 @@ const fixtures = [
     },
   },
   {
-    name: "deno",
+    packageManager: "deno",
     commands: {
       install: "deno install",
       installShort: "deno i",
@@ -92,22 +92,20 @@ const fixtures = [
 describe("commands", () => {
   describe("installDependenciesCommand", () => {
     for (const fixture of fixtures) {
-      it(fixture.name, () => {
-        expect(
-          installDependenciesCommand({ packageManager: fixture.name }),
-        ).toBe(fixture.commands.install);
+      it(fixture.packageManager, () => {
+        expect(installDependenciesCommand(fixture.packageManager)).toBe(
+          fixture.commands.install,
+        );
 
         expect(
-          installDependenciesCommand({
-            packageManager: fixture.name,
+          installDependenciesCommand(fixture.packageManager, {
             shortCommand: true,
           }),
           "shortCommand",
         ).toBe(fixture.commands.installShort);
 
         expect(
-          installDependenciesCommand({
-            packageManager: fixture.name,
+          installDependenciesCommand(fixture.packageManager, {
             frozenLockFile: true,
           }),
           "frozenLockFile",
@@ -118,22 +116,20 @@ describe("commands", () => {
 
   describe("addDependencyCommand", () => {
     for (const fixture of fixtures) {
-      it(fixture.name, () => {
-        expect(
-          addDependencyCommand({ name: "test", packageManager: fixture.name }),
-        ).toBe(fixture.commands.add);
+      it(fixture.packageManager, () => {
+        expect(addDependencyCommand(fixture.packageManager, "test")).toBe(
+          fixture.commands.add,
+        );
       });
     }
   });
 
   describe("runScriptCommand", () => {
     for (const fixture of fixtures) {
-      it(fixture.name, () => {
+      it(fixture.packageManager, () => {
         expect(
-          runScriptCommand({
-            name: "test",
+          runScriptCommand(fixture.packageManager, "test", {
             args: ["--arg"],
-            packageManager: fixture.name,
           }),
         ).toBe(fixture.commands.runScript);
       });
@@ -142,11 +138,9 @@ describe("commands", () => {
 
   describe("dlxCommand", () => {
     for (const fixture of fixtures) {
-      it(fixture.name, () => {
+      it(fixture.packageManager, () => {
         expect(
-          dlxCommand({
-            name: "test",
-            packageManager: fixture.name,
+          dlxCommand(fixture.packageManager, "test", {
             args: ["--arg"],
           }),
         ).toBe(fixture.commands.dlx);
