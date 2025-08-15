@@ -340,14 +340,16 @@ export async function dedupeDependencies(
  * @param name - Name of the script to run.
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the script execution.
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
+ * @param options.args - Additional arguments to pass to the script.
  */
 export async function runScript(
   name: string,
   options: Pick<
     OperationOptions,
-    "cwd" | "silent" | "packageManager" | "dry"
+    "cwd" | "env" | "silent" | "packageManager" | "dry"
   > & {
     args?: string[];
   } = {},
@@ -363,6 +365,7 @@ export async function runScript(
   if (!resolvedOptions.dry) {
     await executeCommand(resolvedOptions.packageManager.command, args, {
       cwd: resolvedOptions.cwd,
+      env: resolvedOptions.env,
       silent: resolvedOptions.silent,
     });
   }

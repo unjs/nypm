@@ -56,7 +56,7 @@ const hasCorepack = cached(async () => {
 export async function executeCommand(
   command: string,
   args: string[],
-  options: Pick<OperationOptions, "cwd" | "silent"> = {},
+  options: Pick<OperationOptions, "cwd" | "env" | "silent"> = {},
 ): Promise<void> {
   const xArgs: [string, string[]] =
     command === "npm" ||
@@ -69,6 +69,7 @@ export async function executeCommand(
   const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
     nodeOptions: {
       cwd: resolve(options.cwd || process.cwd()),
+      env: options.env,
       stdio: options.silent ? "pipe" : "inherit",
     },
   });
@@ -89,13 +90,14 @@ export async function resolveOperationOptions(
   options: OperationOptions = {},
 ): Promise<
   NonPartial<
-    Pick<OperationOptions, "cwd" | "silent" | "dev" | "global" | "dry">
+    Pick<OperationOptions, "cwd" | "env" | "silent" | "dev" | "global" | "dry">
   > &
     Pick<OperationOptions, "workspace"> & {
       packageManager: PackageManager;
     }
 > {
   const cwd = options.cwd || process.cwd();
+  const env = options.env ? { ...process.env, ...options.env } : process.env;
 
   const packageManager =
     (typeof options.packageManager === "string"
@@ -109,6 +111,7 @@ export async function resolveOperationOptions(
 
   return {
     cwd,
+    env,
     silent: options.silent ?? false,
     packageManager,
     dev: options.dev ?? false,

@@ -2,7 +2,8 @@
   "name": "fixture-bun",
   "private": true,
   "scripts": {
-    "test-script": "node -e \"fs.writeFileSync('test-file.txt','test','utf8')\""
+    "test-script": "node -e \"fs.writeFileSync('test-file.txt','test','utf8')\"",
+    "test-script-env": "node -e \"fs.writeFileSync('test-file-env.txt', process.env.TEST_CONTENT, 'utf8')\""
   },
   "dependencies": {
     "consola": "3.2.2"

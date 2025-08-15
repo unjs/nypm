@@ -8,5 +8,7 @@ types
 .conf*
 # bun.lockb
 .idea
+.pnpm-store
 
 test-file.txt
+test-file-env.txt

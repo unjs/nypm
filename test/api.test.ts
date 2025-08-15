@@ -8,7 +8,7 @@ import {
 } from "../src";
 import { fixtures } from "./_shared";
 import { join } from "pathe";
-import { existsSync, unlinkSync, rmSync } from "node:fs";
+import { existsSync, unlinkSync, rmSync, readFileSync } from "node:fs";
 
 describe("api", () => {
   for (const fixture of fixtures.filter((f) => !f.workspace)) {
@@ -89,6 +89,25 @@ describe("api", () => {
         expect(runScriptSpy).toHaveReturned();
 
         expect(existsSync(testFilePath)).toBe(true);
+      }, 60_000);
+
+      it("runs script with env", async () => {
+        const runScriptSpy = vi.fn(runScript);
+
+        const testFilePath = join(fixture.dir, "test-file-env.txt");
+        rmSync(testFilePath, { force: true });
+
+        const executeRunScriptSpy = () =>
+          runScriptSpy("test-script-env", {
+            cwd: fixture.dir,
+            env: { TEST_CONTENT: "test-value" },
+            silent: !process.env.DEBUG,
+          });
+
+        await executeRunScriptSpy();
+        expect(runScriptSpy).toHaveReturned();
+
+        expect(readFileSync(testFilePath, "utf8")).toBe("test-value");
       }, 60_000);
     });
   }
