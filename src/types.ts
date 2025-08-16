@@ -12,7 +12,7 @@ export type PackageManager = {
 
 export type OperationOptions = {
   cwd?: string;
-  env?: Record<string, string | undefined>;
+  env?: Record<string, string>;
   silent?: boolean;
   packageManager?: PackageManager | PackageManagerName;
   installPeerDependencies?: boolean;

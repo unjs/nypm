@@ -97,7 +97,7 @@ export async function resolveOperationOptions(
     }
 > {
   const cwd = options.cwd || process.cwd();
-  const env = options.env ? { ...process.env, ...options.env } : process.env;
+  const env = { ...process.env, ...options.env } as Record<string, string>;
 
   const packageManager =
     (typeof options.packageManager === "string"
