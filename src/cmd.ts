@@ -95,6 +95,17 @@ export function runScriptCommand(
 
 /**
  * Get the command to download and execute a package with the package manager.
+ *
+ * @param packageManager - The package manager to use.
+ * @param name - The name of the package to download and execute.
+ * @param options - The options to pass to the command.
+ * @param options.args - The arguments to pass to the command.
+ * @param options.short - Whether to use the short version of the command.
+ *
+ * e.g. `pnpx` instead of `pnpm dlx`.
+ * @param options.packages - The packages to pass to the command
+ *
+ * e.g. `npx --package=<package1> --package=<package2> <command>`.
  */
 export function dlxCommand(
   packageManager: PackageManagerName,
@@ -102,10 +113,11 @@ export function dlxCommand(
   options: {
     args?: string[];
     short?: boolean;
-  },
+    packages?: string[];
+  } = {},
 ): string {
   const pmToDlxCommand: Record<PackageManagerName, string> = {
-    npm: options.short ? "npx" : "npm dlx",
+    npm: "npx",
     yarn: "yarn dlx",
     pnpm: options.short ? "pnpx" : "pnpm dlx",
     bun: options.short ? "bunx" : "bun x",
@@ -114,9 +126,30 @@ export function dlxCommand(
 
   const command = pmToDlxCommand[packageManager];
 
+  // Check if multiple packages are provided for unsupported package managers
+  const unsupportedPackageManagers = ["deno"];
+  if (
+    options.packages &&
+    options.packages.length > 0 &&
+    unsupportedPackageManagers.includes(packageManager)
+  ) {
+    throw new Error(`${command} does not support multiple packages`);
+  }
+
   if (packageManager === "deno" && !name.startsWith("npm:")) {
     name = `npm:${name}`;
   }
 
-  return fmtCommand([command, name, ...(options.args || [])]);
+  const packageArgs: string[] = [];
+  if (options.packages && options.packages.length > 0) {
+    const packageFlag =
+      options.short && (packageManager === "npm" || packageManager === "yarn")
+        ? "-p"
+        : "--package";
+    for (const pkg of options.packages) {
+      packageArgs.push(`${packageFlag}=${pkg}`);
+    }
+  }
+
+  return fmtCommand([command, ...packageArgs, name, ...(options.args || [])]);
 }
