@@ -5,6 +5,7 @@ import {
   removeDependency,
   ensureDependencyInstalled,
   runScript,
+  dlx,
 } from "../src";
 import { fixtures } from "./_shared";
 import { join } from "pathe";
@@ -108,6 +109,20 @@ describe("api", () => {
         expect(runScriptSpy).toHaveReturned();
 
         expect(readFileSync(testFilePath, "utf8")).toBe("test-value");
+      }, 60_000);
+
+      it("executes dlx command", async () => {
+        const dlxSpy = vi.fn(dlx);
+
+        const executeDlxSpy = () =>
+          dlxSpy("cowsay", {
+            cwd: fixture.dir,
+            silent: !process.env.DEBUG,
+            args: ["Hello from dlx test!"],
+          });
+
+        await executeDlxSpy();
+        expect(dlxSpy).toHaveReturned();
       }, 60_000);
     });
   }

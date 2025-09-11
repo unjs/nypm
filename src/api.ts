@@ -5,6 +5,7 @@ import {
   getWorkspaceArgs,
   doesDependencyExist,
 } from "./_utils";
+import { dlxCommand } from "./cmd";
 import type {
   OperationOptions,
   OperationResult,
@@ -373,6 +374,54 @@ export async function runScript(
   return {
     exec: {
       command: resolvedOptions.packageManager.command,
+      args,
+    },
+  };
+}
+
+/**
+ * Download and execute a package with the package manager.
+ *
+ * @param name - Name of the package to download and execute.
+ * @param options - Options to pass to the API call.
+ * @param options.cwd - The directory to run the command in.
+ * @param options.silent - Whether to run the command in silent mode.
+ * @param options.packageManager - The package manager info to use (auto-detected).
+ * @param options.args - The arguments to pass to the command.
+ * @param options.short - Whether to use the short version of the command (e.g. pnpx instead of pnpm dlx).
+ * @param options.packages - The packages to pass to the command (e.g. npx --package=<package1> --package=<package2> <command>).
+ */
+export async function dlx(
+  name: string,
+  options: Pick<
+    OperationOptions,
+    "cwd" | "silent" | "packageManager" | "dry"
+  > & {
+    args?: string[];
+    short?: boolean;
+    packages?: string[];
+  } = {},
+): Promise<OperationResult> {
+  const resolvedOptions = await resolveOperationOptions(options);
+
+  const commandStr = dlxCommand(resolvedOptions.packageManager.name, name, {
+    args: options.args,
+    short: options.short,
+    packages: options.packages,
+  });
+
+  const [command, ...args] = commandStr.split(" ");
+
+  if (!resolvedOptions.dry) {
+    await executeCommand(command, args, {
+      cwd: resolvedOptions.cwd,
+      silent: resolvedOptions.silent,
+    });
+  }
+
+  return {
+    exec: {
+      command,
       args,
     },
   };
