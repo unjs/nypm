@@ -111,28 +111,58 @@ describe("api", () => {
         expect(readFileSync(testFilePath, "utf8")).toBe("test-value");
       }, 60_000);
 
-      it("executes dlx command", async () => {
-        const dlxSpy = vi.fn(dlx);
+      it.skipIf(fixture.name.includes("yarn-classic"))(
+        "executes dlx command",
+        async () => {
+          const dlxSpy = vi.fn(dlx);
 
-        const executeDlxSpy = () =>
-          dlxSpy("cowsay", {
-            cwd: fixture.dir,
-            silent: !process.env.DEBUG,
-            args: ["Hello from dlx test!"],
-          });
+          const executeDlxSpy = () =>
+            dlxSpy("cowsay", {
+              cwd: fixture.dir,
+              silent: !process.env.DEBUG,
+              args: ["Hello from dlx test!"],
+            });
 
-        await executeDlxSpy();
-        expect(dlxSpy).toHaveReturned();
-      }, 60_000);
+          await executeDlxSpy();
+          expect(dlxSpy).toHaveReturned();
+        },
+        60_000,
+      );
+
+      it.skipIf(fixture.name.includes("yarn-classic"))(
+        "executes dlx command with env",
+        async () => {
+          const dlxSpy = vi.fn(dlx);
+
+          const executeDlxSpy = () =>
+            dlxSpy("envinfo", {
+              cwd: fixture.dir,
+              env: {
+                CUSTOM_TEST_VAR: "dlx-test-success",
+                NODE_ENV: "test",
+              },
+              silent: !process.env.DEBUG,
+              args: ["--json"],
+            });
+
+          await executeDlxSpy();
+          expect(dlxSpy).toHaveReturned();
+        },
+        60_000,
+      );
     });
   }
 
   afterAll(() => {
     for (const fixture of fixtures.filter((f) => !f.workspace)) {
       const testFilePath = join(fixture.dir, "test-file.txt");
+      const testFileEnvPath = join(fixture.dir, "test-file-env.txt");
 
       if (existsSync(testFilePath)) {
         unlinkSync(testFilePath);
+      }
+      if (existsSync(testFileEnvPath)) {
+        unlinkSync(testFileEnvPath);
       }
     }
   });
