@@ -21,8 +21,10 @@ const fixtures = [
       addGlobal: "npm install -g name",
       addWorkspace: "npm install -w workspace name",
       runScript: "npm run test --arg",
-      dlx: "npm dlx test --arg",
+      dlx: "npm exec test -- --arg",
       dlxShort: "npx test --arg",
+      dlxWithPkg: "npm exec --package=dep1 --package=dep2 test -- --arg",
+      dlxWithPkgShort: "npx -p=dep1 -p=dep2 test --arg",
     },
   },
   {
@@ -41,6 +43,8 @@ const fixtures = [
       runScript: "pnpm run test --arg",
       dlx: "pnpm dlx test --arg",
       dlxShort: "pnpx test --arg",
+      dlxWithPkg: "pnpm dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "pnpx --package=dep1 --package=dep2 test --arg",
     },
   },
   {
@@ -59,6 +63,8 @@ const fixtures = [
       runScript: "bun run test --arg",
       dlx: "bun x test --arg",
       dlxShort: "bunx test --arg",
+      dlxWithPkg: "bun x --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "bunx --package=dep1 --package=dep2 test --arg",
     },
   },
   {
@@ -77,6 +83,9 @@ const fixtures = [
       runScript: "deno task test --arg",
       dlx: "deno run -A npm:test --arg",
       dlxShort: "deno run -A npm:test --arg",
+      // https://github.com/denoland/deno/issues/30737
+      dlxWithPkg: "deno run -A npm:test --arg",
+      dlxWithPkgShort: "deno run -A npm:test --arg",
     },
   },
   {
@@ -95,6 +104,8 @@ const fixtures = [
       runScript: "yarn run test --arg",
       dlx: "yarn dlx test --arg",
       dlxShort: "yarn dlx test --arg",
+      dlxWithPkg: "yarn dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "yarn dlx -p=dep1 -p=dep2 test --arg",
     },
   },
   {
@@ -113,6 +124,8 @@ const fixtures = [
       runScript: "yarn run test --arg",
       dlx: "yarn dlx test --arg",
       dlxShort: "yarn dlx test --arg",
+      dlxWithPkg: "yarn dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "yarn dlx -p=dep1 -p=dep2 test --arg",
     },
   },
 ] as const;
@@ -211,6 +224,23 @@ describe("commands", () => {
             short: true,
           }),
         ).toBe(fixture.commands.dlxShort);
+
+        expect(
+          dlxCommand(fixture.packageManager, "test", {
+            ...fixture.opts,
+            args: ["--arg"],
+            packages: ["dep1", "dep2"],
+          }),
+        ).toBe(fixture.commands.dlxWithPkg);
+
+        expect(
+          dlxCommand(fixture.packageManager, "test", {
+            ...fixture.opts,
+            args: ["--arg"],
+            packages: ["dep1", "dep2"],
+            short: true,
+          }),
+        ).toBe(fixture.commands.dlxWithPkgShort);
       });
     }
   });

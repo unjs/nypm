@@ -95,6 +95,10 @@ Dedupe project dependencies.
 
 Runs a script defined in the `package.json` file.
 
+### `dlx(package, options)`
+
+Download and execute a package with the package manager.
+
 ### `installDependenciesCommand(<pm>, { short?, frozenLockFile? })`
 
 Get the command to install dependencies with the package manager.
@@ -107,7 +111,7 @@ Get the command to add a dependency with the package manager.
 
 Get the command to run a script with the package manager.
 
-### `dlxCommand(<pm>, <name>, { args?, short? })`
+### `dlxCommand(<pm>, <name>, { args?, short?, packages? })`
 
 Get the command to download and execute a package with the package manager.
 
