@@ -115,26 +115,24 @@ export function dlxCommand(
 
   const command = pmToDlxCommand[packageManager];
 
-  // Deno does not support multiple packages https://github.com/denoland/deno/issues/30737
-  if (
-    packageManager === "deno" &&
-    options.packages &&
-    options.packages.length > 0
-  ) {
-    throw new Error(`${command} does not support multiple packages`);
-  }
+  let packages: string[] = options.packages || [];
 
-  if (packageManager === "deno" && !name.startsWith("npm:")) {
-    name = `npm:${name}`;
+  if (packageManager === "deno") {
+    if (!name.startsWith("npm:")) {
+      name = `npm:${name}`;
+    }
+    packages = packages.map((pkg) =>
+      pkg.startsWith("npm:") ? pkg : `npm:${pkg}`,
+    );
   }
 
   const packageArgs: string[] = [];
-  if (options.packages && options.packages.length > 0) {
+
+  // https://github.com/denoland/deno/issues/30737
+  if (packages.length > 0 && packageManager !== "deno") {
     const packageFlag =
-      options.short && (packageManager === "npm" || packageManager === "yarn")
-        ? "-p"
-        : "--package";
-    for (const pkg of options.packages) {
+      options.short && /^npm|yarn$/.test(packageManager) ? "-p" : "--package";
+    for (const pkg of packages) {
       packageArgs.push(`${packageFlag}=${pkg}`);
     }
   }

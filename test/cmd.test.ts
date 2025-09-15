@@ -83,8 +83,9 @@ const fixtures = [
       runScript: "deno task test --arg",
       dlx: "deno run -A npm:test --arg",
       dlxShort: "deno run -A npm:test --arg",
-      dlxWithPkg: "deno run -A --package=test --package=dep2 test --arg",
-      dlxWithPkgShort: "deno run -A --package=test --package=dep2 test --arg",
+      // https://github.com/denoland/deno/issues/30737
+      dlxWithPkg: "deno run -A npm:test --arg",
+      dlxWithPkgShort: "deno run -A npm:test --arg",
     },
   },
   {
@@ -224,24 +225,22 @@ describe("commands", () => {
           }),
         ).toBe(fixture.commands.dlxShort);
 
-        if (fixture.name !== "deno") {
-          expect(
-            dlxCommand(fixture.packageManager, "test", {
-              ...fixture.opts,
-              args: ["--arg"],
-              packages: ["dep1", "dep2"],
-            }),
-          ).toBe(fixture.commands.dlxWithPkg);
+        expect(
+          dlxCommand(fixture.packageManager, "test", {
+            ...fixture.opts,
+            args: ["--arg"],
+            packages: ["dep1", "dep2"],
+          }),
+        ).toBe(fixture.commands.dlxWithPkg);
 
-          expect(
-            dlxCommand(fixture.packageManager, "test", {
-              ...fixture.opts,
-              args: ["--arg"],
-              packages: ["dep1", "dep2"],
-              short: true,
-            }),
-          ).toBe(fixture.commands.dlxWithPkgShort);
-        }
+        expect(
+          dlxCommand(fixture.packageManager, "test", {
+            ...fixture.opts,
+            args: ["--arg"],
+            packages: ["dep1", "dep2"],
+            short: true,
+          }),
+        ).toBe(fixture.commands.dlxWithPkgShort);
       });
     }
   });
