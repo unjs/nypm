@@ -127,7 +127,11 @@ export function dlxCommand(
   const command = pmToDlxCommand[packageManager];
 
   // Deno does not support multiple packages https://github.com/denoland/deno/issues/30737
-  if (packageManager === "deno" && options.packages && options.packages.length > 0) {
+  if (
+    packageManager === "deno" &&
+    options.packages &&
+    options.packages.length > 0
+  ) {
     throw new Error(`${command} does not support multiple packages`);
   }
 
