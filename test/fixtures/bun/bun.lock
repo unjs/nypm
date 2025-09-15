@@ -1,0 +1,14 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "fixture-bun",
+      "dependencies": {
+        "consola": "3.2.2",
+      },
+    },
+  },
+  "packages": {
+    "consola": ["consola@3.2.2", "", {}, "sha512-r921u0vbF4lQsoIqYvSSER+yZLPQGijOHrYcWoCNVNBZmn/bRR+xT/DgerTze/nLD9TTGzdDa378TVhx7RDOYg=="],
+  }
+}
