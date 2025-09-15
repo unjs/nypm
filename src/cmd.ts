@@ -95,17 +95,6 @@ export function runScriptCommand(
 
 /**
  * Get the command to download and execute a package with the package manager.
- *
- * @param packageManager - The package manager to use.
- * @param name - The name of the package to download and execute.
- * @param options - The options to pass to the command.
- * @param options.args - The arguments to pass to the command.
- * @param options.short - Whether to use the short version of the command.
- *
- * e.g. `pnpx` instead of `pnpm dlx`.
- * @param options.packages - The packages to pass to the command
- *
- * e.g. `npx --package=<package1> --package=<package2> <command>`.
  */
 export function dlxCommand(
   packageManager: PackageManagerName,
@@ -117,7 +106,7 @@ export function dlxCommand(
   } = {},
 ): string {
   const pmToDlxCommand: Record<PackageManagerName, string> = {
-    npm: options.short ? "npx" : "npm dlx",
+    npm: options.short ? "npx" : "npm exec",
     yarn: "yarn dlx",
     pnpm: options.short ? "pnpx" : "pnpm dlx",
     bun: options.short ? "bunx" : "bun x",
