@@ -42,29 +42,10 @@ npx nypm remove defu
 
 Install package:
 
-<!-- automd:pm-i -->
-
 ```sh
 # ✨ Auto-detect
 npx nypm install nypm
-
-# npm
-npm install nypm
-
-# yarn
-yarn add nypm
-
-# pnpm
-pnpm install nypm
-
-# bun
-bun install nypm
-
-# deno
-deno install nypm
 ```
-
-<!-- /automd -->
 
 Import:
 
