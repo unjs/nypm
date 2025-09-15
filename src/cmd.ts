@@ -137,5 +137,13 @@ export function dlxCommand(
     }
   }
 
-  return fmtCommand([command, ...packageArgs, name, ...(options.args || [])]);
+  const argSep = packageManager === "npm" && !options.short ? "--" : "";
+
+  return fmtCommand([
+    command,
+    ...packageArgs,
+    name,
+    argSep,
+    ...(options.args || []),
+  ]);
 }
