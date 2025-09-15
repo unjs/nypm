@@ -1,6 +1,27 @@
 # Changelog
 
 
+## v0.6.2
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.1...v0.6.2)
+
+### 🚀 Enhancements
+
+- **runScript:** Support custom `env` ([#215](https://github.com/unjs/nypm/pull/215))
+- `dlx` and `packages` option for `dlxCommand` ([#218](https://github.com/unjs/nypm/pull/218))
+
+### 🏡 Chore
+
+- Update deps ([71dd2a2](https://github.com/unjs/nypm/commit/71dd2a2))
+- Uopdate deps ([539afd3](https://github.com/unjs/nypm/commit/539afd3))
+- Update readme ([3e9f5d3](https://github.com/unjs/nypm/commit/3e9f5d3))
+
+### ❤️ Contributors
+
+- Rihan ([@RihanArfan](https://github.com/RihanArfan))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Fedor Chubukov ([@Exeteres](https://github.com/Exeteres))
+
 ## v0.6.1
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.0...v0.6.1)
