@@ -117,7 +117,7 @@ export function dlxCommand(
   } = {},
 ): string {
   const pmToDlxCommand: Record<PackageManagerName, string> = {
-    npm: "npx",
+    npm: options.short ? "npx" : "npm dlx",
     yarn: "yarn dlx",
     pnpm: options.short ? "pnpx" : "pnpm dlx",
     bun: options.short ? "bunx" : "bun x",

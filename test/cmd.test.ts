@@ -21,7 +21,7 @@ const fixtures = [
       addGlobal: "npm install -g name",
       addWorkspace: "npm install -w workspace name",
       runScript: "npm run test --arg",
-      dlx: "npx test --arg",
+      dlx: "npm dlx test --arg",
       dlxShort: "npx test --arg",
     },
   },
@@ -298,7 +298,7 @@ describe("commands", () => {
 
       it("should work normally without packages option", () => {
         expect(dlxCommand("npm", "test", { args: ["--arg"] })).toBe(
-          "npx test --arg",
+          "npm dlx test --arg",
         );
         expect(dlxCommand("pnpm", "test", { args: ["--arg"] })).toBe(
           "pnpm dlx test --arg",
