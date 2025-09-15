@@ -23,6 +23,8 @@ const fixtures = [
       runScript: "npm run test --arg",
       dlx: "npm dlx test --arg",
       dlxShort: "npx test --arg",
+      dlxWithPkg: "npm dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "npx -p=dep1 -p=dep2 test --arg",
     },
   },
   {
@@ -41,6 +43,8 @@ const fixtures = [
       runScript: "pnpm run test --arg",
       dlx: "pnpm dlx test --arg",
       dlxShort: "pnpx test --arg",
+      dlxWithPkg: "pnpm dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "pnpx --package=dep1 --package=dep2 test --arg",
     },
   },
   {
@@ -59,6 +63,8 @@ const fixtures = [
       runScript: "bun run test --arg",
       dlx: "bun x test --arg",
       dlxShort: "bunx test --arg",
+      dlxWithPkg: "bun x --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "bunx --package=dep1 --package=dep2 test --arg",
     },
   },
   {
@@ -77,6 +83,8 @@ const fixtures = [
       runScript: "deno task test --arg",
       dlx: "deno run -A npm:test --arg",
       dlxShort: "deno run -A npm:test --arg",
+      dlxWithPkg: "deno run -A --package=test --package=dep2 test --arg",
+      dlxWithPkgShort: "deno run -A --package=test --package=dep2 test --arg",
     },
   },
   {
@@ -95,6 +103,8 @@ const fixtures = [
       runScript: "yarn run test --arg",
       dlx: "yarn dlx test --arg",
       dlxShort: "yarn dlx test --arg",
+      dlxWithPkg: "yarn dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "yarn dlx -p=dep1 -p=dep2 test --arg",
     },
   },
   {
@@ -113,6 +123,8 @@ const fixtures = [
       runScript: "yarn run test --arg",
       dlx: "yarn dlx test --arg",
       dlxShort: "yarn dlx test --arg",
+      dlxWithPkg: "yarn dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "yarn dlx -p=dep1 -p=dep2 test --arg",
     },
   },
 ] as const;
@@ -211,120 +223,26 @@ describe("commands", () => {
             short: true,
           }),
         ).toBe(fixture.commands.dlxShort);
+
+        if (fixture.name !== "deno") {
+          expect(
+            dlxCommand(fixture.packageManager, "test", {
+              ...fixture.opts,
+              args: ["--arg"],
+              packages: ["dep1", "dep2"],
+            }),
+          ).toBe(fixture.commands.dlxWithPkg);
+
+          expect(
+            dlxCommand(fixture.packageManager, "test", {
+              ...fixture.opts,
+              args: ["--arg"],
+              packages: ["dep1", "dep2"],
+              short: true,
+            }),
+          ).toBe(fixture.commands.dlxWithPkgShort);
+        }
       });
     }
-
-    describe("multiple packages", () => {
-      it("should support multiple packages for npm", () => {
-        expect(
-          dlxCommand("npm", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-          }),
-        ).toBe("npm dlx --package=obuild --package=ofetch obuild src/index.ts");
-
-        expect(
-          dlxCommand("npm", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-            short: true,
-          }),
-        ).toBe("npx -p=obuild -p=ofetch obuild src/index.ts");
-      });
-
-      it("should support multiple packages for pnpm", () => {
-        expect(
-          dlxCommand("pnpm", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-          }),
-        ).toBe(
-          "pnpm dlx --package=obuild --package=ofetch obuild src/index.ts",
-        );
-
-        expect(
-          dlxCommand("pnpm", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-            short: true,
-          }),
-        ).toBe("pnpx --package=obuild --package=ofetch obuild src/index.ts");
-      });
-
-      it("should support multiple packages for yarn", () => {
-        expect(
-          dlxCommand("yarn", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-          }),
-        ).toBe(
-          "yarn dlx --package=obuild --package=ofetch obuild src/index.ts",
-        );
-
-        expect(
-          dlxCommand("yarn", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-            short: true,
-          }),
-        ).toBe("yarn dlx -p=obuild -p=ofetch obuild src/index.ts");
-      });
-
-      it("should throw error for deno with multiple packages", () => {
-        expect(() =>
-          dlxCommand("deno", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-          }),
-        ).toThrow("deno run -A does not support multiple packages");
-      });
-
-      it("should support multiple packages for bun", () => {
-        expect(
-          dlxCommand("bun", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-          }),
-        ).toBe("bun x --package=obuild --package=ofetch obuild src/index.ts");
-
-        expect(
-          dlxCommand("bun", "obuild", {
-            packages: ["obuild", "ofetch"],
-            args: ["src/index.ts"],
-            short: true,
-          }),
-        ).toBe("bunx --package=obuild --package=ofetch obuild src/index.ts");
-      });
-
-      it("should work normally without packages option", () => {
-        expect(dlxCommand("npm", "test", { args: ["--arg"] })).toBe(
-          "npm dlx test --arg",
-        );
-        expect(dlxCommand("pnpm", "test", { args: ["--arg"] })).toBe(
-          "pnpm dlx test --arg",
-        );
-        expect(dlxCommand("yarn", "test", { args: ["--arg"] })).toBe(
-          "yarn dlx test --arg",
-        );
-        expect(dlxCommand("bun", "test", { args: ["--arg"] })).toBe(
-          "bun x test --arg",
-        );
-        expect(dlxCommand("deno", "test", { args: ["--arg"] })).toBe(
-          "deno run -A npm:test --arg",
-        );
-      });
-
-      it("should work normally with empty packages array", () => {
-        expect(
-          dlxCommand("npm", "test", { packages: [], args: ["--arg"] }),
-        ).toBe("npm dlx test --arg");
-        expect(
-          dlxCommand("bun", "test", { packages: [], args: ["--arg"] }),
-        ).toBe("bun x test --arg");
-        expect(
-          dlxCommand("deno", "test", { packages: [], args: ["--arg"] }),
-        ).toBe("deno run -A npm:test --arg");
-      });
-    });
   });
 });
