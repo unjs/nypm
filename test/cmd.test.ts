@@ -221,7 +221,7 @@ describe("commands", () => {
             packages: ["obuild", "ofetch"],
             args: ["src/index.ts"],
           }),
-        ).toBe("npx --package=obuild --package=ofetch obuild src/index.ts");
+        ).toBe("npm dlx --package=obuild --package=ofetch obuild src/index.ts");
 
         expect(
           dlxCommand("npm", "obuild", {
@@ -317,7 +317,7 @@ describe("commands", () => {
       it("should work normally with empty packages array", () => {
         expect(
           dlxCommand("npm", "test", { packages: [], args: ["--arg"] }),
-        ).toBe("npx test --arg");
+        ).toBe("npm dlx test --arg");
         expect(
           dlxCommand("bun", "test", { packages: [], args: ["--arg"] }),
         ).toBe("bun x test --arg");
