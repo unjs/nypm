@@ -37,9 +37,9 @@
     "tinyexec": "^1.0.1"
   },
   "devDependencies": {
-    "@types/node": "^24.3.1",
+    "@types/node": "^24.4.0",
     "@vitest/coverage-v8": "^3.2.4",
-    "automd": "^0.4.0",
+    "automd": "^0.4.2",
     "changelogen": "^0.6.2",
     "eslint": "^9.35.0",
     "eslint-config-unjs": "^0.5.0",
@@ -51,7 +51,7 @@
     "unbuild": "^3.6.1",
     "vitest": "^3.2.4"
   },
-  "packageManager": "pnpm@10.15.1",
+  "packageManager": "pnpm@10.16.1",
   "engines": {
     "node": "^14.16.0 || >=16.10.0"
   }
