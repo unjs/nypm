@@ -39,18 +39,22 @@ export async function installDependencies(
   if (options.frozenLockFile) {
     if (resolvedOptions.packageManager.name === "npm") {
       commandArgs[0] = "ci";
-    }
-    else {
-      commandArgs.push({
-        yarn: "--immutable",
-        pnpm: "--frozen-lockfile",
-        bun: "--frozen-lockfile",
-        deno: "--frozen",
-      }[resolvedOptions.packageManager.name]);
+    } else {
+      commandArgs.push(
+        {
+          yarn: "--immutable",
+          pnpm: "--frozen-lockfile",
+          bun: "--frozen-lockfile",
+          deno: "--frozen",
+        }[resolvedOptions.packageManager.name],
+      );
     }
   }
 
-  if (options.ignoreWorkspace && resolvedOptions.packageManager.name === "pnpm") {
+  if (
+    options.ignoreWorkspace &&
+    resolvedOptions.packageManager.name === "pnpm"
+  ) {
     commandArgs.push("--ignore-workspace");
   }
 
