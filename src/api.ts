@@ -29,22 +29,30 @@ export async function installDependencies(
     "cwd" | "silent" | "packageManager" | "dry"
   > & {
     frozenLockFile?: boolean;
+    ignoreWorkspace?: boolean;
   } = {},
 ): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
-    {
-      npm: ["ci"],
-      yarn: ["install", "--immutable"],
-      bun: ["install", "--frozen-lockfile"],
-      pnpm: ["install", "--frozen-lockfile"],
-      deno: ["install", "--frozen"],
-    };
+  const commandArgs: string[] = ["install"];
 
-  const commandArgs = options.frozenLockFile
-    ? pmToFrozenLockfileInstallCommand[resolvedOptions.packageManager.name]
-    : ["install"];
+  if (options.frozenLockFile) {
+    if (resolvedOptions.packageManager.name === "npm") {
+      commandArgs[0] = "ci";
+    }
+    else {
+      commandArgs.push({
+        yarn: "--immutable",
+        pnpm: "--frozen-lockfile",
+        bun: "--frozen-lockfile",
+        deno: "--frozen",
+      }[resolvedOptions.packageManager.name]);
+    }
+  }
+
+  if (options.ignoreWorkspace && resolvedOptions.packageManager.name === "pnpm") {
+    commandArgs.push("--ignore-workspace");
+  }
 
   if (!resolvedOptions.dry) {
     await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
