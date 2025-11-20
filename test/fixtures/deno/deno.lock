@@ -1,11 +1,15 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:consola@3.2.2": "3.2.2"
+    "npm:consola@3.2.2": "3.2.2",
+    "npm:pathe@^2.0.3": "2.0.3"
   },
   "npm": {
     "consola@3.2.2": {
       "integrity": "sha512-r921u0vbF4lQsoIqYvSSER+yZLPQGijOHrYcWoCNVNBZmn/bRR+xT/DgerTze/nLD9TTGzdDa378TVhx7RDOYg=="
+    },
+    "pathe@2.0.3": {
+      "integrity": "sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w=="
     }
   },
   "workspace": {
@@ -14,7 +18,8 @@
     ],
     "packageJson": {
       "dependencies": [
-        "npm:consola@3.2.2"
+        "npm:consola@3.2.2",
+        "npm:pathe@^2.0.3"
       ]
     }
   }
