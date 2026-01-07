@@ -50,6 +50,7 @@ export async function installDependencies(
     await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
+      packageManager: resolvedOptions.packageManager,
     });
   }
 
@@ -120,6 +121,7 @@ export async function addDependency(
     await executeCommand(resolvedOptions.packageManager.command, args, {
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
+      packageManager: resolvedOptions.packageManager,
     });
   }
 
@@ -241,6 +243,7 @@ export async function removeDependency(
     await executeCommand(resolvedOptions.packageManager.command, args, {
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
+      packageManager: resolvedOptions.packageManager,
     });
   }
 
@@ -320,6 +323,7 @@ export async function dedupeDependencies(
         {
           cwd: resolvedOptions.cwd,
           silent: resolvedOptions.silent,
+          packageManager: resolvedOptions.packageManager,
         },
       );
     }
@@ -368,6 +372,7 @@ export async function runScript(
       cwd: resolvedOptions.cwd,
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
+      packageManager: resolvedOptions.packageManager,
     });
   }
 
@@ -418,6 +423,7 @@ export async function dlx(
       cwd: resolvedOptions.cwd,
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
+      packageManager: resolvedOptions.packageManager,
     });
   }
 

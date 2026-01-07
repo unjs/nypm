@@ -34,6 +34,7 @@
     "consola": "^3.4.2",
     "pathe": "^2.0.3",
     "pkg-types": "^2.3.0",
+    "tar": "^7.4.3",
     "tinyexec": "^1.0.1"
   },
   "devDependencies": {

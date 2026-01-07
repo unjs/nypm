@@ -8,6 +8,7 @@ import type {
 } from "./types";
 import type { DetectPackageManagerOptions } from "./package-manager";
 import { detectPackageManager, packageManagers } from "./package-manager";
+import { getExecutionArgs } from "./version-manager";
 
 export async function findup<T>(
   cwd: string,
@@ -28,43 +29,17 @@ export async function findup<T>(
   }
 }
 
-function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
-  let v: T | Promise<T> | undefined;
-  return () => {
-    if (v === undefined) {
-      v = fn().then((r) => {
-        v = r;
-        return v;
-      });
-    }
-    return v;
-  };
-}
-
-const hasCorepack = cached(async () => {
-  if (globalThis.process?.versions?.webcontainer) {
-    return false;
-  }
-  try {
-    const { exitCode } = await x("corepack", ["--version"]);
-    return exitCode === 0;
-  } catch {
-    return false;
-  }
-});
-
 export async function executeCommand(
   command: string,
   args: string[],
-  options: Pick<OperationOptions, "cwd" | "env" | "silent"> = {},
+  options: Pick<OperationOptions, "cwd" | "env" | "silent"> & {
+    packageManager?: PackageManager;
+  } = {},
 ): Promise<void> {
-  const xArgs: [string, string[]] =
-    command === "npm" ||
-    command === "bun" ||
-    command === "deno" ||
-    !(await hasCorepack())
-      ? [command, args]
-      : ["corepack", [command, ...args]];
+  // Use version manager for pnpm/yarn when version is specified
+  const xArgs: [string, string[]] = options.packageManager
+    ? await getExecutionArgs(options.packageManager, args)
+    : [command, args];
 
   const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
     nodeOptions: {
