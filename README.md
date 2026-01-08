@@ -16,7 +16,7 @@
 
 ✅ **Autodetects** project's package manager using `package.json` and known lockfiles.
 
-✅ **[corepack](https://github.com/nodejs/corepack)** integration for **pnpm** and **yarn**.
+✅ **Built-in version management** for **pnpm** and **yarn** based on the `packageManager` field.
 
 ## `nypm` command
 
@@ -119,8 +119,7 @@ Get the command to download and execute a package with the package manager.
 
 - Clone this repository
 - Play [Nyan Cat](https://www.nyan.cat/) in the background (really important!)
-- Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable`
-- Install dependencies using `pnpm install`
+- Install dependencies using `npx nypm install`
 - Run interactive tests using `pnpm dev`
 
 ## Related Projects
