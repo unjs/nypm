@@ -26,7 +26,7 @@ import { resolve } from "pathe";
 export async function installDependencies(
   options: Pick<
     OperationOptions,
-    "cwd" | "silent" | "packageManager" | "dry"
+    "cwd" | "silent" | "packageManager" | "dry" | "corepack"
   > & {
     frozenLockFile?: boolean;
   } = {},
@@ -50,6 +50,7 @@ export async function installDependencies(
     await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
+      corepack: resolvedOptions.corepack,
     });
   }
 
@@ -120,6 +121,7 @@ export async function addDependency(
     await executeCommand(resolvedOptions.packageManager.command, args, {
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
+      corepack: resolvedOptions.corepack,
     });
   }
 
@@ -241,6 +243,7 @@ export async function removeDependency(
     await executeCommand(resolvedOptions.packageManager.command, args, {
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
+      corepack: resolvedOptions.corepack,
     });
   }
 
@@ -288,7 +291,7 @@ export async function ensureDependencyInstalled(
 export async function dedupeDependencies(
   options: Pick<
     OperationOptions,
-    "cwd" | "silent" | "packageManager" | "dry"
+    "cwd" | "silent" | "packageManager" | "dry" | "corepack"
   > & {
     recreateLockfile?: boolean;
   } = {},
@@ -320,6 +323,7 @@ export async function dedupeDependencies(
         {
           cwd: resolvedOptions.cwd,
           silent: resolvedOptions.silent,
+          corepack: resolvedOptions.corepack,
         },
       );
     }
@@ -350,7 +354,7 @@ export async function runScript(
   name: string,
   options: Pick<
     OperationOptions,
-    "cwd" | "env" | "silent" | "packageManager" | "dry"
+    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack"
   > & {
     args?: string[];
   } = {},
@@ -368,6 +372,7 @@ export async function runScript(
       cwd: resolvedOptions.cwd,
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
+      corepack: resolvedOptions.corepack,
     });
   }
 
@@ -396,7 +401,7 @@ export async function dlx(
   name: string,
   options: Pick<
     OperationOptions,
-    "cwd" | "env" | "silent" | "packageManager" | "dry"
+    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack"
   > & {
     args?: string[];
     short?: boolean;
@@ -418,6 +423,7 @@ export async function dlx(
       cwd: resolvedOptions.cwd,
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
+      corepack: resolvedOptions.corepack,
     });
   }
 

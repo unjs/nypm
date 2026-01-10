@@ -26,6 +26,10 @@ const operationArgs = {
     type: "boolean",
     description: "Run in silent mode",
   },
+  corepack: {
+    type: "boolean",
+    description: "Use corepack",
+  },
   dry: {
     type: "boolean",
     description: "Run in dry run mode (does not execute commands)",

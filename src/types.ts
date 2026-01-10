@@ -19,6 +19,7 @@ export type OperationOptions = {
   dev?: boolean;
   workspace?: boolean | string;
   global?: boolean;
+  corepack?: boolean;
   /** Do not execute actual command */
   dry?: boolean;
 };

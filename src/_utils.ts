@@ -56,15 +56,18 @@ const hasCorepack = cached(async () => {
 export async function executeCommand(
   command: string,
   args: string[],
-  options: Pick<OperationOptions, "cwd" | "env" | "silent"> = {},
+  options: Pick<OperationOptions, "cwd" | "env" | "silent" | "corepack"> = {},
 ): Promise<void> {
-  const xArgs: [string, string[]] =
-    command === "npm" ||
-    command === "bun" ||
-    command === "deno" ||
-    !(await hasCorepack())
-      ? [command, args]
-      : ["corepack", [command, ...args]];
+  const useCorepack =
+    command !== "npm" &&
+    command !== "bun" &&
+    command !== "deno" &&
+    options.corepack !== false &&
+    (await hasCorepack());
+
+  const xArgs: [string, string[]] = useCorepack
+    ? ["corepack", [command, ...args]]
+    : [command, args];
 
   const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
     nodeOptions: {
@@ -90,7 +93,10 @@ export async function resolveOperationOptions(
   options: OperationOptions = {},
 ): Promise<
   NonPartial<
-    Pick<OperationOptions, "cwd" | "env" | "silent" | "dev" | "global" | "dry">
+    Pick<
+      OperationOptions,
+      "cwd" | "env" | "silent" | "dev" | "global" | "dry" | "corepack"
+    >
   > &
     Pick<OperationOptions, "workspace"> & {
       packageManager: PackageManager;
@@ -118,6 +124,7 @@ export async function resolveOperationOptions(
     workspace: options.workspace,
     global: options.global ?? false,
     dry: options.dry ?? false,
+    corepack: options.corepack ?? false,
   };
 }
 
