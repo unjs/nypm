@@ -124,7 +124,7 @@ export async function resolveOperationOptions(
     workspace: options.workspace,
     global: options.global ?? false,
     dry: options.dry ?? false,
-    corepack: options.corepack ?? false,
+    corepack: options.corepack ?? true,
   };
 }
 
