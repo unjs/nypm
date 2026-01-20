@@ -1,4 +1,4 @@
-import { readPackageJSON } from "pkg-types";
+import { createRequire } from "node:module";
 import {
   executeCommand,
   resolveOperationOptions,
@@ -6,6 +6,7 @@ import {
   doesDependencyExist,
 } from "./_utils.ts";
 import { dlxCommand } from "./cmd.ts";
+import { readPackageJSON } from "./_utils.ts";
 import type {
   OperationOptions,
   OperationResult,
@@ -13,6 +14,8 @@ import type {
 } from "./types.ts";
 import * as fs from "node:fs";
 import { resolve } from "pathe";
+import { join } from "node:path";
+import type { PackageJson } from "pkg-types";
 
 /**
  * Installs project dependencies.
@@ -129,9 +132,8 @@ export async function addDependency(
     const peerDevDeps: string[] = [];
     for (const _name of names) {
       const pkgName = _name.match(/^(.[^@]+)/)?.[0];
-      const pkg = await readPackageJSON(pkgName, {
-        url: resolvedOptions.cwd,
-      }).catch(() => ({}) as Record<string, undefined>);
+      const _require = createRequire(join(resolvedOptions.cwd, "/_.js"));
+      const pkg = _require(`${pkgName}/package.json`) as PackageJson;
       if (!pkg.peerDependencies || pkg.name !== pkgName) {
         continue;
       }
@@ -143,8 +145,8 @@ export async function addDependency(
         }
         // TODO: refactor to getSpecifiedPackageInfo later on
         if (
-          existingPkg.dependencies?.[peerDependency] ||
-          existingPkg.devDependencies?.[peerDependency]
+          existingPkg?.dependencies?.[peerDependency] ||
+          existingPkg?.devDependencies?.[peerDependency]
         ) {
           continue;
         }

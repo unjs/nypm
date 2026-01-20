@@ -9,11 +9,11 @@
   "exports": {
     ".": "./dist/index.mjs"
   },
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "bin": {
     "nypm": "./dist/cli.mjs"
   },
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
@@ -30,7 +30,6 @@
   "dependencies": {
     "citty": "^0.2.0",
     "pathe": "^2.0.3",
-    "pkg-types": "^2.3.0",
     "tinyexec": "^1.0.2"
   },
   "devDependencies": {
@@ -42,7 +41,10 @@
     "eslint": "^9.39.2",
     "eslint-config-unjs": "^0.6.2",
     "obuild": "^0.4.18",
+    "pkg-types": "^2.3.0",
     "prettier": "^3.8.0",
+    "rolldown": "1.0.0-beta.60",
+    "rolldown-plugin-dts": "^0.21.4",
     "std-env": "^3.10.0",
     "typescript": "^5.9.3",
     "ufo": "^1.6.3",

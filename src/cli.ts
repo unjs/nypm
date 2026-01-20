@@ -56,6 +56,10 @@ const install = defineCommand({
       type: "boolean",
       description: "Install dependencies with frozen lock file",
     },
+    "install-peer-dependencies": {
+      type: "boolean",
+      description: "Also install peer dependencies",
+    },
   },
   run: async ({ args }) => {
     const result = await (args._.length > 0
