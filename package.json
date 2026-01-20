@@ -43,8 +43,6 @@
     "obuild": "^0.4.18",
     "pkg-types": "^2.3.0",
     "prettier": "^3.8.0",
-    "rolldown": "1.0.0-beta.60",
-    "rolldown-plugin-dts": "^0.21.4",
     "std-env": "^3.10.0",
     "typescript": "^5.9.3",
     "ufo": "^1.6.3",
