@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { defineCommand, runMain, type ArgsDef } from "citty";
 import { resolve } from "pathe";
-import { consola } from "consola";
 import pkg from "../package.json" with { type: "json" };
 import {
   addDependency,
@@ -100,17 +99,17 @@ const detect = defineCommand({
 
     if (packageManager?.warnings) {
       for (const warning of packageManager.warnings) {
-        consola.warn(warning);
+        console.warn(warning);
       }
     }
 
     if (!packageManager) {
-      consola.error(`Cannot detect package manager in \`${cwd}\``);
+      console.error(`Cannot detect package manager in "${cwd}"`);
       return process.exit(1);
     }
 
-    consola.log(
-      `Detected package manager in \`${cwd}\`: \`${packageManager.name}@${packageManager.version}\``,
+    console.log(
+      `Detected package manager in "${cwd}": "${packageManager.name}@${packageManager.version}"`,
     );
   },
 });
@@ -189,6 +188,6 @@ function handleRes(
   args: { dry?: boolean; silent?: boolean },
 ) {
   if (args.dry && !args.silent) {
-    consola.log(`${result.exec?.command} ${result.exec?.args.join(" ")}`);
+    console.log(`${result.exec?.command} ${result.exec?.args.join(" ")}`);
   }
 }
