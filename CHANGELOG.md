@@ -1,6 +1,43 @@
 # Changelog
 
 
+## v0.6.3
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.2...v0.6.3)
+
+### 🚀 Enhancements
+
+- **installDependencies:** Support `--ignore-workspace` for pnpm ([#221](https://github.com/unjs/nypm/pull/221))
+- Support `corepack: false` ([#226](https://github.com/unjs/nypm/pull/226))
+
+### 💅 Refactors
+
+- More strict types ([8ee2aae](https://github.com/unjs/nypm/commit/8ee2aae))
+- Update citty to 0.2 ([62c13b9](https://github.com/unjs/nypm/commit/62c13b9))
+- **cli:** Replace consola with simple console ([cc66b91](https://github.com/unjs/nypm/commit/cc66b91))
+- Remove `pkg-types` dependency ([549d93e](https://github.com/unjs/nypm/commit/549d93e))
+
+### 📦 Build
+
+- Migrate to obuild ([576a594](https://github.com/unjs/nypm/commit/576a594))
+- Update engines to 18+ ([2bc96a5](https://github.com/unjs/nypm/commit/2bc96a5))
+
+### 🏡 Chore
+
+- Update deps ([fbc3081](https://github.com/unjs/nypm/commit/fbc3081))
+- Apply automated updates ([3f7c121](https://github.com/unjs/nypm/commit/3f7c121))
+- Update lockfile ([c1de73e](https://github.com/unjs/nypm/commit/c1de73e))
+
+### ✅ Tests
+
+- Use `bun.lock` ([5fc7ad8](https://github.com/unjs/nypm/commit/5fc7ad8))
+
+### ❤️ Contributors
+
+- Alejandro López Almeida <raky291@gmail.com>
+- 山吹色御守 ([@KazariEX](https://github.com/KazariEX))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v0.6.2
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.1...v0.6.2)
