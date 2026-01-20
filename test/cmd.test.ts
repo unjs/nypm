@@ -4,7 +4,7 @@ import {
   installDependenciesCommand,
   runScriptCommand,
   dlxCommand,
-} from "../src";
+} from "../src/index.ts";
 
 const fixtures = [
   {

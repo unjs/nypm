@@ -45,9 +45,6 @@ importers:
       eslint-config-unjs:
         specifier: ^0.6.2
         version: 0.6.2(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
-      jiti:
-        specifier: ^2.6.1
-        version: 2.6.1
       obuild:
         specifier: ^0.4.18
         version: 0.4.18(@typescript/native-preview@7.0.0-dev.20260120.1)(magicast@0.5.1)(typescript@5.9.3)
@@ -676,9 +673,6 @@ packages:
 
   '@types/node@25.0.9':
     resolution: {integrity: sha512-/rpCXHlCWeqClNBwUhDcusJxXYDjZTyE8v5oTO7WbL8eij2nKhUeU89/6xgjU7N4/Vh3He0BtyhJdQbDyhiXAw==}
-
-  '@types/unist@2.0.11':
-    resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
@@ -2281,15 +2275,13 @@ snapshots:
 
   '@types/mdast@4.0.4':
     dependencies:
-      '@types/unist': 2.0.11
+      '@types/unist': 3.0.3
 
   '@types/ms@2.1.0': {}
 
   '@types/node@25.0.9':
     dependencies:
       undici-types: 7.16.0
-
-  '@types/unist@2.0.11': {}
 
   '@types/unist@3.0.3': {}
 

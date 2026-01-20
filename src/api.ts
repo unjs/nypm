@@ -4,13 +4,13 @@ import {
   resolveOperationOptions,
   getWorkspaceArgs,
   doesDependencyExist,
-} from "./_utils";
-import { dlxCommand } from "./cmd";
+} from "./_utils.ts";
+import { dlxCommand } from "./cmd.ts";
 import type {
   OperationOptions,
   OperationResult,
   PackageManagerName,
-} from "./types";
+} from "./types.ts";
 import * as fs from "node:fs";
 import { resolve } from "pathe";
 
@@ -83,7 +83,7 @@ export async function addDependency(
 
   if (resolvedOptions.packageManager.name === "deno") {
     for (let i = 0; i < names.length; i++) {
-      if (!/^(npm|jsr|file):.+$/.test(names[i])) {
+      if (!/^(npm|jsr|file):.+$/.test(names[i] || "")) {
         names[i] = `npm:${names[i]}`;
       }
     }
@@ -414,7 +414,7 @@ export async function dlx(
   const [command, ...args] = commandStr.split(" ");
 
   if (!resolvedOptions.dry) {
-    await executeCommand(command, args, {
+    await executeCommand(command!, args, {
       cwd: resolvedOptions.cwd,
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
@@ -423,7 +423,7 @@ export async function dlx(
 
   return {
     exec: {
-      command,
+      command: command!,
       args,
     },
   };

@@ -1,8 +1,8 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
-import { findup, parsePackageManagerField } from "./_utils";
-import type { PackageManager } from "./types";
+import { findup, parsePackageManagerField } from "./_utils.ts";
+import type { PackageManager } from "./types.ts";
 
 export type DetectPackageManagerOptions = {
   /**

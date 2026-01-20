@@ -5,9 +5,9 @@ import type {
   OperationOptions,
   PackageManager,
   PackageManagerName,
-} from "./types";
-import type { DetectPackageManagerOptions } from "./package-manager";
-import { detectPackageManager, packageManagers } from "./package-manager";
+} from "./types.ts";
+import type { DetectPackageManagerOptions } from "./package-manager.ts";
+import { detectPackageManager, packageManagers } from "./package-manager.ts";
 
 export async function findup<T>(
   cwd: string,
@@ -241,7 +241,7 @@ export function parsePackageManagerField(packageManager?: string): {
     return { name: name as PackageManagerName, version, buildMeta };
   }
 
-  const sanitized = name.replace(/\W+/g, "");
+  const sanitized = (name || "").replace(/\W+/g, "");
   const warnings = [
     `Abnormal characters found in \`packageManager\` field, sanitizing from \`${name}\` to \`${sanitized}\``,
   ];

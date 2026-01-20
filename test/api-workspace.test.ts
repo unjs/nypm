@@ -1,6 +1,6 @@
 import { expect, it, describe, vi } from "vitest";
-import { addDependency, removeDependency } from "../src";
-import { fixtures } from "./_shared";
+import { addDependency, removeDependency } from "../src/index.ts";
+import { fixtures } from "./_shared.ts";
 
 describe("api (workspace)", () => {
   for (const fixture of fixtures.filter((f) => f.workspace)) {

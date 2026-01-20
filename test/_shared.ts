@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { isWindows } from "std-env";
-import type { PackageManagerName } from "../src";
+import type { PackageManagerName } from "../src/index.ts";
 
 export type Fixture = {
   name: string;

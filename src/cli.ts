@@ -1,17 +1,17 @@
 #!/usr/bin/env node
-import { defineCommand, runMain, ArgsDef } from "citty";
+import { defineCommand, runMain, type ArgsDef } from "citty";
 import { resolve } from "pathe";
 import { consola } from "consola";
-import { name, version, description } from "../package.json";
+import pkg from "../package.json" with { type: "json" };
 import {
   addDependency,
   installDependencies,
   removeDependency,
   dedupeDependencies,
   runScript,
-} from "./api";
-import { detectPackageManager } from "./package-manager";
-import { OperationResult } from "./types";
+} from "./api.ts";
+import { detectPackageManager } from "./package-manager.ts";
+import type { OperationResult } from "./types.ts";
 
 const operationArgs = {
   cwd: {
@@ -162,9 +162,9 @@ const run = defineCommand({
 
 const main = defineCommand({
   meta: {
-    name,
-    version,
-    description,
+    name: pkg.name,
+    version: pkg.version,
+    description: pkg.description,
   },
   subCommands: {
     install,
