@@ -28,7 +28,7 @@
     "test:types": "tsgo --noEmit"
   },
   "dependencies": {
-    "citty": "^0.1.6",
+    "citty": "^0.2.0",
     "consola": "^3.4.2",
     "pathe": "^2.0.3",
     "pkg-types": "^2.3.0",
