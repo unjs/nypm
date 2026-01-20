@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.6.4
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.3...v0.6.4)
+
+### 📦 Build
+
+- Add missing cli ([0554d66](https://github.com/unjs/nypm/commit/0554d66))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v0.6.3
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.2...v0.6.3)
