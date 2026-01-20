@@ -2,7 +2,7 @@ import { expect, it, describe } from "vitest";
 import {
   parsePackageManagerField,
   resolveOperationOptions,
-} from "../src/_utils";
+} from "../src/_utils.ts";
 
 describe("internal utils", () => {
   describe("resolveOperationOptions", () => {

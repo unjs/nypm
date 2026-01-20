@@ -6,8 +6,8 @@ import {
   ensureDependencyInstalled,
   runScript,
   dlx,
-} from "../src";
-import { fixtures } from "./_shared";
+} from "../src/index.ts";
+import { fixtures } from "./_shared.ts";
 import { join } from "pathe";
 import { existsSync, unlinkSync, rmSync, readFileSync } from "node:fs";
 

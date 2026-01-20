@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { fixtures } from "./_shared";
-import { dedupeDependencies } from "../src";
+import { fixtures } from "./_shared.ts";
+import { dedupeDependencies } from "../src/index.ts";
 
 const { rmSync } = vi.hoisted(() => {
   return { rmSync: vi.fn() };

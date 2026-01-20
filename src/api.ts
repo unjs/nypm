@@ -1,18 +1,21 @@
-import { readPackageJSON } from "pkg-types";
+import { createRequire } from "node:module";
 import {
   executeCommand,
   resolveOperationOptions,
   getWorkspaceArgs,
   doesDependencyExist,
-} from "./_utils";
-import { dlxCommand } from "./cmd";
+} from "./_utils.ts";
+import { dlxCommand } from "./cmd.ts";
+import { readPackageJSON } from "./_utils.ts";
 import type {
   OperationOptions,
   OperationResult,
   PackageManagerName,
-} from "./types";
+} from "./types.ts";
 import * as fs from "node:fs";
 import { resolve } from "pathe";
+import { join } from "node:path";
+import type { PackageJson } from "pkg-types";
 
 /**
  * Installs project dependencies.
@@ -84,7 +87,7 @@ export async function addDependency(
 
   if (resolvedOptions.packageManager.name === "deno") {
     for (let i = 0; i < names.length; i++) {
-      if (!/^(npm|jsr|file):.+$/.test(names[i])) {
+      if (!/^(npm|jsr|file):.+$/.test(names[i] || "")) {
         names[i] = `npm:${names[i]}`;
       }
     }
@@ -131,9 +134,8 @@ export async function addDependency(
     const peerDevDeps: string[] = [];
     for (const _name of names) {
       const pkgName = _name.match(/^(.[^@]+)/)?.[0];
-      const pkg = await readPackageJSON(pkgName, {
-        url: resolvedOptions.cwd,
-      }).catch(() => ({}) as Record<string, undefined>);
+      const _require = createRequire(join(resolvedOptions.cwd, "/_.js"));
+      const pkg = _require(`${pkgName}/package.json`) as PackageJson;
       if (!pkg.peerDependencies || pkg.name !== pkgName) {
         continue;
       }
@@ -145,8 +147,8 @@ export async function addDependency(
         }
         // TODO: refactor to getSpecifiedPackageInfo later on
         if (
-          existingPkg.dependencies?.[peerDependency] ||
-          existingPkg.devDependencies?.[peerDependency]
+          existingPkg?.dependencies?.[peerDependency] ||
+          existingPkg?.devDependencies?.[peerDependency]
         ) {
           continue;
         }
@@ -419,7 +421,7 @@ export async function dlx(
   const [command, ...args] = commandStr.split(" ");
 
   if (!resolvedOptions.dry) {
-    await executeCommand(command, args, {
+    await executeCommand(command!, args, {
       cwd: resolvedOptions.cwd,
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
@@ -429,7 +431,7 @@ export async function dlx(
 
   return {
     exec: {
-      command,
+      command: command!,
       args,
     },
   };

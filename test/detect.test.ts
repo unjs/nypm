@@ -1,6 +1,6 @@
 import { expect, it, describe } from "vitest";
-import { detectPackageManager } from "../src";
-import { fixtures } from "./_shared";
+import { detectPackageManager } from "../src/index.ts";
+import { fixtures } from "./_shared.ts";
 
 describe("detectPackageManager", () => {
   for (const fixture of fixtures) {

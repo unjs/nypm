@@ -5,9 +5,13 @@ import type {
   OperationOptions,
   PackageManager,
   PackageManagerName,
-} from "./types";
-import type { DetectPackageManagerOptions } from "./package-manager";
-import { detectPackageManager, packageManagers } from "./package-manager";
+} from "./types.ts";
+import type { DetectPackageManagerOptions } from "./package-manager.ts";
+import { detectPackageManager, packageManagers } from "./package-manager.ts";
+import type { PackageJson } from "pkg-types";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { readFile } from "node:fs/promises";
 
 export async function findup<T>(
   cwd: string,
@@ -26,6 +30,17 @@ export async function findup<T>(
 
     segments.pop();
   }
+}
+
+export async function readPackageJSON(
+  cwd: string,
+): Promise<PackageJson | null> {
+  return findup(cwd, (p) => {
+    const pkgPath = join(p, "package.json");
+    if (existsSync(pkgPath)) {
+      return readFile(pkgPath, "utf8").then((data) => JSON.parse(data));
+    }
+  });
 }
 
 function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {
@@ -248,7 +263,7 @@ export function parsePackageManagerField(packageManager?: string): {
     return { name: name as PackageManagerName, version, buildMeta };
   }
 
-  const sanitized = name.replace(/\W+/g, "");
+  const sanitized = (name || "").replace(/\W+/g, "");
   const warnings = [
     `Abnormal characters found in \`packageManager\` field, sanitizing from \`${name}\` to \`${sanitized}\``,
   ];

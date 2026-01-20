@@ -1,5 +1,5 @@
-import type { PackageManagerName } from "./types";
-import { fmtCommand, getWorkspaceArgs2 as getWorkspaceArgs } from "./_utils";
+import type { PackageManagerName } from "./types.ts";
+import { fmtCommand, getWorkspaceArgs2 as getWorkspaceArgs } from "./_utils.ts";
 
 /**
  * Get the command to install dependencies with the package manager.
@@ -47,7 +47,7 @@ export function addDependencyCommand(
 
   if (packageManager === "deno") {
     for (let i = 0; i < names.length; i++) {
-      if (!/^(npm|jsr|file):.+$/.test(names[i])) {
+      if (!/^(npm|jsr|file):.+$/.test(names[i]!)) {
         names[i] = `npm:${names[i]}`;
       }
     }

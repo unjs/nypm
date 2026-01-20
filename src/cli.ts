@@ -1,17 +1,16 @@
 #!/usr/bin/env node
-import { defineCommand, runMain, ArgsDef } from "citty";
+import { defineCommand, runMain, type ArgsDef } from "citty";
 import { resolve } from "pathe";
-import { consola } from "consola";
-import { name, version, description } from "../package.json";
+import pkg from "../package.json" with { type: "json" };
 import {
   addDependency,
   installDependencies,
   removeDependency,
   dedupeDependencies,
   runScript,
-} from "./api";
-import { detectPackageManager } from "./package-manager";
-import { OperationResult } from "./types";
+} from "./api.ts";
+import { detectPackageManager } from "./package-manager.ts";
+import type { OperationResult } from "./types.ts";
 
 const operationArgs = {
   cwd: {
@@ -61,6 +60,10 @@ const install = defineCommand({
       type: "boolean",
       description: "Install dependencies with frozen lock file",
     },
+    "install-peer-dependencies": {
+      type: "boolean",
+      description: "Also install peer dependencies",
+    },
   },
   run: async ({ args }) => {
     const result = await (args._.length > 0
@@ -104,17 +107,17 @@ const detect = defineCommand({
 
     if (packageManager?.warnings) {
       for (const warning of packageManager.warnings) {
-        consola.warn(warning);
+        console.warn(warning);
       }
     }
 
     if (!packageManager) {
-      consola.error(`Cannot detect package manager in \`${cwd}\``);
+      console.error(`Cannot detect package manager in "${cwd}"`);
       return process.exit(1);
     }
 
-    consola.log(
-      `Detected package manager in \`${cwd}\`: \`${packageManager.name}@${packageManager.version}\``,
+    console.log(
+      `Detected package manager in "${cwd}": "${packageManager.name}@${packageManager.version}"`,
     );
   },
 });
@@ -166,9 +169,9 @@ const run = defineCommand({
 
 const main = defineCommand({
   meta: {
-    name,
-    version,
-    description,
+    name: pkg.name,
+    version: pkg.version,
+    description: pkg.description,
   },
   subCommands: {
     install,
@@ -193,6 +196,6 @@ function handleRes(
   args: { dry?: boolean; silent?: boolean },
 ) {
   if (args.dry && !args.silent) {
-    consola.log(`${result.exec?.command} ${result.exec?.args.join(" ")}`);
+    console.log(`${result.exec?.command} ${result.exec?.args.join(" ")}`);
   }
 }
