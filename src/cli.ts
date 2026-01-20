@@ -27,6 +27,7 @@ const operationArgs = {
   },
   corepack: {
     type: "boolean",
+    default: true,
     description: "Use corepack",
   },
   dry: {
