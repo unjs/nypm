@@ -9,6 +9,7 @@ import {
   dedupeDependencies,
   runScript,
 } from "./api.ts";
+import { getPackageInfo } from "./registry.ts";
 import { detectPackageManager } from "./package-manager.ts";
 import type { OperationResult } from "./types.ts";
 
@@ -168,6 +169,33 @@ const run = defineCommand({
   },
 });
 
+const info = defineCommand({
+  meta: {
+    description: "Show package info from registry",
+  },
+  args: {
+    name: {
+      type: "positional",
+      description: "Package name (e.g. vue, vue@3.0.0, vue@next)",
+      required: true,
+    },
+    registry: { type: "string", description: "Custom registry URL" },
+    json: { type: "boolean", description: "Output as JSON" },
+  },
+  run: async ({ args }) => {
+    const pkgInfo = await getPackageInfo(args.name, {
+      registry: args.registry,
+    });
+    if (args.json) {
+      console.log(JSON.stringify(pkgInfo, null, 2));
+    } else {
+      console.log(`${pkgInfo.name}@${pkgInfo.version}`);
+      if (pkgInfo.description) console.log(pkgInfo.description);
+      if (pkgInfo.license) console.log(`license: ${pkgInfo.license}`);
+    }
+  },
+});
+
 const main = defineCommand({
   meta: {
     name: pkg.name,
@@ -185,6 +213,7 @@ const main = defineCommand({
     detect,
     dedupe,
     run,
+    info,
   },
 });
 
