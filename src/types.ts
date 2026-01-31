@@ -41,6 +41,7 @@ export type PackageInfo = {
   dist?: { tarball: string; shasum: string; integrity?: string };
   versions?: string[];
   distTags?: Record<string, string>;
+  [key: string]: unknown;
 };
 
 export type GetPackageInfoOptions = {

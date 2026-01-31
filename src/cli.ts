@@ -183,15 +183,20 @@ const info = defineCommand({
     json: { type: "boolean", description: "Output as JSON" },
   },
   run: async ({ args }) => {
-    const pkgInfo = await getPackageInfo(args.name, {
-      registry: args.registry,
-    });
-    if (args.json) {
-      console.log(JSON.stringify(pkgInfo, null, 2));
-    } else {
-      console.log(`${pkgInfo.name}@${pkgInfo.version}`);
-      if (pkgInfo.description) console.log(pkgInfo.description);
-      if (pkgInfo.license) console.log(`license: ${pkgInfo.license}`);
+    try {
+      const pkgInfo = await getPackageInfo(args.name, {
+        registry: args.registry,
+      });
+      if (args.json) {
+        console.log(JSON.stringify(pkgInfo, null, 2));
+      } else {
+        console.log(`${pkgInfo.name}@${pkgInfo.version}`);
+        if (pkgInfo.description) console.log(pkgInfo.description);
+        if (pkgInfo.license) console.log(`license: ${pkgInfo.license}`);
+      }
+    } catch (err: any) {
+      console.error(err.message);
+      process.exit(1);
     }
   },
 });
