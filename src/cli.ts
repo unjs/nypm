@@ -194,8 +194,8 @@ const info = defineCommand({
         if (pkgInfo.description) console.log(pkgInfo.description);
         if (pkgInfo.license) console.log(`license: ${pkgInfo.license}`);
       }
-    } catch (err: any) {
-      console.error(err.message);
+    } catch (error_: any) {
+      console.error(error_.message);
       process.exit(1);
     }
   },

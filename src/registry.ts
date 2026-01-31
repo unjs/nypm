@@ -12,7 +12,9 @@ export async function getPackageInfo(
 
   const response = await fetch(`${registry}/${encodedName}`);
   if (!response.ok) {
-    const status = response.status === 404 ? "not found" : response.status === 403 ? "forbidden" : `error ${response.status}`;
+    let status = `error ${response.status}`;
+    if (response.status === 404) status = "not found";
+    else if (response.status === 403) status = "forbidden";
     throw new Error(`Package ${name}: ${status}`, { cause: response });
   }
 
