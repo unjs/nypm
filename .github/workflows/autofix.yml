@@ -17,7 +17,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - uses: denoland/setup-deno@v2
         with:
-          deno-version: v2.x
+          deno-version: 2.6.8
       - uses: actions/setup-node@v6
         with:
           node-version: 22
