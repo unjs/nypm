@@ -49,6 +49,24 @@ describe("api", () => {
         expect(addDependencySpy).toHaveReturned();
       }, 60_000);
 
+      it.skipIf(fixture.name.includes("deno"))(
+        "adds dependency with installPeerDependencies option",
+        async () => {
+          const addDependencySpy = vi.fn(addDependency);
+          // consola has restrictive exports and does not export ./package.json
+          const executeAddDependencySpy = () =>
+            addDependencySpy("consola", {
+              cwd: fixture.dir,
+              silent: !process.env.DEBUG,
+              installPeerDependencies: true,
+            });
+
+          await executeAddDependencySpy();
+          expect(addDependencySpy).toHaveReturned();
+        },
+        60_000,
+      );
+
       it("ensures dependency is installed", async () => {
         const ensureDependencyInstalledSpy = vi.fn(ensureDependencyInstalled);
 
