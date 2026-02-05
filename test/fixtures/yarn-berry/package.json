@@ -7,6 +7,6 @@
   },
   "packageManager": "yarn@3.6.1",
   "dependencies": {
-    "consola": "3.2.2"
+    "consola": "^3.4.2"
   }
 }

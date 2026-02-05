@@ -5,10 +5,10 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"consola@npm:3.2.2":
-  version: 3.2.2
-  resolution: "consola@npm:3.2.2"
-  checksum: 3c22102f74b4dc1519ab2a3096b1975a8b767f258027cef9888ca9d999ed79388e390b969474bce0b42aade73cd2689f62ca511e530a06bf842092f8ef1bf7a6
+"consola@npm:^3.4.2":
+  version: 3.4.2
+  resolution: "consola@npm:3.4.2"
+  checksum: 32d1339e0505842f033ca34cb4572a841281caa367f438b785d3b284ab2a06134f009e605908480402c5f57f56c1e3210090c37e6417923416f76ce730d39361
   languageName: node
   linkType: hard
 
@@ -16,6 +16,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "fixture-yarn-berry@workspace:."
   dependencies:
-    consola: 3.2.2
+    consola: ^3.4.2
   languageName: unknown
   linkType: soft
