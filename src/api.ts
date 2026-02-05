@@ -4,9 +4,9 @@ import {
   resolveOperationOptions,
   getWorkspaceArgs,
   doesDependencyExist,
+  readPackageJSON,
 } from "./_utils.ts";
 import { dlxCommand } from "./cmd.ts";
-import { readPackageJSON } from "./_utils.ts";
 import type {
   OperationOptions,
   OperationResult,
@@ -15,7 +15,6 @@ import type {
 import * as fs from "node:fs";
 import { resolve } from "pathe";
 import { join } from "node:path";
-import type { PackageJson } from "pkg-types";
 
 /**
  * Installs project dependencies.
@@ -140,11 +139,12 @@ export async function addDependency(
     const existingPkg = await readPackageJSON(resolvedOptions.cwd);
     const peerDeps: string[] = [];
     const peerDevDeps: string[] = [];
+    const _require = createRequire(join(resolvedOptions.cwd, "/_.js"));
     for (const _name of names) {
       const pkgName = _name.match(/^(.[^@]+)/)?.[0];
-      const _require = createRequire(join(resolvedOptions.cwd, "/_.js"));
-      const pkg = _require(`${pkgName}/package.json`) as PackageJson;
-      if (!pkg.peerDependencies || pkg.name !== pkgName) {
+      const pkgEntryPath = _require.resolve(pkgName!);
+      const pkg = await readPackageJSON(pkgEntryPath);
+      if (!pkg?.peerDependencies || pkg.name !== pkgName) {
         continue;
       }
       for (const [peerDependency, version] of Object.entries(
