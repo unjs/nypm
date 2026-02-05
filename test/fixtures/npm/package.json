@@ -5,8 +5,8 @@
     "test-script": "node -e \"fs.writeFileSync('test-file.txt','test','utf8')\"",
     "test-script-env": "node -e \"fs.writeFileSync('test-file-env.txt', process.env.TEST_CONTENT, 'utf8')\""
   },
-  "packageManager": "npm@9.7.2",
   "dependencies": {
     "consola": "^3.4.2"
-  }
+  },
+  "packageManager": "npm@9.7.2"
 }

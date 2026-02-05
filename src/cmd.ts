@@ -13,14 +13,13 @@ export function installDependenciesCommand(
 ): string {
   const installCmd = options.short ? "i" : "install";
 
-  const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
-    {
-      npm: ["ci"],
-      yarn: [installCmd, "--immutable"],
-      bun: [installCmd, "--frozen-lockfile"],
-      pnpm: [installCmd, "--frozen-lockfile"],
-      deno: [installCmd, "--frozen"],
-    };
+  const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> = {
+    npm: ["ci"],
+    yarn: [installCmd, "--immutable"],
+    bun: [installCmd, "--frozen-lockfile"],
+    pnpm: [installCmd, "--frozen-lockfile"],
+    deno: [installCmd, "--frozen"],
+  };
 
   const commandArgs = options.frozenLockFile
     ? pmToFrozenLockfileInstallCommand[packageManager]
@@ -85,11 +84,7 @@ export function runScriptCommand(
     args?: string[];
   } = {},
 ): string {
-  const args = [
-    packageManager === "deno" ? "task" : "run",
-    name,
-    ...(options.args || []),
-  ];
+  const args = [packageManager === "deno" ? "task" : "run", name, ...(options.args || [])];
   return fmtCommand([packageManager, ...args]);
 }
 
@@ -121,17 +116,14 @@ export function dlxCommand(
     if (!name.startsWith("npm:")) {
       name = `npm:${name}`;
     }
-    packages = packages.map((pkg) =>
-      pkg.startsWith("npm:") ? pkg : `npm:${pkg}`,
-    );
+    packages = packages.map((pkg) => (pkg.startsWith("npm:") ? pkg : `npm:${pkg}`));
   }
 
   const packageArgs: string[] = [];
 
   // https://github.com/denoland/deno/issues/30737
   if (packages.length > 0 && packageManager !== "deno") {
-    const packageFlag =
-      options.short && /^npm|yarn$/.test(packageManager) ? "-p" : "--package";
+    const packageFlag = options.short && /^npm|yarn$/.test(packageManager) ? "-p" : "--package";
     for (const pkg of packages) {
       packageArgs.push(`${packageFlag}=${pkg}`);
     }
@@ -139,11 +131,5 @@ export function dlxCommand(
 
   const argSep = packageManager === "npm" && !options.short ? "--" : "";
 
-  return fmtCommand([
-    command,
-    ...packageArgs,
-    name,
-    argSep,
-    ...(options.args || []),
-  ]);
+  return fmtCommand([command, ...packageArgs, name, argSep, ...(options.args || [])]);
 }

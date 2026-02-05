@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/oxlint/configuration_schema.json",
+  "plugins": [
+    "unicorn",
+    "typescript",
+    "oxc"
+  ],
+  "ignorePatterns": [
+    "**/.pnp.loader.mjs"
+  ],
+  "rules": {}
+}

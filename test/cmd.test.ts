@@ -134,9 +134,7 @@ describe("commands", () => {
   describe("installDependenciesCommand", () => {
     for (const fixture of fixtures) {
       it(fixture.name, () => {
-        expect(installDependenciesCommand(fixture.packageManager)).toBe(
-          fixture.commands.install,
-        );
+        expect(installDependenciesCommand(fixture.packageManager)).toBe(fixture.commands.install);
 
         expect(
           installDependenciesCommand(fixture.packageManager, { short: true }),
@@ -156,9 +154,9 @@ describe("commands", () => {
   describe("addDependencyCommand", () => {
     for (const fixture of fixtures) {
       it(fixture.name, () => {
-        expect(
-          addDependencyCommand(fixture.packageManager, "name", fixture.opts),
-        ).toBe(fixture.commands.add);
+        expect(addDependencyCommand(fixture.packageManager, "name", fixture.opts)).toBe(
+          fixture.commands.add,
+        );
 
         expect(
           addDependencyCommand(fixture.packageManager, "name", {

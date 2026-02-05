@@ -7,11 +7,7 @@ import {
   readPackageJSON,
 } from "./_utils.ts";
 import { dlxCommand } from "./cmd.ts";
-import type {
-  OperationOptions,
-  OperationResult,
-  PackageManagerName,
-} from "./types.ts";
+import type { OperationOptions, OperationResult, PackageManagerName } from "./types.ts";
 import * as fs from "node:fs";
 import { resolve } from "pathe";
 import { join } from "node:path";
@@ -26,33 +22,26 @@ import { join } from "node:path";
  * @param options.frozenLockFile - Whether to install dependencies with frozen lock file.
  */
 export async function installDependencies(
-  options: Pick<
-    OperationOptions,
-    "cwd" | "silent" | "packageManager" | "dry" | "corepack"
-  > & {
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dry" | "corepack"> & {
     frozenLockFile?: boolean;
     ignoreWorkspace?: boolean;
   } = {},
 ): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> =
-    {
-      npm: ["ci"],
-      yarn: ["install", "--immutable"],
-      bun: ["install", "--frozen-lockfile"],
-      pnpm: ["install", "--frozen-lockfile"],
-      deno: ["install", "--frozen"],
-    };
+  const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> = {
+    npm: ["ci"],
+    yarn: ["install", "--immutable"],
+    bun: ["install", "--frozen-lockfile"],
+    pnpm: ["install", "--frozen-lockfile"],
+    deno: ["install", "--frozen"],
+  };
 
   const commandArgs = options.frozenLockFile
     ? pmToFrozenLockfileInstallCommand[resolvedOptions.packageManager.name]
     : ["install"];
 
-  if (
-    options.ignoreWorkspace &&
-    resolvedOptions.packageManager.name === "pnpm"
-  ) {
+  if (options.ignoreWorkspace && resolvedOptions.packageManager.name === "pnpm") {
     commandArgs.push("--ignore-workspace");
   }
 
@@ -110,8 +99,7 @@ export async function addDependency(
       ? [
           ...getWorkspaceArgs(resolvedOptions),
           // Global is not supported in berry: yarnpkg/berry#821
-          resolvedOptions.global &&
-          resolvedOptions.packageManager.majorVersion === "1"
+          resolvedOptions.global && resolvedOptions.packageManager.majorVersion === "1"
             ? "global"
             : "",
           "add",
@@ -147,9 +135,7 @@ export async function addDependency(
       if (!pkg?.peerDependencies || pkg?.name !== pkgName) {
         continue;
       }
-      for (const [peerDependency, version] of Object.entries(
-        pkg.peerDependencies,
-      )) {
+      for (const [peerDependency, version] of Object.entries(pkg.peerDependencies)) {
         if (pkg.peerDependenciesMeta?.[peerDependency]?.optional) {
           continue;
         }
@@ -228,8 +214,7 @@ export async function removeDependency(
     resolvedOptions.packageManager.name === "yarn"
       ? [
           // Global is not supported in berry: yarnpkg/berry#821
-          resolvedOptions.global &&
-          resolvedOptions.packageManager.majorVersion === "1"
+          resolvedOptions.global && resolvedOptions.packageManager.majorVersion === "1"
             ? "global"
             : "",
           ...getWorkspaceArgs(resolvedOptions),
@@ -239,9 +224,7 @@ export async function removeDependency(
           ...names,
         ]
       : [
-          resolvedOptions.packageManager.name === "npm"
-            ? "uninstall"
-            : "remove",
+          resolvedOptions.packageManager.name === "npm" ? "uninstall" : "remove",
           ...getWorkspaceArgs(resolvedOptions),
           resolvedOptions.dev ? "-D" : "",
           resolvedOptions.global ? "-g" : "",
@@ -299,25 +282,19 @@ export async function ensureDependencyInstalled(
  * @param options.recreateLockfile - Whether to recreate the lockfile instead of deduping.
  */
 export async function dedupeDependencies(
-  options: Pick<
-    OperationOptions,
-    "cwd" | "silent" | "packageManager" | "dry" | "corepack"
-  > & {
+  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dry" | "corepack"> & {
     recreateLockfile?: boolean;
   } = {},
 ): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
-  const isSupported = !["bun", "deno"].includes(
-    resolvedOptions.packageManager.name,
-  );
+  const isSupported = !["bun", "deno"].includes(resolvedOptions.packageManager.name);
   const recreateLockfile = options.recreateLockfile ?? !isSupported;
   if (recreateLockfile) {
     const lockfiles = Array.isArray(resolvedOptions.packageManager.lockFile)
       ? resolvedOptions.packageManager.lockFile
       : [resolvedOptions.packageManager.lockFile];
     for (const lockfile of lockfiles) {
-      if (lockfile)
-        fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
+      if (lockfile) fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
     }
     return await installDependencies(resolvedOptions);
   }
@@ -344,9 +321,7 @@ export async function dedupeDependencies(
       },
     };
   }
-  throw new Error(
-    `Deduplication is not supported for ${resolvedOptions.packageManager.name}`,
-  );
+  throw new Error(`Deduplication is not supported for ${resolvedOptions.packageManager.name}`);
 }
 
 /**

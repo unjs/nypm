@@ -192,10 +192,7 @@ runMain(main);
 
 // --- internal utils ---
 
-function handleRes(
-  result: OperationResult,
-  args: { dry?: boolean; silent?: boolean },
-) {
+function handleRes(result: OperationResult, args: { dry?: boolean; silent?: boolean }) {
   if (args.dry && !args.silent) {
     console.log(`${result.exec?.command} ${result.exec?.args.join(" ")}`);
   }

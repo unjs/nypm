@@ -1,8 +1,5 @@
 import { expect, it, describe } from "vitest";
-import {
-  parsePackageManagerField,
-  resolveOperationOptions,
-} from "../src/_utils.ts";
+import { parsePackageManagerField, resolveOperationOptions } from "../src/_utils.ts";
 
 describe("internal utils", () => {
   describe("resolveOperationOptions", () => {
@@ -22,11 +19,7 @@ describe("internal utils", () => {
       "unknown-name": ["unknown-name"],
       unknownName: ["unknownName"],
       "npm@1.2.3": ["npm", "1.2.3"],
-      "pnpm@9.15.4+sha512.b2dc20e2fc72b3e": [
-        "pnpm",
-        "9.15.4",
-        "sha512.b2dc20e2fc72b3e",
-      ],
+      "pnpm@9.15.4+sha512.b2dc20e2fc72b3e": ["pnpm", "9.15.4", "sha512.b2dc20e2fc72b3e"],
     };
     for (const [input, [name, version, buildMeta]] of Object.entries(cases)) {
       it(input, () => {

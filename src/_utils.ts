@@ -1,11 +1,7 @@
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { x } from "tinyexec";
-import type {
-  OperationOptions,
-  PackageManager,
-  PackageManagerName,
-} from "./types.ts";
+import type { OperationOptions, PackageManager, PackageManagerName } from "./types.ts";
 import type { DetectPackageManagerOptions } from "./package-manager.ts";
 import { detectPackageManager, packageManagers } from "./package-manager.ts";
 import type { PackageJson } from "pkg-types";
@@ -32,9 +28,7 @@ export async function findup<T>(
   }
 }
 
-export async function readPackageJSON(
-  cwd: string,
-): Promise<PackageJson | null> {
+export async function readPackageJSON(cwd: string): Promise<PackageJson | null> {
   return findup(cwd, (p) => {
     const pkgPath = join(p, "package.json");
     if (existsSync(pkgPath)) {
@@ -101,17 +95,11 @@ export async function executeCommand(
 
 type NonPartial<T> = { [P in keyof T]-?: T[P] };
 
-export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG =
-  "No package manager auto-detected.";
+export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG = "No package manager auto-detected.";
 
-export async function resolveOperationOptions(
-  options: OperationOptions = {},
-): Promise<
+export async function resolveOperationOptions(options: OperationOptions = {}): Promise<
   NonPartial<
-    Pick<
-      OperationOptions,
-      "cwd" | "env" | "silent" | "dev" | "global" | "dry" | "corepack"
-    >
+    Pick<OperationOptions, "cwd" | "env" | "silent" | "dev" | "global" | "dry" | "corepack">
   > &
     Pick<OperationOptions, "workspace"> & {
       packageManager: PackageManager;
@@ -123,8 +111,7 @@ export async function resolveOperationOptions(
   const packageManager =
     (typeof options.packageManager === "string"
       ? packageManagers.find((pm) => pm.name === options.packageManager)
-      : options.packageManager) ||
-    (await detectPackageManager(options.cwd || process.cwd()));
+      : options.packageManager) || (await detectPackageManager(options.cwd || process.cwd()));
 
   if (!packageManager) {
     throw new Error(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
@@ -167,10 +154,7 @@ export function getWorkspaceArgs(
   }
 
   if (options.packageManager.name === "yarn") {
-    if (
-      !options.packageManager.majorVersion ||
-      options.packageManager.majorVersion === "1"
-    ) {
+    if (!options.packageManager.majorVersion || options.packageManager.majorVersion === "1") {
       // Yarn classic
       return workspacePkg ? ["--cwd", workspacePkg] : ["-W"];
     } else {
@@ -228,14 +212,9 @@ export function fmtCommand(args: string[]): string {
 
 export function doesDependencyExist(
   name: string,
-  options: Pick<
-    Awaited<ReturnType<typeof resolveOperationOptions>>,
-    "cwd" | "workspace"
-  >,
+  options: Pick<Awaited<ReturnType<typeof resolveOperationOptions>>, "cwd" | "workspace">,
 ) {
-  const require = createRequire(
-    options.cwd.endsWith("/") ? options.cwd : options.cwd + "/",
-  );
+  const require = createRequire(options.cwd.endsWith("/") ? options.cwd : options.cwd + "/");
 
   try {
     const resolvedPath = require.resolve(name);
@@ -255,11 +234,7 @@ export function parsePackageManagerField(packageManager?: string): {
   const [name, _version] = (packageManager || "").split("@");
   const [version, buildMeta] = _version?.split("+") || [];
 
-  if (
-    name &&
-    name !== "-" &&
-    /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)
-  ) {
+  if (name && name !== "-" && /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)) {
     return { name: name as PackageManagerName, version, buildMeta };
   }
 

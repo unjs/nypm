@@ -30,9 +30,7 @@ describe("api (workspace)", () => {
       }, 60_000);
 
       const workspaceRef =
-        fixture.name === "yarn-classic-workspace"
-          ? "./packages/workspace-a"
-          : "workspace-a";
+        fixture.name === "yarn-classic-workspace" ? "./packages/workspace-a" : "workspace-a";
 
       it("adds dependency to workspace package", async () => {
         const addDependencySpy = vi.fn(addDependency);
