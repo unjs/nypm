@@ -144,7 +144,7 @@ export async function addDependency(
       const pkgName = _name.match(/^(.[^@]+)/)?.[0];
       const pkgEntryPath = _require.resolve(pkgName!);
       const pkg = await readPackageJSON(pkgEntryPath);
-      if (!pkg?.peerDependencies || pkg.name !== pkgName) {
+      if (!pkg?.peerDependencies || pkg?.name !== pkgName) {
         continue;
       }
       for (const [peerDependency, version] of Object.entries(
