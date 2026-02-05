@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.6.5
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.4...v0.6.5)
+
+### 🩹 Fixes
+
+- Do not try to require `/package.json` ([#230](https://github.com/unjs/nypm/pull/230))
+
+### 🏡 Chore
+
+- Migrate to oxlint and oxfmt ([dcf0a77](https://github.com/unjs/nypm/commit/dcf0a77))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Daniel Roe ([@danielroe](https://github.com/danielroe))
+
 ## v0.6.4
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.3...v0.6.4)
