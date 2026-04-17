@@ -44,7 +44,7 @@
     "oxlint": "^1.43.0",
     "pkg-types": "^2.3.0",
     "std-env": "^3.10.0",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "ufo": "^1.6.3",
     "vitest": "^4.0.18"
   },
