@@ -28,13 +28,59 @@ export async function findup<T>(
   }
 }
 
-export async function readPackageJSON(cwd: string): Promise<PackageJson | null> {
-  return findup(cwd, (p) => {
-    const pkgPath = join(p, "package.json");
-    if (existsSync(pkgPath)) {
-      return readFile(pkgPath, "utf8").then((data) => JSON.parse(data));
-    }
-  });
+export async function readPackageJSON(
+  cwd: string,
+  options: Pick<DetectPackageManagerOptions, "includeParentDirs"> = {},
+): Promise<PackageJson | null> {
+  return findup(
+    cwd,
+    (p) => {
+      const pkgPath = join(p, "package.json");
+      if (existsSync(pkgPath)) {
+        return readFile(pkgPath, "utf8").then((data) => JSON.parse(data));
+      }
+    },
+    options,
+  );
+}
+
+export async function readInstalledPackageJSON(
+  pkgName: string,
+  cwd: string,
+): Promise<PackageJson | null> {
+  const pkgJSONPath = await findup(
+    cwd,
+    (p) => {
+      const candidate = join(p, "node_modules", pkgName, "package.json");
+      if (existsSync(candidate)) {
+        return candidate;
+      }
+    },
+    { includeParentDirs: true },
+  );
+
+  if (!pkgJSONPath) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(await readFile(pkgJSONPath, "utf8")) as PackageJson;
+  } catch {
+    return null;
+  }
+}
+
+export async function readPackageJSONFromResolver(
+  requireFn: ReturnType<typeof createRequire>,
+  pkgName: string,
+): Promise<PackageJson | null> {
+  let resolved: string;
+  try {
+    resolved = requireFn.resolve(pkgName);
+  } catch {
+    return null;
+  }
+  return readPackageJSON(resolved, { includeParentDirs: true });
 }
 
 function cached<T>(fn: () => Promise<T>): () => T | Promise<T> {

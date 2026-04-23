@@ -5,6 +5,8 @@ import {
   getWorkspaceArgs,
   doesDependencyExist,
   readPackageJSON,
+  readInstalledPackageJSON,
+  readPackageJSONFromResolver,
 } from "./_utils.ts";
 import { dlxCommand } from "./cmd.ts";
 import type { OperationOptions, OperationResult, PackageManagerName } from "./types.ts";
@@ -130,8 +132,13 @@ export async function addDependency(
     const _require = createRequire(join(resolvedOptions.cwd, "/_.js"));
     for (const _name of names) {
       const pkgName = _name.match(/^(.[^@]+)/)?.[0];
-      const pkgEntryPath = _require.resolve(pkgName!);
-      const pkg = await readPackageJSON(pkgEntryPath);
+      if (!pkgName) {
+        continue;
+      }
+      let pkg = await readPackageJSONFromResolver(_require, pkgName);
+      if (!pkg) {
+        pkg = await readInstalledPackageJSON(pkgName, resolvedOptions.cwd);
+      }
       if (!pkg?.peerDependencies || pkg?.name !== pkgName) {
         continue;
       }
