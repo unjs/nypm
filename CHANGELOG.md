@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v0.6.6
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.4...v0.6.6)
+
+### 🩹 Fixes
+
+- Do not try to require `/package.json` ([#230](https://github.com/unjs/nypm/pull/230))
+- Handle resolving `package.json` from pure esm packages ([#234](https://github.com/unjs/nypm/pull/234))
+
+### 🏡 Chore
+
+- Migrate to oxlint and oxfmt ([dcf0a77](https://github.com/unjs/nypm/commit/dcf0a77))
+- **release:** V0.6.5 ([dd09ffa](https://github.com/unjs/nypm/commit/dd09ffa))
+- Update deps ([634f1a9](https://github.com/unjs/nypm/commit/634f1a9))
+
+### ❤️ Contributors
+
+- Daniel Roe ([@danielroe](https://github.com/danielroe))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v0.6.5
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.4...v0.6.5)
