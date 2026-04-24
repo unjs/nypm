@@ -136,10 +136,10 @@ export async function addDependency(
         continue;
       }
       let pkg = await readPackageJSONFromResolver(_require, pkgName);
-      if (!pkg || pkg.name !== pkgName) {
+      if (pkg?.name !== pkgName) {
         pkg = await readInstalledPackageJSON(pkgName, resolvedOptions.cwd);
       }
-      if (!pkg?.peerDependencies || pkg?.name !== pkgName) {
+      if (!pkg?.peerDependencies) {
         continue;
       }
       for (const [peerDependency, version] of Object.entries(pkg.peerDependencies)) {
