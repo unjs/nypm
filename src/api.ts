@@ -136,7 +136,7 @@ export async function addDependency(
         continue;
       }
       let pkg = await readPackageJSONFromResolver(_require, pkgName);
-      if (!pkg) {
+      if (!pkg || pkg.name !== pkgName) {
         pkg = await readInstalledPackageJSON(pkgName, resolvedOptions.cwd);
       }
       if (!pkg?.peerDependencies || pkg?.name !== pkgName) {
