@@ -82,8 +82,12 @@ export const fixtures = (
     workspace: fixture.name.includes("workspace"),
   }))
   .filter((fixture) => {
-    // Bun is not yet supported on Windows
-    if (isWindows && fixture.packageManager === "bun") {
+    // Bun is not yet supported on Windows.
+    // aube runs on Windows (the install step verifies the binary), but its
+    // network-heavy fixtures are skipped there: the Windows runner already
+    // times out on such install/dlx tests for npm/pnpm/deno, and adding more
+    // concurrent installs only worsens that flakiness.
+    if (isWindows && (fixture.packageManager === "bun" || fixture.packageManager === "aube")) {
       return false;
     }
     return true;
