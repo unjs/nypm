@@ -20,9 +20,12 @@ jobs:
           deno-version: v2.x
       - name: Install aube
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          AUBE_VERSION="v1.18.2"
+          AUBE_VERSION=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+            https://api.github.com/repos/jdx/aube/releases/latest | grep -m1 '"tag_name"' | cut -d'"' -f4)
           case "${{ runner.os }}-${{ runner.arch }}" in
             Linux-X64)   target="x86_64-unknown-linux-gnu" ;;
             Linux-ARM64) target="aarch64-unknown-linux-gnu" ;;
