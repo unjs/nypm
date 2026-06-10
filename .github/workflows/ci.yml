@@ -39,12 +39,17 @@ jobs:
             *) echo "Unsupported runner: ${{ runner.os }}-${{ runner.arch }}"; exit 1 ;;
           esac
           dir="$HOME/.aube/bin"
+          archive="$HOME/$asset"
           mkdir -p "$dir"
-          # `tar -xf` auto-detects gzip (unix tarballs) and zip (Windows, via bsdtar).
-          gh release download "$tag" --repo jdx/aube --pattern "$asset" --output "$HOME/aube-archive" --clobber
-          tar -xf "$HOME/aube-archive" -C "$dir"
-          rm -f "$HOME/aube-archive"
-          if [ "${{ runner.os }}" = "Windows" ]; then dir="$(cygpath -w "$dir")"; fi
+          gh release download "$tag" --repo jdx/aube --pattern "$asset" --output "$archive" --clobber
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            # Git Bash ships GNU tar, which can't read zip; use PowerShell instead.
+            powershell -NoProfile -Command "Expand-Archive -Force -Path '$(cygpath -w "$archive")' -DestinationPath '$(cygpath -w "$dir")'"
+            dir="$(cygpath -w "$dir")"
+          else
+            tar -xf "$archive" -C "$dir"
+          fi
+          rm -f "$archive"
           echo "$dir" >> "$GITHUB_PATH"
       - run: aube --version
       - uses: actions/setup-node@v6
