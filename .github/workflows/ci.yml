@@ -22,6 +22,25 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      - name: Install aube
+        if: ${{ matrix.os != 'windows-latest' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          AUBE_VERSION="v1.18.2"
+          case "${{ runner.os }}-${{ runner.arch }}" in
+            Linux-X64)   target="x86_64-unknown-linux-gnu" ;;
+            Linux-ARM64) target="aarch64-unknown-linux-gnu" ;;
+            macOS-ARM64) target="aarch64-apple-darwin" ;;
+            macOS-X64)   target="x86_64-apple-darwin" ;;
+            *) echo "Unsupported runner: ${{ runner.os }}-${{ runner.arch }}"; exit 1 ;;
+          esac
+          url="https://github.com/jdx/aube/releases/download/${AUBE_VERSION}/aube-${AUBE_VERSION}-${target}.tar.gz"
+          mkdir -p "$HOME/.aube/bin"
+          curl -fsSL "$url" | tar -xz -C "$HOME/.aube/bin"
+          echo "$HOME/.aube/bin" >> "$GITHUB_PATH"
+      - run: aube --version
+        if: ${{ matrix.os != 'windows-latest' }}
       - uses: actions/setup-node@v6
         with:
           node-version: 22

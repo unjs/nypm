@@ -22,6 +22,10 @@ export const fixtures = (
       packageManager: "deno",
     },
     {
+      name: "aube",
+      packageManager: "aube",
+    },
+    {
       name: "bun",
       packageManager: "bun",
     },
@@ -78,8 +82,8 @@ export const fixtures = (
     workspace: fixture.name.includes("workspace"),
   }))
   .filter((fixture) => {
-    // Bun is not yet supported on Windows
-    if (isWindows && fixture.packageManager === "bun") {
+    // Bun and aube are not installed on Windows runners
+    if (isWindows && (fixture.packageManager === "bun" || fixture.packageManager === "aube")) {
       return false;
     }
     return true;
