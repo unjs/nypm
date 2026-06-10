@@ -23,27 +23,30 @@ jobs:
         with:
           deno-version: v2.x
       - name: Install aube
-        if: ${{ matrix.os != 'windows-latest' }}
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          AUBE_VERSION=$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
-            https://api.github.com/repos/jdx/aube/releases/latest | grep -m1 '"tag_name"' | cut -d'"' -f4)
+          tag=$(gh release view --repo jdx/aube --json tagName --jq .tagName)
           case "${{ runner.os }}-${{ runner.arch }}" in
-            Linux-X64)   target="x86_64-unknown-linux-gnu" ;;
-            Linux-ARM64) target="aarch64-unknown-linux-gnu" ;;
-            macOS-ARM64) target="aarch64-apple-darwin" ;;
-            macOS-X64)   target="x86_64-apple-darwin" ;;
+            Linux-X64)     asset="aube-${tag}-x86_64-unknown-linux-gnu.tar.gz" ;;
+            Linux-ARM64)   asset="aube-${tag}-aarch64-unknown-linux-gnu.tar.gz" ;;
+            macOS-ARM64)   asset="aube-${tag}-aarch64-apple-darwin.tar.gz" ;;
+            macOS-X64)     asset="aube-${tag}-x86_64-apple-darwin.tar.gz" ;;
+            Windows-X64)   asset="aube-${tag}-x86_64-pc-windows-msvc.zip" ;;
+            Windows-ARM64) asset="aube-${tag}-aarch64-pc-windows-msvc.zip" ;;
             *) echo "Unsupported runner: ${{ runner.os }}-${{ runner.arch }}"; exit 1 ;;
           esac
-          url="https://github.com/jdx/aube/releases/download/${AUBE_VERSION}/aube-${AUBE_VERSION}-${target}.tar.gz"
-          mkdir -p "$HOME/.aube/bin"
-          curl -fsSL "$url" | tar -xz -C "$HOME/.aube/bin"
-          echo "$HOME/.aube/bin" >> "$GITHUB_PATH"
+          dir="$HOME/.aube/bin"
+          mkdir -p "$dir"
+          # `tar -xf` auto-detects gzip (unix tarballs) and zip (Windows, via bsdtar).
+          gh release download "$tag" --repo jdx/aube --pattern "$asset" --output "$HOME/aube-archive" --clobber
+          tar -xf "$HOME/aube-archive" -C "$dir"
+          rm -f "$HOME/aube-archive"
+          if [ "${{ runner.os }}" = "Windows" ]; then dir="$(cygpath -w "$dir")"; fi
+          echo "$dir" >> "$GITHUB_PATH"
       - run: aube --version
-        if: ${{ matrix.os != 'windows-latest' }}
       - uses: actions/setup-node@v6
         with:
           node-version: 22

@@ -82,8 +82,8 @@ export const fixtures = (
     workspace: fixture.name.includes("workspace"),
   }))
   .filter((fixture) => {
-    // Bun and aube are not installed on Windows runners
-    if (isWindows && (fixture.packageManager === "bun" || fixture.packageManager === "aube")) {
+    // Bun is not yet supported on Windows
+    if (isWindows && fixture.packageManager === "bun") {
       return false;
     }
     return true;
