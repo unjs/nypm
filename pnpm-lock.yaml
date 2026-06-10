@@ -36,6 +36,9 @@ importers:
       eslint-config-unjs:
         specifier: ^0.6.2
         version: 0.6.2(eslint@9.39.2(jiti@2.7.0))(typescript@6.0.3)
+      expect-type:
+        specifier: ^1.3.0
+        version: 1.3.0
       obuild:
         specifier: ^0.4.36
         version: 0.4.36(@typescript/native-preview@7.0.0-dev.20260609.1)(chokidar@5.0.0)(dotenv@17.4.2)(giget@3.2.0)(jiti@2.7.0)(magicast@0.5.3)(typescript@6.0.3)

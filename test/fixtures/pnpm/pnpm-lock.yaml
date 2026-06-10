@@ -12,8 +12,6 @@ importers:
         specifier: 3.2.2
         version: 3.2.2
 
-  packages/workspace-a: {}
-
 packages:
 
   /consola@3.2.2:
