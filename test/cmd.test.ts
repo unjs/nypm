@@ -89,6 +89,26 @@ const fixtures = [
     },
   },
   {
+    name: "aube",
+    packageManager: "aube",
+    opts: {},
+    commands: {
+      install: "aube install",
+      installShort: "aube install", // aube has no `i` alias
+      installFrozen: "aube install --frozen-lockfile",
+      add: "aube add name",
+      addShort: "aube add name",
+      addDev: "aube add --save-dev name",
+      addGlobal: "aube add -g name",
+      addWorkspace: "aube add name", // TODO: workspace not supported
+      runScript: "aube run test --arg",
+      dlx: "aube dlx test --arg",
+      dlxShort: "aubx test --arg",
+      dlxWithPkg: "aube dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "aubx --package=dep1 --package=dep2 test --arg",
+    },
+  },
+  {
     name: "yarn classic",
     packageManager: "yarn",
     opts: {},

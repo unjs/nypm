@@ -1,6 +1,6 @@
 import { expect, it, describe } from "vitest";
 import { detectPackageManager } from "../src/index.ts";
-import { fixtures } from "./_shared.ts";
+import { fixtures, resolveFixtureDirectory } from "./_shared.ts";
 
 describe("detectPackageManager", () => {
   for (const fixture of fixtures) {
@@ -32,4 +32,20 @@ describe("detectPackageManager", () => {
       );
     });
   }
+
+  // aube is not executed in CI, so it is kept out of the shared fixtures
+  // (which run real package manager binaries) and tested standalone here.
+  describe("aube", () => {
+    const dir = resolveFixtureDirectory("aube");
+
+    it("should detect with package.json", async () => {
+      const detected = await detectPackageManager(dir, { ignoreLockFile: true });
+      expect(detected?.name).toBe("aube");
+    });
+
+    it("should detect with lock file", async () => {
+      const detected = await detectPackageManager(dir, { ignorePackageJSON: true });
+      expect(detected?.name).toBe("aube");
+    });
+  });
 });

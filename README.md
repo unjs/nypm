@@ -10,7 +10,7 @@
 
 🌈 Unified Package Manager for Node.js (npm, pnpm, yarn), Bun and Deno.
 
-✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/package-manager) and [deno](https://deno.com/) out of the box with a unified API.
+✅ Supports [npm](https://docs.npmjs.com/cli/v10/commands/npm), [yarn](https://yarnpkg.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/package-manager), [deno](https://deno.com/) and [aube](https://github.com/jdx/aube) out of the box with a unified API.
 
 ✅ Provides an **API interface** to interact with package managers.
 

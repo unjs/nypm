@@ -61,6 +61,11 @@ export const packageManagers: PackageManager[] = [
     lockFile: "deno.lock",
     files: ["deno.json"],
   },
+  {
+    name: "aube",
+    command: "aube",
+    lockFile: "aube-lock.yaml",
+  },
 ] as const;
 
 /**
