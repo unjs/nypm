@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fixtures } from "./_shared.ts";
+import { fixtures, isPackageManagerAvailable } from "./_shared.ts";
 import { dedupeDependencies } from "../src/index.ts";
 
 const { rmSync } = vi.hoisted(() => {
@@ -13,7 +13,7 @@ vi.mock("fs", () => ({
 
 describe("dedupe", () => {
   for (const fixture of fixtures.filter((f) => !f.workspace)) {
-    describe(fixture.name, () => {
+    describe.skipIf(!isPackageManagerAvailable(fixture.packageManager))(fixture.name, () => {
       it("dedupe dependencies", async () => {
         const dedupeDependenciesSpy = vi.fn(dedupeDependencies);
         const executeDedupeDependenciesSpy = async () =>

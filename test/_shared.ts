@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { isWindows } from "std-env";
 import type { PackageManagerName } from "../src/index.ts";
@@ -95,4 +96,29 @@ export const fixtures = (
 
 export function resolveFixtureDirectory(name: string) {
   return fileURLToPath(new URL(`fixtures/${name}`, import.meta.url));
+}
+
+const availabilityCache = new Map<PackageManagerName, boolean>();
+
+/**
+ * Whether a package manager's CLI is installed and runnable.
+ *
+ * Used to skip fixtures that drive the real CLI (install/add/dlx/...) when the
+ * binary is missing locally. `aube` is not provided by corepack and is only
+ * installed in CI, so its tests are ignored on machines without it.
+ */
+export function isPackageManagerAvailable(
+  packageManager: PackageManagerName,
+): boolean {
+  if (!availabilityCache.has(packageManager)) {
+    const result = spawnSync(packageManager, ["--version"], {
+      stdio: "ignore",
+      shell: isWindows,
+    });
+    availabilityCache.set(
+      packageManager,
+      !result.error && result.status === 0,
+    );
+  }
+  return availabilityCache.get(packageManager)!;
 }

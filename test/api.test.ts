@@ -7,13 +7,13 @@ import {
   runScript,
   dlx,
 } from "../src/index.ts";
-import { fixtures } from "./_shared.ts";
+import { fixtures, isPackageManagerAvailable } from "./_shared.ts";
 import { join } from "pathe";
 import { existsSync, unlinkSync, rmSync, readFileSync } from "node:fs";
 
 describe("api", () => {
   for (const fixture of fixtures.filter((f) => !f.workspace)) {
-    describe(fixture.name, () => {
+    describe.skipIf(!isPackageManagerAvailable(fixture.packageManager))(fixture.name, () => {
       it("installs dependencies", async () => {
         const installDependenciesSpy = vi.fn(installDependencies);
         const executeInstallDependenciesSpy = () =>

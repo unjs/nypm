@@ -1,10 +1,10 @@
 import { expect, it, describe, vi } from "vitest";
 import { addDependency, removeDependency } from "../src/index.ts";
-import { fixtures } from "./_shared.ts";
+import { fixtures, isPackageManagerAvailable } from "./_shared.ts";
 
 describe("api (workspace)", () => {
   for (const fixture of fixtures.filter((f) => f.workspace)) {
-    describe(fixture.name, () => {
+    describe.skipIf(!isPackageManagerAvailable(fixture.packageManager))(fixture.name, () => {
       it("adds dependency to the workspace root", async () => {
         const addDependencySpy = vi.fn(addDependency);
         const executeAddDependencySpy = () =>
