@@ -1,6 +1,29 @@
 # Changelog
 
 
+## v0.6.7
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.6...v0.6.7)
+
+### 🚀 Enhancements
+
+- Add support for aube package manager ([#240](https://github.com/unjs/nypm/pull/240))
+
+### 🏡 Chore
+
+- Update deps + test ([a75c233](https://github.com/unjs/nypm/commit/a75c233))
+- Fix ci tests ([cf9c58e](https://github.com/unjs/nypm/commit/cf9c58e))
+
+### ✅ Tests
+
+- Skip unavailable pms ([cda9a73](https://github.com/unjs/nypm/commit/cda9a73))
+- Use 1 parallel worker for windows ([e4aa61c](https://github.com/unjs/nypm/commit/e4aa61c))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Pi0x <x@pi0.io>
+
 ## v0.6.6
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.4...v0.6.6)
