@@ -53,7 +53,7 @@ jobs:
           cache: "pnpm"
       - run: pnpm install
       - name: Fix lint issues
-        run: pnpm run lint:fix && pnpm vitest run --update
+        run: pnpm run fmt && pnpm vitest run --update
       - run: git checkout HEAD test/fixtures/bun test/fixtures/aube
       - uses: autofix-ci/action@7a166d7532b277f34e16238930461bf77f9d7ed8
         with:

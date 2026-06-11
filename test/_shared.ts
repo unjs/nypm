@@ -107,18 +107,13 @@ const availabilityCache = new Map<PackageManagerName, boolean>();
  * binary is missing locally. `aube` is not provided by corepack and is only
  * installed in CI, so its tests are ignored on machines without it.
  */
-export function isPackageManagerAvailable(
-  packageManager: PackageManagerName,
-): boolean {
+export function isPackageManagerAvailable(packageManager: PackageManagerName): boolean {
   if (!availabilityCache.has(packageManager)) {
     const result = spawnSync(packageManager, ["--version"], {
       stdio: "ignore",
       shell: isWindows,
     });
-    availabilityCache.set(
-      packageManager,
-      !result.error && result.status === 0,
-    );
+    availabilityCache.set(packageManager, !result.error && result.status === 0);
   }
   return availabilityCache.get(packageManager)!;
 }

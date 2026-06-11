@@ -21,7 +21,7 @@
     "build": "automd && obuild",
     "dev": "vitest dev",
     "lint": "oxlint . && oxfmt --check src test",
-    "lint:fix": "oxlint . --fix && oxfmt src test",
+    "fmt": "oxlint . --fix && oxfmt src test",
     "nypm": "node ./src/cli.ts",
     "release": "pnpm test && pnpm build && changelogen --release --push && pnpm publish",
     "test": "pnpm lint && pnpm test:types && vitest run --coverage",
