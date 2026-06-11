@@ -11,7 +11,8 @@ export function installDependenciesCommand(
     frozenLockFile?: boolean;
   } = {},
 ): string {
-  const installCmd = options.short ? "i" : "install";
+  // aube has no `i` alias for install
+  const installCmd = options.short && packageManager !== "aube" ? "i" : "install";
 
   const pmToFrozenLockfileInstallCommand: Record<PackageManagerName, string[]> = {
     npm: ["ci"],
@@ -19,6 +20,7 @@ export function installDependenciesCommand(
     bun: [installCmd, "--frozen-lockfile"],
     pnpm: [installCmd, "--frozen-lockfile"],
     deno: [installCmd, "--frozen"],
+    aube: [installCmd, "--frozen-lockfile"],
   };
 
   const commandArgs = options.frozenLockFile
@@ -65,7 +67,14 @@ export function addDependencyCommand(
       : [
           packageManager === "npm" ? (options.short ? "i" : "install") : "add",
           ...getWorkspaceArgs({ packageManager, ...options }),
-          options.dev ? (options.short ? "-D" : "--dev") : "",
+          options.dev
+            ? options.short
+              ? "-D"
+              : // aube uses `--save-dev` rather than `--dev`
+                packageManager === "aube"
+                ? "--save-dev"
+                : "--dev"
+            : "",
           options.global ? "-g" : "",
           ...names,
         ]
@@ -106,6 +115,7 @@ export function dlxCommand(
     pnpm: options.short ? "pnpx" : "pnpm dlx",
     bun: options.short ? "bunx" : "bun x",
     deno: "deno run -A",
+    aube: options.short ? "aubx" : "aube dlx",
   };
 
   const command = pmToDlxCommand[packageManager];

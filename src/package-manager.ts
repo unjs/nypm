@@ -39,6 +39,13 @@ export const packageManagers: PackageManager[] = [
     lockFile: "package-lock.json",
   },
   {
+    // aube reuses other lockfiles, so it must be matched before pnpm to avoid
+    // a false `pnpm-workspace.yaml` match when an `aube-lock.yaml` is present.
+    name: "aube",
+    command: "aube",
+    lockFile: "aube-lock.yaml",
+  },
+  {
     name: "pnpm",
     command: "pnpm",
     lockFile: "pnpm-lock.yaml",
