@@ -52,5 +52,9 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@11.5.3"
+  "packageManager": "pnpm@11.5.3",
+  "homepage": "https://github.com/unjs/nypm",
+  "bugs": {
+    "url": "https://github.com/unjs/nypm/issues"
+  }
 }
