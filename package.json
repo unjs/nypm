@@ -3,7 +3,11 @@
   "version": "0.6.7",
   "description": "Unified Package Manager for Node.js",
   "license": "MIT",
+  "homepage": "https://github.com/unjs/nypm",
   "repository": "unjs/nypm",
+  "bugs": {
+    "url": "https://github.com/unjs/nypm/issues"
+  },
   "bin": {
     "nypm": "./dist/cli.mjs"
   },
