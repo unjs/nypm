@@ -118,7 +118,7 @@ const fixtures = [
       installFrozen: "nub install --frozen-lockfile",
       add: "nub add name",
       addShort: "nub add name",
-      addDev: "nub add --dev name",
+      addDev: "nub add --save-dev name",
       addGlobal: "nub add -g name",
       addWorkspace: "nub add name", // TODO: workspace not supported
       runScript: "nub run test --arg",

@@ -71,8 +71,8 @@ export function addDependencyCommand(
           options.dev
             ? options.short
               ? "-D"
-              : // aube uses `--save-dev` rather than `--dev`
-                packageManager === "aube"
+              : // aube and nub use `--save-dev` rather than `--dev`
+                packageManager === "aube" || packageManager === "nub"
                 ? "--save-dev"
                 : "--dev"
             : "",
