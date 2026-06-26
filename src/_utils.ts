@@ -118,6 +118,7 @@ export async function executeCommand(
     command !== "bun" &&
     command !== "deno" &&
     command !== "aube" &&
+    command !== "nub" &&
     options.corepack !== false &&
     (await hasCorepack());
 

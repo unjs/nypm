@@ -21,6 +21,7 @@ export function installDependenciesCommand(
     pnpm: [installCmd, "--frozen-lockfile"],
     deno: [installCmd, "--frozen"],
     aube: [installCmd, "--frozen-lockfile"],
+    nub: [installCmd, "--frozen-lockfile"],
   };
 
   const commandArgs = options.frozenLockFile
@@ -116,6 +117,7 @@ export function dlxCommand(
     bun: options.short ? "bunx" : "bun x",
     deno: "deno run -A",
     aube: options.short ? "aubx" : "aube dlx",
+    nub: options.short ? "nubx" : "nub dlx",
   };
 
   const command = pmToDlxCommand[packageManager];

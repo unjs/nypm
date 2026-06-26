@@ -46,6 +46,13 @@ export const packageManagers: PackageManager[] = [
     lockFile: "aube-lock.yaml",
   },
   {
+    // nub is lockfile-compatible (it round-trips npm/pnpm/bun lockfiles) and
+    // has no lockfile of its own, so it is detected via the `packageManager`
+    // field or the `nub` command, never an implicit lockfile match.
+    name: "nub",
+    command: "nub",
+  },
+  {
     name: "pnpm",
     command: "pnpm",
     lockFile: "pnpm-lock.yaml",
