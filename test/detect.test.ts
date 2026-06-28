@@ -1,4 +1,7 @@
-import { expect, it, describe } from "vitest";
+import { afterAll, beforeAll, expect, it, describe } from "vitest";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { detectPackageManager } from "../src/index.ts";
 import { fixtures } from "./_shared.ts";
 
@@ -34,4 +37,91 @@ describe("detectPackageManager", () => {
       );
     });
   }
+});
+
+describe("detectPackageManager (devEngines.packageManager)", () => {
+  let root!: string;
+
+  beforeAll(() => {
+    root = mkdtempSync(join(tmpdir(), "nypm-devengines-"));
+  });
+
+  afterAll(() => {
+    rmSync(root, { recursive: true, force: true });
+  });
+
+  const detectFrom = async (packageJSON: unknown) => {
+    const dir = mkdtempSync(join(root, "case-"));
+    writeFileSync(join(dir, "package.json"), JSON.stringify(packageJSON));
+    return detectPackageManager(dir, {
+      ignoreLockFile: true,
+      includeParentDirs: false,
+    });
+  };
+
+  it("detects from a plain object entry", async () => {
+    const detected = await detectFrom({
+      name: "fixture",
+      devEngines: { packageManager: { name: "pnpm", version: "^9.0.0" } },
+    });
+    expect(detected?.name).toBe("pnpm");
+    expect(detected?.majorVersion).toBe("9");
+    expect(detected?.lockFile).toBe("pnpm-lock.yaml");
+    expect(detected?.files).toEqual(["pnpm-workspace.yaml"]);
+  });
+
+  it("detects yarn berry from the range major version", async () => {
+    const detected = await detectFrom({
+      name: "fixture",
+      devEngines: { packageManager: { name: "yarn", version: "^4.0.0" } },
+    });
+    expect(detected?.name).toBe("yarn");
+    expect(detected?.majorVersion).toBe("4");
+  });
+
+  it("leaves majorVersion undefined for a non-numeric range", async () => {
+    for (const version of ["latest", "*"]) {
+      const detected = await detectFrom({
+        name: "fixture",
+        devEngines: { packageManager: { name: "pnpm", version } },
+      });
+      expect(detected?.name).toBe("pnpm");
+      expect(detected?.version).toBe(version);
+      expect(detected?.majorVersion).toBeUndefined();
+      // still resolves the package manager's files/lockFile by name
+      expect(detected?.lockFile).toBe("pnpm-lock.yaml");
+    }
+  });
+
+  it("derives the major from the first numeric segment of a range", async () => {
+    // Known limitation: the major is taken from the first digit in the range,
+    // so an upper-bound range (`<2.0.0`, which means yarn classic 1.x) resolves
+    // to "2" rather than "1". Lower-bound ranges (`^`, `~`, `>=`) are correct.
+    const detected = await detectFrom({
+      name: "fixture",
+      devEngines: { packageManager: { name: "yarn", version: "<2.0.0" } },
+    });
+    expect(detected?.name).toBe("yarn");
+    expect(detected?.majorVersion).toBe("2");
+  });
+
+  it("uses the first entry when given an array", async () => {
+    const detected = await detectFrom({
+      name: "fixture",
+      devEngines: {
+        packageManager: [{ name: "bun", version: "^1.0.0" }, { name: "npm" }],
+      },
+    });
+    expect(detected?.name).toBe("bun");
+  });
+
+  it("prefers the `packageManager` field over `devEngines`", async () => {
+    const detected = await detectFrom({
+      name: "fixture",
+      packageManager: "npm@10.0.0",
+      devEngines: { packageManager: { name: "pnpm", version: "^9.0.0" } },
+    });
+    expect(detected?.name).toBe("npm");
+    expect(detected?.majorVersion).toBe("10");
+  });
 });
