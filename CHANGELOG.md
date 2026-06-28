@@ -1,6 +1,30 @@
 # Changelog
 
 
+## v0.6.8
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.7...v0.6.8)
+
+### 🚀 Enhancements
+
+- Add nub package manager ([#247](https://github.com/unjs/nypm/pull/247))
+- Support `devEngines.packageManager` detection ([#248](https://github.com/unjs/nypm/pull/248))
+
+### 🏡 Chore
+
+- Bump aub version ([ce22c19](https://github.com/unjs/nypm/commit/ce22c19))
+- Fix autofix ci ([2aa360e](https://github.com/unjs/nypm/commit/2aa360e))
+
+### 🤖 CI
+
+- Update autofix ([843a3c8](https://github.com/unjs/nypm/commit/843a3c8))
+
+### ❤️ Contributors
+
+- Pi0x <x@pi0.io>
+- Colin McDonnell ([@colinhacks](https://github.com/colinhacks))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v0.6.7
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.6...v0.6.7)
