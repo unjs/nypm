@@ -79,6 +79,32 @@ describe("detectPackageManager (devEngines.packageManager)", () => {
     expect(detected?.majorVersion).toBe("4");
   });
 
+  it("leaves majorVersion undefined for a non-numeric range", async () => {
+    for (const version of ["latest", "*"]) {
+      const detected = await detectFrom({
+        name: "fixture",
+        devEngines: { packageManager: { name: "pnpm", version } },
+      });
+      expect(detected?.name).toBe("pnpm");
+      expect(detected?.version).toBe(version);
+      expect(detected?.majorVersion).toBeUndefined();
+      // still resolves the package manager's files/lockFile by name
+      expect(detected?.lockFile).toBe("pnpm-lock.yaml");
+    }
+  });
+
+  it("derives the major from the first numeric segment of a range", async () => {
+    // Known limitation: the major is taken from the first digit in the range,
+    // so an upper-bound range (`<2.0.0`, which means yarn classic 1.x) resolves
+    // to "2" rather than "1". Lower-bound ranges (`^`, `~`, `>=`) are correct.
+    const detected = await detectFrom({
+      name: "fixture",
+      devEngines: { packageManager: { name: "yarn", version: "<2.0.0" } },
+    });
+    expect(detected?.name).toBe("yarn");
+    expect(detected?.majorVersion).toBe("2");
+  });
+
   it("uses the first entry when given an array", async () => {
     const detected = await detectFrom({
       name: "fixture",
