@@ -109,6 +109,26 @@ const fixtures = [
     },
   },
   {
+    name: "nub",
+    packageManager: "nub",
+    opts: {},
+    commands: {
+      install: "nub install",
+      installShort: "nub i",
+      installFrozen: "nub install --frozen-lockfile",
+      add: "nub add name",
+      addShort: "nub add name",
+      addDev: "nub add --save-dev name",
+      addGlobal: "nub add -g name",
+      addWorkspace: "nub add name", // TODO: workspace not supported
+      runScript: "nub run test --arg",
+      dlx: "nub dlx test --arg",
+      dlxShort: "nubx test --arg",
+      dlxWithPkg: "nub dlx --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "nubx --package=dep1 --package=dep2 test --arg",
+    },
+  },
+  {
     name: "yarn classic",
     packageManager: "yarn",
     opts: {},

@@ -38,6 +38,7 @@ export async function installDependencies(
     pnpm: ["install", "--frozen-lockfile"],
     deno: ["install", "--frozen"],
     aube: ["install", "--frozen-lockfile"],
+    nub: ["install", "--frozen-lockfile"],
   };
 
   const commandArgs = options.frozenLockFile

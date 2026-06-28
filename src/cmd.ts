@@ -21,6 +21,7 @@ export function installDependenciesCommand(
     pnpm: [installCmd, "--frozen-lockfile"],
     deno: [installCmd, "--frozen"],
     aube: [installCmd, "--frozen-lockfile"],
+    nub: [installCmd, "--frozen-lockfile"],
   };
 
   const commandArgs = options.frozenLockFile
@@ -70,8 +71,8 @@ export function addDependencyCommand(
           options.dev
             ? options.short
               ? "-D"
-              : // aube uses `--save-dev` rather than `--dev`
-                packageManager === "aube"
+              : // aube and nub use `--save-dev` rather than `--dev`
+                packageManager === "aube" || packageManager === "nub"
                 ? "--save-dev"
                 : "--dev"
             : "",
@@ -116,6 +117,7 @@ export function dlxCommand(
     bun: options.short ? "bunx" : "bun x",
     deno: "deno run -A",
     aube: options.short ? "aubx" : "aube dlx",
+    nub: options.short ? "nubx" : "nub dlx",
   };
 
   const command = pmToDlxCommand[packageManager];
