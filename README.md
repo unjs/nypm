@@ -70,7 +70,8 @@ Adds dev dependency to the project.
 Detect the package manager used in a directory (and up) by checking various sources:
 
 1. Use `packageManager` field from package.json
-2. Known lock files and other files
+2. Use [`devEngines.packageManager`](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#devengines) field from package.json
+3. Known lock files and other files
 
 ### `ensureDependencyInstalled(name, options)`
 

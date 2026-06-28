@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "pathe";
-import { findup, parsePackageManagerField } from "./_utils.ts";
+import { findup, parseDevEnginesPackageManager, parsePackageManagerField } from "./_utils.ts";
 import type { PackageManager } from "./types.ts";
 
 export type DetectPackageManagerOptions = {
@@ -82,7 +82,9 @@ export const packageManagers: PackageManager[] = [
  *
  * 1. Use `packageManager` field from package.json
  *
- * 2. Known lock files and other files
+ * 2. Use `devEngines.packageManager` field from package.json
+ *
+ * 3. Known lock files and other files
  */
 export async function detectPackageManager(
   cwd: string,
@@ -120,6 +122,27 @@ export async function detectPackageManager(
                 lockFile: packageManager?.lockFile,
               };
             }
+          }
+
+          // 1b. Fall back to the `devEngines.packageManager` field
+          const devEngines = parseDevEnginesPackageManager(packageJSON?.devEngines);
+          if (devEngines.name) {
+            const { name, version, warnings } = devEngines;
+            // `version` is a semver range (e.g. `^9.0.0`), so derive the major
+            // from its first numeric segment instead of splitting on `.`.
+            const majorVersion = version?.match(/\d+/)?.[0];
+            const packageManager =
+              packageManagers.find((pm) => pm.name === name && pm.majorVersion === majorVersion) ||
+              packageManagers.find((pm) => pm.name === name);
+            return {
+              name,
+              command: name,
+              version,
+              majorVersion,
+              warnings,
+              files: packageManager?.files,
+              lockFile: packageManager?.lockFile,
+            };
           }
         }
 

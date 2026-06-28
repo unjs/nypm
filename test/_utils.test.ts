@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
+  parseDevEnginesPackageManager,
   parsePackageManagerField,
   readInstalledPackageJSON,
   readPackageJSONFromResolver,
@@ -152,6 +153,57 @@ describe("internal utils", () => {
             `Abnormal characters found in \`packageManager\` field, sanitizing from \`${input}\` to \`${name}\``,
           ]);
         }
+      });
+    }
+  });
+
+  describe("parseDevEnginesPackageManager", () => {
+    it("parses an object entry", () => {
+      const p = parseDevEnginesPackageManager({
+        packageManager: { name: "pnpm", version: "^9.0.0" },
+      });
+      expect(p.name).toBe("pnpm");
+      expect(p.version).toBe("^9.0.0");
+      expect(p.warnings).toBeUndefined();
+    });
+
+    it("uses the first entry when given an array", () => {
+      const p = parseDevEnginesPackageManager({
+        packageManager: [
+          { name: "yarn", version: "^4.0.0" },
+          { name: "npm", version: "^10.0.0" },
+        ],
+      });
+      expect(p.name).toBe("yarn");
+      expect(p.version).toBe("^4.0.0");
+    });
+
+    it("parses an entry without a version", () => {
+      const p = parseDevEnginesPackageManager({ packageManager: { name: "bun" } });
+      expect(p.name).toBe("bun");
+      expect(p.version).toBeUndefined();
+    });
+
+    it("sanitizes abnormal names", () => {
+      const p = parseDevEnginesPackageManager({
+        packageManager: { name: "^pnpm", version: "^9.0.0" },
+      });
+      expect(p.name).toBe("pnpm");
+      expect(p.warnings).toMatchObject([
+        "Abnormal characters found in `devEngines.packageManager` field, sanitizing from `^pnpm` to `pnpm`",
+      ]);
+    });
+
+    for (const devEngines of [
+      undefined,
+      {},
+      { packageManager: undefined },
+      { packageManager: {} },
+      { packageManager: [] },
+      { packageManager: { version: "^9.0.0" } },
+    ]) {
+      it(`returns empty for ${JSON.stringify(devEngines)}`, () => {
+        expect(parseDevEnginesPackageManager(devEngines)).toEqual({});
       });
     }
   });

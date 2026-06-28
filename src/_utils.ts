@@ -273,6 +273,8 @@ export function doesDependencyExist(
   }
 }
 
+const VALID_PM_NAME_RE = /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/;
+
 export function parsePackageManagerField(packageManager?: string): {
   name?: PackageManagerName;
   version?: string;
@@ -282,7 +284,7 @@ export function parsePackageManagerField(packageManager?: string): {
   const [name, _version] = (packageManager || "").split("@");
   const [version, buildMeta] = _version?.split("+") || [];
 
-  if (name && name !== "-" && /^(@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(name)) {
+  if (name && name !== "-" && VALID_PM_NAME_RE.test(name)) {
     return { name: name as PackageManagerName, version, buildMeta };
   }
 
@@ -296,4 +298,44 @@ export function parsePackageManagerField(packageManager?: string): {
     buildMeta,
     warnings,
   };
+}
+
+/**
+ * Parse the `devEngines.packageManager` field.
+ *
+ * https://docs.npmjs.com/cli/v11/configuring-npm/package-json#devengines
+ *
+ * Unlike `packageManager`, the value is an object (or an array of objects, in
+ * which case the first entry is used) and its `version` is a semver range
+ * rather than a pinned version.
+ */
+export function parseDevEnginesPackageManager(devEngines?: unknown): {
+  name?: PackageManagerName;
+  version?: string;
+  warnings?: string[];
+} {
+  const field = (devEngines as { packageManager?: unknown } | undefined)?.packageManager;
+  const entry = (Array.isArray(field) ? field[0] : field) as
+    | { name?: unknown; version?: unknown }
+    | undefined;
+
+  const name = typeof entry?.name === "string" ? entry.name : undefined;
+  const version = typeof entry?.version === "string" ? entry.version : undefined;
+
+  if (!name) {
+    return {};
+  }
+
+  if (!VALID_PM_NAME_RE.test(name)) {
+    const sanitized = name.replace(/\W+/g, "");
+    return {
+      name: sanitized as PackageManagerName,
+      version,
+      warnings: [
+        `Abnormal characters found in \`devEngines.packageManager\` field, sanitizing from \`${name}\` to \`${sanitized}\``,
+      ],
+    };
+  }
+
+  return { name: name as PackageManagerName, version };
 }
