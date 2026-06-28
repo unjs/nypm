@@ -14,47 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: npm i -fg corepack &&  corepack enable
-      - uses: oven-sh/setup-bun@v2
-      - uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-      - name: Install aube
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          tag=$(gh release view --repo jdx/aube --json tagName --jq .tagName)
-          case "${{ runner.os }}-${{ runner.arch }}" in
-            Linux-X64)     asset="aube-${tag}-x86_64-unknown-linux-gnu.tar.gz" ;;
-            Linux-ARM64)   asset="aube-${tag}-aarch64-unknown-linux-gnu.tar.gz" ;;
-            macOS-ARM64)   asset="aube-${tag}-aarch64-apple-darwin.tar.gz" ;;
-            macOS-X64)     asset="aube-${tag}-x86_64-apple-darwin.tar.gz" ;;
-            Windows-X64)   asset="aube-${tag}-x86_64-pc-windows-msvc.zip" ;;
-            Windows-ARM64) asset="aube-${tag}-aarch64-pc-windows-msvc.zip" ;;
-            *) echo "Unsupported runner: ${{ runner.os }}-${{ runner.arch }}"; exit 1 ;;
-          esac
-          dir="$HOME/.aube/bin"
-          archive="$HOME/$asset"
-          mkdir -p "$dir"
-          gh release download "$tag" --repo jdx/aube --pattern "$asset" --output "$archive" --clobber
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            # Git Bash ships GNU tar, which can't read zip; use PowerShell instead.
-            powershell -NoProfile -Command "Expand-Archive -Force -Path '$(cygpath -w "$archive")' -DestinationPath '$(cygpath -w "$dir")'"
-            dir="$(cygpath -w "$dir")"
-          else
-            tar -xf "$archive" -C "$dir"
-          fi
-          rm -f "$archive"
-          echo "$dir" >> "$GITHUB_PATH"
       - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: "pnpm"
       - run: pnpm install
-      - name: Fix lint issues
-        run: pnpm run fmt && pnpm vitest run --update
-      - run: git checkout HEAD test/fixtures/bun test/fixtures/aube
+      - name: pnpm run fmt
       - uses: autofix-ci/action@7a166d7532b277f34e16238930461bf77f9d7ed8
         with:
           commit-message: "chore: apply automated updates"
