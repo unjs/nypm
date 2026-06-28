@@ -8,5 +8,5 @@
   "dependencies": {
     "consola": "^3.4.2"
   },
-  "packageManager": "aube@0.1.0"
+  "packageManager": "aube@1.25.1"
 }
