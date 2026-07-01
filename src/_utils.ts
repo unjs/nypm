@@ -130,7 +130,11 @@ export async function executeCommand(
     nodeOptions: {
       cwd: resolve(options.cwd || process.cwd()),
       env: options.env,
-      stdio: options.silent ? "pipe" : ["ignore", "inherit", "inherit"],
+      stdio: options.silent
+        ? "pipe"
+        : process.stdin.isTTY
+          ? "inherit"
+          : ["ignore", "inherit", "inherit"],
     },
   });
 
