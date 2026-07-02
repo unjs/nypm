@@ -5,6 +5,7 @@ const x = vi.fn();
 vi.mock("tinyexec", () => ({ x }));
 
 const { executeCommand } = await import("../src/_utils.ts");
+const originalStdinIsTTY = Object.getOwnPropertyDescriptor(process.stdin, "isTTY");
 
 function mockStdinTTY(isTTY: boolean) {
   Object.defineProperty(process.stdin, "isTTY", {
@@ -17,6 +18,11 @@ describe("executeCommand", () => {
   afterEach(() => {
     x.mockReset();
     vi.restoreAllMocks();
+    if (originalStdinIsTTY) {
+      Object.defineProperty(process.stdin, "isTTY", originalStdinIsTTY);
+    } else {
+      delete (process.stdin as { isTTY?: boolean }).isTTY;
+    }
   });
 
   it("does not connect package manager commands to stdin without a parent TTY", async () => {
