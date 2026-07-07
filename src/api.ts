@@ -282,6 +282,24 @@ export async function ensureDependencyInstalled(
 }
 
 /**
+ * Checks whether a dependency can be resolved from the project.
+ *
+ * @param name - Name of the dependency.
+ * @param options - Options to pass to the API call.
+ * @param options.cwd - The directory to check from.
+ * @param options.packageManager - The package manager info to use (auto-detected).
+ * @param options.workspace - The name of the workspace to check in.
+ */
+export async function isInstalled(
+  name: string,
+  options: Pick<OperationOptions, "cwd" | "packageManager" | "workspace"> = {},
+): Promise<boolean> {
+  const resolvedOptions = await resolveOperationOptions(options);
+
+  return doesDependencyExist(name, resolvedOptions);
+}
+
+/**
  * Dedupe dependencies in the project.
  *
  * @param options - Options to pass to the API call.

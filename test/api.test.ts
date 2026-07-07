@@ -4,6 +4,7 @@ import {
   addDependency,
   removeDependency,
   ensureDependencyInstalled,
+  isInstalled,
   runScript,
   dlx,
 } from "../src/index.ts";
@@ -77,6 +78,11 @@ describe("api", () => {
 
         await executeEnsureDependencyInstalledSpy();
         expect(ensureDependencyInstalledSpy).toHaveReturned();
+      });
+
+      it("checks if dependency is installed", async () => {
+        expect(await isInstalled("pathe", { cwd: fixture.dir })).toBe(true);
+        expect(await isInstalled("nypm-missing-test-package", { cwd: fixture.dir })).toBe(false);
       });
 
       it("removes dependency", async () => {
