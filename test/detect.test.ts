@@ -21,9 +21,7 @@ describe("detectPackageManager", () => {
         }
       });
 
-      // nub is lockfile-compatible and has no lockfile of its own, so it is
-      // only detectable via the `packageManager` field, not an implicit file.
-      it.skipIf(fixture.name.includes("berry") /* TODO */ || fixture.packageManager === "nub")(
+      it.skipIf(fixture.name.includes("berry") /* TODO */)(
         "should detect with lock file",
         async () => {
           const detected = await detectPackageManager(fixture.dir, {
