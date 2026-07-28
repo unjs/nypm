@@ -1,6 +1,40 @@
 # Changelog
 
 
+## v0.6.9
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.7...v0.6.9)
+
+### 🚀 Enhancements
+
+- Add nub package manager ([#247](https://github.com/unjs/nypm/pull/247))
+- Support `devEngines.packageManager` detection ([#248](https://github.com/unjs/nypm/pull/248))
+
+### 🩹 Fixes
+
+- Detect `nub.lock` ([#253](https://github.com/unjs/nypm/pull/253))
+- Use `--save-dev` for npm and pnpm in addDependencyCommand ([#256](https://github.com/unjs/nypm/pull/256))
+- Ignore stdin for package manager commands ([#249](https://github.com/unjs/nypm/pull/249))
+
+### 🏡 Chore
+
+- Bump aub version ([ce22c19](https://github.com/unjs/nypm/commit/ce22c19))
+- Fix autofix ci ([2aa360e](https://github.com/unjs/nypm/commit/2aa360e))
+- **release:** V0.6.8 ([2d5e85b](https://github.com/unjs/nypm/commit/2d5e85b))
+- Update deps ([f758b63](https://github.com/unjs/nypm/commit/f758b63))
+
+### 🤖 CI
+
+- Update autofix ([843a3c8](https://github.com/unjs/nypm/commit/843a3c8))
+
+### ❤️ Contributors
+
+- Mochammad Fadhlan Al-Ghiffari ([@MFA-G](https://github.com/MFA-G))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Damian Głowala ([@DamianGlowala](https://github.com/DamianGlowala))
+- Colin McDonnell ([@colinhacks](https://github.com/colinhacks))
+- Pi0x <x@pi0.io>
+
 ## v0.6.8
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.7...v0.6.8)
