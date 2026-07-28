@@ -1,3 +1,4 @@
+import type { StdioOptions } from "node:child_process";
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { x } from "tinyexec";
@@ -126,15 +127,20 @@ export async function executeCommand(
     ? ["corepack", [command, ...args]]
     : [command, args];
 
+  // Only hand our stdin to the package manager when it is an interactive terminal.
+  // Otherwise the child gets `/dev/null` (immediate EOF) so that prompts nobody can
+  // answer (e.g. pnpm's `Proceed? (Y/n)`) fall back to their defaults instead of
+  // hanging forever. (#118)
+  const stdin = process.stdin.isTTY ? "inherit" : "ignore";
+  const stdio: StdioOptions = options.silent
+    ? [stdin, "pipe", "pipe"]
+    : [stdin, "inherit", "inherit"];
+
   const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
     nodeOptions: {
       cwd: resolve(options.cwd || process.cwd()),
       env: options.env,
-      stdio: options.silent
-        ? "pipe"
-        : process.stdin.isTTY
-          ? "inherit"
-          : ["ignore", "inherit", "inherit"],
+      stdio,
     },
   });
 
