@@ -201,8 +201,12 @@ export function getWorkspaceArgs(
       ? options.workspace
       : undefined;
 
-  // pnpm
-  if (options.packageManager.name === "pnpm") {
+  // pnpm (aube and nub expose pnpm's `--filter` / `--workspace-root` selectors)
+  if (
+    options.packageManager.name === "pnpm" ||
+    options.packageManager.name === "aube" ||
+    options.packageManager.name === "nub"
+  ) {
     return workspacePkg ? ["--filter", workspacePkg] : ["--workspace-root"];
   }
 
@@ -238,8 +242,12 @@ export function getWorkspaceArgs2(options: {
       ? options.workspace
       : undefined;
 
-  // pnpm
-  if (options.packageManager === "pnpm") {
+  // pnpm (aube and nub expose pnpm's `--filter` / `--workspace-root` selectors)
+  if (
+    options.packageManager === "pnpm" ||
+    options.packageManager === "aube" ||
+    options.packageManager === "nub"
+  ) {
     return workspacePkg ? ["--filter", workspacePkg] : ["--workspace-root"];
   }
 
