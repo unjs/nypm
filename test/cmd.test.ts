@@ -100,7 +100,7 @@ const fixtures = [
       addShort: "aube add name",
       addDev: "aube add --save-dev name",
       addGlobal: "aube add -g name",
-      addWorkspace: "aube add name", // TODO: workspace not supported
+      addWorkspace: "aube add --filter workspace name",
       runScript: "aube run test --arg",
       dlx: "aube dlx test --arg",
       dlxShort: "aubx test --arg",
@@ -120,7 +120,7 @@ const fixtures = [
       addShort: "nub add name",
       addDev: "nub add --save-dev name",
       addGlobal: "nub add -g name",
-      addWorkspace: "nub add name", // TODO: workspace not supported
+      addWorkspace: "nub add --filter workspace name",
       runScript: "nub run test --arg",
       dlx: "nub dlx test --arg",
       dlxShort: "nubx test --arg",
@@ -230,6 +230,14 @@ describe("commands", () => {
         ).toBe(fixture.commands.addWorkspace);
       });
     }
+  });
+
+  describe("addDependencyCommand (workspace root)", () => {
+    it.each(["pnpm", "aube", "nub"] as const)("%s", (packageManager) => {
+      expect(addDependencyCommand(packageManager, "name", { workspace: true })).toBe(
+        `${packageManager} add --workspace-root name`,
+      );
+    });
   });
 
   describe("runScriptCommand", () => {
