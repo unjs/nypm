@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^5.0.0",
     "@volar/language-service": "^2.4.28",
     "@volar/typescript": "^2.4.28",
     "automd": "^0.4.3",
@@ -48,7 +48,7 @@
     "std-env": "^4.2.0",
     "typescript": "^6.0.3",
     "ufo": "^1.6.4",
-    "vitest": "^4.1.10"
+    "vitest": "^5.0.0"
   },
   "engines": {
     "node": ">=18"
