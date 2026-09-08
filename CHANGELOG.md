@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.6.10
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.9...v0.6.10)
+
+### 🩹 Fixes
+
+- Select the workspace root for aube and nub ([#260](https://github.com/unjs/nypm/pull/260))
+
+### ❤️ Contributors
+
+- Hayden Bleasel <hello@haydenbleasel.com>
+
 ## v0.6.9
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.7...v0.6.9)
