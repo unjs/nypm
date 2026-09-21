@@ -163,13 +163,15 @@ export async function resolveOperationOptions(options: OperationOptions = {}): P
       packageManager: PackageManager;
     }
 > {
-  const cwd = options.cwd || process.cwd();
+  // Resolve `cwd` up-front: consumers feed it to `createRequire` and `join`,
+  // both of which require an absolute path.
+  const cwd = resolve(options.cwd || process.cwd());
   const env = { ...process.env, ...options.env } as Record<string, string>;
 
   const packageManager =
     (typeof options.packageManager === "string"
       ? packageManagers.find((pm) => pm.name === options.packageManager)
-      : options.packageManager) || (await detectPackageManager(options.cwd || process.cwd()));
+      : options.packageManager) || (await detectPackageManager(cwd));
 
   if (!packageManager) {
     throw new Error(NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG);
@@ -280,12 +282,15 @@ export function doesDependencyExist(
   name: string,
   options: Pick<Awaited<ReturnType<typeof resolveOperationOptions>>, "cwd" | "workspace">,
 ) {
-  const require = createRequire(options.cwd.endsWith("/") ? options.cwd : options.cwd + "/");
+  const cwd = resolve(options.cwd);
+  const require = createRequire(cwd.endsWith("/") ? cwd : cwd + "/");
 
   try {
-    const resolvedPath = require.resolve(name);
+    // `require.resolve` returns a platform-native path, so normalize it before
+    // comparing against the (posix-style) `cwd`.
+    const resolvedPath = normalize(require.resolve(name));
 
-    return resolvedPath.startsWith(options.cwd);
+    return resolvedPath.startsWith(cwd.endsWith("/") ? cwd : cwd + "/");
   } catch {
     return false;
   }

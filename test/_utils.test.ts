@@ -1,9 +1,12 @@
 import { afterAll, beforeAll, expect, it, describe } from "vitest";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+// `resolve` from pathe (as used in src/_utils.ts) so the expectations match on Windows too.
+import { isAbsolute, resolve } from "pathe";
 import {
+  doesDependencyExist,
   parseDevEnginesPackageManager,
   parsePackageManagerField,
   readInstalledPackageJSON,
@@ -15,7 +18,7 @@ describe("internal utils", () => {
   let root!: string;
 
   beforeAll(() => {
-    root = mkdtempSync(join(tmpdir(), "nypm-test-"));
+    root = realpathSync(mkdtempSync(join(tmpdir(), "nypm-test-")));
     mkdirSync(join(root, "project", "src"), { recursive: true });
 
     // scoped pure-ESM package whose `exports` only defines an `import`
@@ -46,6 +49,7 @@ describe("internal utils", () => {
       join(plainPkgDir, "package.json"),
       JSON.stringify({ name: "plain-pkg", version: "2.0.0", main: "./index.js" }),
     );
+    writeFileSync(join(plainPkgDir, "index.js"), "module.exports = {};");
 
     // package with a nested `cjs/package.json` type stub (as emitted by
     // tshy and similar dual-build tools). `require.resolve` lands on the
@@ -127,6 +131,45 @@ describe("internal utils", () => {
     it("resolved package manager by name", async () => {
       const r = await resolveOperationOptions({ packageManager: "yarn" });
       expect(r.packageManager.name).toBe("yarn");
+    });
+
+    it("resolves a relative cwd to an absolute path", async () => {
+      const previousCwd = process.cwd();
+      process.chdir(root);
+      try {
+        const r = await resolveOperationOptions({ cwd: "./project", packageManager: "npm" });
+        expect(isAbsolute(r.cwd)).toBe(true);
+        expect(r.cwd).toBe(resolve(root, "project"));
+      } finally {
+        process.chdir(previousCwd);
+      }
+    });
+  });
+
+  describe("doesDependencyExist", () => {
+    it("finds a dependency installed under an absolute cwd", () => {
+      expect(doesDependencyExist("stubbed-pkg", { cwd: join(root, "project") })).toBe(true);
+    });
+
+    it("finds a dependency when cwd is relative", () => {
+      const previousCwd = process.cwd();
+      process.chdir(root);
+      try {
+        expect(doesDependencyExist("stubbed-pkg", { cwd: "./project" })).toBe(true);
+      } finally {
+        process.chdir(previousCwd);
+      }
+    });
+
+    it("returns false for a dependency that is not installed", () => {
+      expect(
+        doesDependencyExist("definitely-not-installed-xyz", { cwd: join(root, "project") }),
+      ).toBe(false);
+    });
+
+    it("returns false for a dependency hoisted above cwd", () => {
+      // `plain-pkg` lives in `<root>/node_modules`, outside `<root>/project`.
+      expect(doesDependencyExist("plain-pkg", { cwd: join(root, "project") })).toBe(false);
     });
   });
 
