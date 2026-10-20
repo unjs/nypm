@@ -20,6 +20,12 @@ export type OperationOptions = {
   workspace?: boolean | string;
   global?: boolean;
   corepack?: boolean;
+  /**
+   * Run the package manager through [jup](https://jup.unjs.io) (takes precedence over `corepack`).
+   *
+   * Uses the `jup` package when installed (optional peer dependency), otherwise the global `jup` command.
+   */
+  jup?: boolean;
   /** Do not execute actual command */
   dry?: boolean;
 };

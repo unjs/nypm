@@ -30,6 +30,10 @@ const operationArgs = {
     default: true,
     description: "Use corepack",
   },
+  jup: {
+    type: "boolean",
+    description: "Use jup (https://jup.unjs.io) to run the package manager",
+  },
   dry: {
     type: "boolean",
     description: "Run in dry run mode (does not execute commands)",

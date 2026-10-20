@@ -18,6 +18,8 @@
 
 ✅ **[corepack](https://github.com/nodejs/corepack)** integration for **pnpm** and **yarn**.
 
+✅ Optional **[jup](https://jup.unjs.io)** integration to run the project's pinned package manager version (`jup: true` option or `--jup` flag).
+
 ## `nypm` command
 
 **Install dependencies:**
@@ -56,6 +58,16 @@ import { addDependency } from "nypm";
 // or dynamic import
 const { addDependency } = await import("nypm");
 ```
+
+### Using jup
+
+[jup](https://jup.unjs.io) is a package manager version manager (a modern alternative to corepack). Set the `jup: true` option (or pass `--jup` to the CLI) to run every package manager command through jup. It takes precedence over `corepack`.
+
+```js
+await installDependencies({ jup: true });
+```
+
+nypm uses the `jup` package when it is installed (optional peer dependency) and otherwise falls back to the global `jup` command.
 
 ### `addDependency(name, options)`
 

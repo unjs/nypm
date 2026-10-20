@@ -39,6 +39,9 @@ importers:
       expect-type:
         specifier: ^1.4.0
         version: 1.4.0
+      jup:
+        specifier: ^0.6.4
+        version: 0.6.4
       obuild:
         specifier: ^0.4.45
         version: 0.4.45(@volar/typescript@2.4.28(typescript@7.0.2))(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magicast@0.5.5)(typescript@7.0.2)
@@ -968,6 +971,11 @@ packages:
 
   js-tokens@10.0.0:
     resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
+
+  jup@0.6.4:
+    resolution: {integrity: sha512-h7pTrIqQYoHdEqJAv4as1MZS0oRcR+37u9uQW/Is5XgeJt1QuHsHihcKr2sJ1uc2nnD09NNjCk2zUdwD5MiN5A==}
+    engines: {node: '>=22.18.0'}
+    hasBin: true
 
   knitwork@1.3.0:
     resolution: {integrity: sha512-4LqMNoONzR43B1W0ek0fhXMsDNW/zxa1NdFAVMY+k28pgZLovR4G3PB5MrpTxCy1QaZCqNoiaKPr5w5qZHfSNw==}
@@ -1963,6 +1971,8 @@ snapshots:
   jiti@2.7.0: {}
 
   js-tokens@10.0.0: {}
+
+  jup@0.6.4: {}
 
   knitwork@1.3.0: {}
 

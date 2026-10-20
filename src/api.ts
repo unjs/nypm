@@ -24,7 +24,10 @@ import { join } from "node:path";
  * @param options.frozenLockFile - Whether to install dependencies with frozen lock file.
  */
 export async function installDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dry" | "corepack"> & {
+  options: Pick<
+    OperationOptions,
+    "cwd" | "silent" | "packageManager" | "dry" | "corepack" | "jup"
+  > & {
     frozenLockFile?: boolean;
     ignoreWorkspace?: boolean;
   } = {},
@@ -55,6 +58,7 @@ export async function installDependencies(
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
+      jup: resolvedOptions.jup,
     });
   }
 
@@ -125,6 +129,7 @@ export async function addDependency(
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
+      jup: resolvedOptions.jup,
     });
   }
 
@@ -248,6 +253,7 @@ export async function removeDependency(
       cwd: resolvedOptions.cwd,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
+      jup: resolvedOptions.jup,
     });
   }
 
@@ -293,7 +299,10 @@ export async function ensureDependencyInstalled(
  * @param options.recreateLockfile - Whether to recreate the lockfile instead of deduping.
  */
 export async function dedupeDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dry" | "corepack"> & {
+  options: Pick<
+    OperationOptions,
+    "cwd" | "silent" | "packageManager" | "dry" | "corepack" | "jup"
+  > & {
     recreateLockfile?: boolean;
   } = {},
 ): Promise<OperationResult> {
@@ -326,6 +335,7 @@ export async function dedupeDependencies(
           cwd: resolvedOptions.cwd,
           silent: resolvedOptions.silent,
           corepack: resolvedOptions.corepack,
+          jup: resolvedOptions.jup,
         },
       );
     }
@@ -354,7 +364,7 @@ export async function runScript(
   name: string,
   options: Pick<
     OperationOptions,
-    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack"
+    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack" | "jup"
   > & {
     args?: string[];
   } = {},
@@ -373,6 +383,7 @@ export async function runScript(
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
+      jup: resolvedOptions.jup,
     });
   }
 
@@ -401,7 +412,7 @@ export async function dlx(
   name: string,
   options: Pick<
     OperationOptions,
-    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack"
+    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack" | "jup"
   > & {
     args?: string[];
     short?: boolean;
@@ -424,6 +435,7 @@ export async function dlx(
       env: resolvedOptions.env,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
+      jup: resolvedOptions.jup,
     });
   }
 

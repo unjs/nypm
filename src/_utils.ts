@@ -7,7 +7,7 @@ import type { DetectPackageManagerOptions } from "./package-manager.ts";
 import { detectPackageManager, packageManagers } from "./package-manager.ts";
 import type { PackageJson } from "pkg-types";
 import { existsSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { readFile } from "node:fs/promises";
 
 export async function findup<T>(
@@ -109,12 +109,36 @@ const hasCorepack = cached(async () => {
   }
 });
 
+// Prefer the bin of the `jup` package (optional peer dependency), resolved next to nypm,
+// and fall back to a globally installed `jup` command.
+const resolveJupCommand = cached(async (): Promise<[string, string[]]> => {
+  try {
+    const entry = createRequire(import.meta.url).resolve("jup");
+    const pkgDir = await findup(
+      dirname(entry),
+      (p) => (existsSync(join(p, "package.json")) ? p : undefined),
+      { includeParentDirs: true },
+    );
+    if (pkgDir) {
+      const pkg = JSON.parse(await readFile(join(pkgDir, "package.json"), "utf8")) as PackageJson;
+      const bin = typeof pkg.bin === "string" ? pkg.bin : pkg.bin?.jup;
+      if (bin) {
+        return [process.execPath, [join(pkgDir, bin)]];
+      }
+    }
+  } catch {
+    // jup package is not installed
+  }
+  return ["jup", []];
+});
+
 export async function executeCommand(
   command: string,
   args: string[],
-  options: Pick<OperationOptions, "cwd" | "env" | "silent" | "corepack"> = {},
+  options: Pick<OperationOptions, "cwd" | "env" | "silent" | "corepack" | "jup"> = {},
 ): Promise<void> {
   const useCorepack =
+    !options.jup &&
     command !== "npm" &&
     command !== "bun" &&
     command !== "deno" &&
@@ -124,8 +148,12 @@ export async function executeCommand(
     options.corepack !== false &&
     (await hasCorepack());
 
-  const xArgs: [string, string[]] = useCorepack
-    ? ["corepack", [command, ...args]]
+  const runner = options.jup ? "jup" : useCorepack ? "corepack" : undefined;
+  const runnerCommand: [string, string[]] | undefined =
+    runner === "jup" ? await resolveJupCommand() : runner ? [runner, []] : undefined;
+
+  const xArgs: [string, string[]] = runnerCommand
+    ? [runnerCommand[0], [...runnerCommand[1], command, ...args]]
     : [command, args];
 
   // Only hand our stdin to the package manager when it is an interactive terminal.
@@ -147,7 +175,7 @@ export async function executeCommand(
 
   if (exitCode !== 0) {
     throw new Error(
-      `\`${xArgs.flat().join(" ")}\` failed.${options.silent ? ["", stdout, stderr].join("\n") : ""}`,
+      `\`${[runner, command, ...args].filter(Boolean).join(" ")}\` failed.${options.silent ? ["", stdout, stderr].join("\n") : ""}`,
     );
   }
 }
@@ -158,7 +186,7 @@ export const NO_PACKAGE_MANAGER_DETECTED_ERROR_MSG = "No package manager auto-de
 
 export async function resolveOperationOptions(options: OperationOptions = {}): Promise<
   NonPartial<
-    Pick<OperationOptions, "cwd" | "env" | "silent" | "dev" | "global" | "dry" | "corepack">
+    Pick<OperationOptions, "cwd" | "env" | "silent" | "dev" | "global" | "dry" | "corepack" | "jup">
   > &
     Pick<OperationOptions, "workspace"> & {
       packageManager: PackageManager;
@@ -186,6 +214,7 @@ export async function resolveOperationOptions(options: OperationOptions = {}): P
     global: options.global ?? false,
     dry: options.dry ?? false,
     corepack: options.corepack ?? true,
+    jup: options.jup ?? false,
   };
 }
 

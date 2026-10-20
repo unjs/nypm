@@ -92,4 +92,26 @@ describe("executeCommand", () => {
       executeCommand("pnpm", ["install"], { corepack: false, silent: true }),
     ).rejects.toThrow(/`pnpm install` failed\.\nsome stdout\nsome stderr/);
   });
+
+  it("runs the package manager through the jup package bin when jup is enabled", async () => {
+    x.mockResolvedValueOnce({ exitCode: 0, stdout: "", stderr: "" });
+
+    await executeCommand("npm", ["install"], { jup: true });
+
+    expect(x).toHaveBeenCalledWith(
+      process.execPath,
+      [expect.stringMatching(/[/\\]jup[/\\]bin[/\\]jup\.mjs$/), "npm", "install"],
+      expect.anything(),
+    );
+  });
+
+  it("prefers jup over corepack", async () => {
+    x.mockResolvedValueOnce({ exitCode: 1, stdout: "", stderr: "" });
+
+    await expect(
+      executeCommand("pnpm", ["install"], { jup: true, corepack: true }),
+    ).rejects.toThrow("`jup pnpm install` failed.");
+    expect(x).toHaveBeenCalledTimes(1);
+    expect(x.mock.calls[0]![1]).toEqual([expect.any(String), "pnpm", "install"]);
+  });
 });
