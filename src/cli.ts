@@ -142,7 +142,9 @@ const dedupe = defineCommand({
     },
   },
   run: async ({ args }) => {
-    const result = await dedupeDependencies({ ...args, recreateLockfile: args.recreateLockFile });
+    // `dedupeDependencies` reads `recreateLockfile`; a directly passed `--recreateLockfile` still wins
+    if (args.recreateLockFile !== undefined) args.recreateLockfile ??= args.recreateLockFile;
+    const result = await dedupeDependencies(args);
     handleRes(result, args);
   },
 });

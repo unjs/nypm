@@ -7,7 +7,8 @@ import { fileURLToPath } from "node:url";
 
 const cli = fileURLToPath(new URL("../src/cli.ts", import.meta.url));
 
-describe("cli", () => {
+// runs src/cli.ts with plain node, which needs type stripping (default since Node 22.18)
+describe.skipIf(!process.features.typescript)("cli", () => {
   let cwd!: string;
 
   beforeAll(() => {
@@ -19,12 +20,22 @@ describe("cli", () => {
     rmSync(cwd, { recursive: true, force: true });
   });
 
-  it("dedupe passes --recreateLockFile to dedupeDependencies", () => {
-    const output = execFileSync(
-      process.execPath,
-      [cli, "dedupe", "--dry", "--recreateLockFile", "--cwd", cwd],
-      { encoding: "utf8", stdio: "pipe" },
-    );
-    expect(output.trim()).toBe("pnpm install");
-  });
+  const cases: [flags: string[], command: string][] = [
+    [[], "pnpm dedupe"],
+    [["--recreateLockFile"], "pnpm install"],
+    [["--recreate-lock-file"], "pnpm install"],
+    [["--recreateLockfile"], "pnpm install"],
+    [["--recreate-lockfile"], "pnpm install"],
+  ];
+
+  for (const [flags, command] of cases) {
+    it(`dedupe ${flags.join(" ") || "without flags"} runs ${command}`, () => {
+      const output = execFileSync(
+        process.execPath,
+        [cli, "dedupe", "--dry", ...flags, "--cwd", cwd],
+        { encoding: "utf8", stdio: "pipe" },
+      );
+      expect(output.trim()).toBe(command);
+    });
+  }
 });
