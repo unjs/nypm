@@ -67,7 +67,7 @@ const { addDependency } = await import("nypm");
 await installDependencies({ jup: true });
 ```
 
-nypm uses the `jup` package when it is installed (optional peer dependency) and otherwise falls back to the global `jup` command.
+When the `jup` package (optional peer dependency, `>=0.6.5`) is installed, nypm runs commands in-process through jup's [programmatic API](https://jup.unjs.io/api). Otherwise it falls back to the global `jup` command.
 
 ### `addDependency(name, options)`
 

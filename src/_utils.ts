@@ -1,4 +1,3 @@
-import type { StdioOptions } from "node:child_process";
 import { createRequire } from "node:module";
 import { normalize, resolve } from "pathe";
 import { x } from "tinyexec";
@@ -7,7 +6,7 @@ import type { DetectPackageManagerOptions } from "./package-manager.ts";
 import { detectPackageManager, packageManagers } from "./package-manager.ts";
 import type { PackageJson } from "pkg-types";
 import { existsSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { readFile } from "node:fs/promises";
 
 export async function findup<T>(
@@ -109,28 +108,8 @@ const hasCorepack = cached(async () => {
   }
 });
 
-// Prefer the bin of the `jup` package (optional peer dependency), resolved next to nypm,
-// and fall back to a globally installed `jup` command.
-const resolveJupCommand = cached(async (): Promise<[string, string[]]> => {
-  try {
-    const entry = createRequire(import.meta.url).resolve("jup");
-    const pkgDir = await findup(
-      dirname(entry),
-      (p) => (existsSync(join(p, "package.json")) ? p : undefined),
-      { includeParentDirs: true },
-    );
-    if (pkgDir) {
-      const pkg = JSON.parse(await readFile(join(pkgDir, "package.json"), "utf8")) as PackageJson;
-      const bin = typeof pkg.bin === "string" ? pkg.bin : pkg.bin?.jup;
-      if (bin) {
-        return [process.execPath, [join(pkgDir, bin)]];
-      }
-    }
-  } catch {
-    // jup package is not installed
-  }
-  return ["jup", []];
-});
+// `jup` is an optional peer dependency (otherwise a globally installed `jup` command is used)
+const importJup = cached(() => import("jup").catch(() => undefined));
 
 export async function executeCommand(
   command: string,
@@ -149,29 +128,27 @@ export async function executeCommand(
     (await hasCorepack());
 
   const runner = options.jup ? "jup" : useCorepack ? "corepack" : undefined;
-  const runnerCommand: [string, string[]] | undefined =
-    runner === "jup" ? await resolveJupCommand() : runner ? [runner, []] : undefined;
-
-  const xArgs: [string, string[]] = runnerCommand
-    ? [runnerCommand[0], [...runnerCommand[1], command, ...args]]
-    : [command, args];
 
   // Only hand our stdin to the package manager when it is an interactive terminal.
   // Otherwise the child gets `/dev/null` (immediate EOF) so that prompts nobody can
   // answer (e.g. pnpm's `Proceed? (Y/n)`) fall back to their defaults instead of
   // hanging forever. (#118)
   const stdin = process.stdin.isTTY ? "inherit" : "ignore";
-  const stdio: StdioOptions = options.silent
-    ? [stdin, "pipe", "pipe"]
-    : [stdin, "inherit", "inherit"];
+  const stdio = options.silent
+    ? ([stdin, "pipe", "pipe"] as const)
+    : ([stdin, "inherit", "inherit"] as const);
 
-  const { exitCode, stdout, stderr } = await x(xArgs[0], xArgs[1], {
-    nodeOptions: {
-      cwd: resolve(options.cwd || process.cwd()),
-      env: options.env,
-      stdio,
-    },
-  });
+  const cwd = resolve(options.cwd || process.cwd());
+
+  const jup = options.jup ? await importJup() : undefined;
+
+  const { exitCode, stdout, stderr } = jup
+    ? await jup
+        .runMain([command, ...args], { cwd, env: options.env, stdio })
+        .then((r) => ({ exitCode: r.code, stdout: r.stdout, stderr: r.stderr }))
+    : await x(runner || command, runner ? [command, ...args] : args, {
+        nodeOptions: { cwd, env: options.env, stdio: [...stdio] },
+      });
 
   if (exitCode !== 0) {
     throw new Error(

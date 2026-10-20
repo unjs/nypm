@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const { x } = vi.hoisted(() => ({ x: vi.fn() }));
+const { x, runMain } = vi.hoisted(() => ({ x: vi.fn(), runMain: vi.fn() }));
 
 vi.mock("tinyexec", () => ({ x }));
+vi.mock("jup", () => ({ runMain }));
 
 const { executeCommand } = await import("../src/_utils.ts");
 const originalStdinIsTTY = Object.getOwnPropertyDescriptor(process.stdin, "isTTY");
@@ -93,25 +94,37 @@ describe("executeCommand", () => {
     ).rejects.toThrow(/`pnpm install` failed\.\nsome stdout\nsome stderr/);
   });
 
-  it("runs the package manager through the jup package bin when jup is enabled", async () => {
-    x.mockResolvedValueOnce({ exitCode: 0, stdout: "", stderr: "" });
+  it("runs the package manager through jup's runMain when jup is enabled", async () => {
+    mockStdinTTY(undefined);
+    runMain.mockResolvedValueOnce({ code: 0 });
 
-    await executeCommand("npm", ["install"], { jup: true });
+    await executeCommand("npm", ["install"], {
+      cwd: "/tmp/project",
+      env: { FOO: "bar" },
+      jup: true,
+      corepack: true,
+    });
 
-    expect(x).toHaveBeenCalledWith(
-      process.execPath,
-      [expect.stringMatching(/[/\\]jup[/\\]bin[/\\]jup\.mjs$/), "npm", "install"],
-      expect.anything(),
-    );
+    expect(runMain).toHaveBeenCalledWith(["npm", "install"], {
+      cwd: "/tmp/project",
+      env: { FOO: "bar" },
+      stdio: ["ignore", "inherit", "inherit"],
+    });
+    expect(x).not.toHaveBeenCalled();
+    runMain.mockReset();
   });
 
-  it("prefers jup over corepack", async () => {
-    x.mockResolvedValueOnce({ exitCode: 1, stdout: "", stderr: "" });
+  it("includes jup's captured output in the error message when a silent command fails", async () => {
+    mockStdinTTY(true);
+    runMain.mockResolvedValueOnce({ code: 1, stdout: "some stdout", stderr: "some stderr" });
 
-    await expect(
-      executeCommand("pnpm", ["install"], { jup: true, corepack: true }),
-    ).rejects.toThrow("`jup pnpm install` failed.");
-    expect(x).toHaveBeenCalledTimes(1);
-    expect(x.mock.calls[0]![1]).toEqual([expect.any(String), "pnpm", "install"]);
+    await expect(executeCommand("pnpm", ["install"], { jup: true, silent: true })).rejects.toThrow(
+      /`jup pnpm install` failed\.\nsome stdout\nsome stderr/,
+    );
+    expect(runMain).toHaveBeenCalledWith(
+      ["pnpm", "install"],
+      expect.objectContaining({ stdio: ["inherit", "pipe", "pipe"] }),
+    );
+    runMain.mockReset();
   });
 });

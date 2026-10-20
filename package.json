@@ -40,7 +40,7 @@
     "automd": "^0.4.3",
     "changelogen": "^0.6.2",
     "expect-type": "^1.4.0",
-    "jup": "^0.6.4",
+    "jup": "^0.6.5",
     "obuild": "^0.4.45",
     "oxfmt": "^0.73.0",
     "oxlint": "^1.88.0",
@@ -51,7 +51,7 @@
     "vitest": "^5.0.5"
   },
   "peerDependencies": {
-    "jup": ">=0.6.0"
+    "jup": ">=0.6.5"
   },
   "peerDependenciesMeta": {
     "jup": {
