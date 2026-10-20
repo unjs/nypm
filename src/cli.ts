@@ -142,7 +142,7 @@ const dedupe = defineCommand({
     },
   },
   run: async ({ args }) => {
-    const result = await dedupeDependencies(args);
+    const result = await dedupeDependencies({ ...args, recreateLockfile: args.recreateLockFile });
     handleRes(result, args);
   },
 });
