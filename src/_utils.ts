@@ -282,15 +282,18 @@ export function doesDependencyExist(
   name: string,
   options: Pick<Awaited<ReturnType<typeof resolveOperationOptions>>, "cwd" | "workspace">,
 ) {
-  const cwd = resolve(options.cwd);
-  const require = createRequire(cwd.endsWith("/") ? cwd : cwd + "/");
+  // Trailing slash so `createRequire` treats it as a directory and the prefix
+  // check below doesn't match lookalike dirs (e.g. `/app` vs `/app_modules`).
+  const resolvedCwd = resolve(options.cwd);
+  const cwd = resolvedCwd.endsWith("/") ? resolvedCwd : resolvedCwd + "/";
+  const require = createRequire(cwd);
 
   try {
     // `require.resolve` returns a platform-native path, so normalize it before
     // comparing against the (posix-style) `cwd`.
     const resolvedPath = normalize(require.resolve(name));
 
-    return resolvedPath.startsWith(cwd.endsWith("/") ? cwd : cwd + "/");
+    return resolvedPath.startsWith(cwd);
   } catch {
     return false;
   }

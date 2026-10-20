@@ -167,6 +167,13 @@ describe("internal utils", () => {
       ).toBe(false);
     });
 
+    it("returns false for a dependency outside cwd that shares its path prefix", () => {
+      // `plain-pkg` resolves to `<root>/node_modules/plain-pkg`, which starts
+      // with the string `<root>/node` but isn't inside that directory.
+      mkdirSync(join(root, "node"), { recursive: true });
+      expect(doesDependencyExist("plain-pkg", { cwd: join(root, "node") })).toBe(false);
+    });
+
     it("returns false for a dependency hoisted above cwd", () => {
       // `plain-pkg` lives in `<root>/node_modules`, outside `<root>/project`.
       expect(doesDependencyExist("plain-pkg", { cwd: join(root, "project") })).toBe(false);
