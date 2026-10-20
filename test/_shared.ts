@@ -31,6 +31,14 @@ export const fixtures = (
       packageManager: "nub",
     },
     {
+      name: "upm",
+      packageManager: "upm",
+    },
+    {
+      name: "upm-workspace",
+      packageManager: "upm",
+    },
+    {
       name: "bun",
       packageManager: "bun",
     },
@@ -111,7 +119,8 @@ const availabilityCache = new Map<PackageManagerName, boolean>();
  * binary is missing locally. `aube` is not provided by corepack and is only
  * installed in CI, so its tests are ignored on machines without it. `nub` is
  * likewise not a corepack PM; its real-CLI tests run only where `nub` is
- * installed, while its detection tests need no binary.
+ * installed, while its detection tests need no binary. `upm` is not a corepack
+ * PM either and is installed from npm in CI.
  */
 export function isPackageManagerAvailable(packageManager: PackageManagerName): boolean {
   if (!availabilityCache.has(packageManager)) {

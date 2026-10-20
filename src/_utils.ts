@@ -120,6 +120,7 @@ export async function executeCommand(
     command !== "deno" &&
     command !== "aube" &&
     command !== "nub" &&
+    command !== "upm" &&
     options.corepack !== false &&
     (await hasCorepack());
 
@@ -215,6 +216,11 @@ export function getWorkspaceArgs(
     return workspacePkg ? ["-w", workspacePkg] : ["--workspaces"];
   }
 
+  // upm (`add` / `remove` target the root unless a workspace is selected with `-w`)
+  if (options.packageManager.name === "upm") {
+    return workspacePkg ? ["-w", workspacePkg] : [];
+  }
+
   if (options.packageManager.name === "yarn") {
     if (!options.packageManager.majorVersion || options.packageManager.majorVersion === "1") {
       // Yarn classic
@@ -254,6 +260,11 @@ export function getWorkspaceArgs2(options: {
   // npm
   if (options.packageManager === "npm") {
     return workspacePkg ? ["-w", workspacePkg] : ["--workspaces"];
+  }
+
+  // upm (`add` / `remove` target the root unless a workspace is selected with `-w`)
+  if (options.packageManager === "upm") {
+    return workspacePkg ? ["-w", workspacePkg] : [];
   }
 
   if (options.packageManager === "yarn") {

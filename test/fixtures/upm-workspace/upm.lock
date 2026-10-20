@@ -1,0 +1,28 @@
+{
+  "lockfileVersion": 1,
+  "root": {
+    "name": "fixture-upm-workspace",
+    "specs": {
+      "dependencies": {
+        "consola": "3.2.2"
+      }
+    },
+    "dependencies": {
+      "consola": "3.2.2"
+    },
+    "workspaces": [
+      "packages/*"
+    ]
+  },
+  "workspaces": {
+    "packages/workspace-a": {
+      "name": "workspace-a",
+      "version": "0.0.0"
+    }
+  },
+  "packages": {
+    "consola@3.2.2": {
+      "integrity": "sha512-r921u0vbF4lQsoIqYvSSER+yZLPQGijOHrYcWoCNVNBZmn/bRR+xT/DgerTze/nLD9TTGzdDa378TVhx7RDOYg=="
+    }
+  }
+}
