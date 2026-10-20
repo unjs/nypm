@@ -53,6 +53,13 @@ export const packageManagers: PackageManager[] = [
     lockFile: "nub.lock",
   },
   {
+    // upm reads other lockfiles and pnpm-workspace.yaml overrides, so it must be
+    // matched before pnpm to avoid a false match when an `upm.lock` is present.
+    name: "upm",
+    command: "upm",
+    lockFile: "upm.lock",
+  },
+  {
     name: "pnpm",
     command: "pnpm",
     lockFile: "pnpm-lock.yaml",

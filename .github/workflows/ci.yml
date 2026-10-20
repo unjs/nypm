@@ -56,6 +56,9 @@ jobs:
         with:
           node-version: 22
           cache: "pnpm"
+      - name: Install upm
+        run: npm i -g upm --min-release-age 0
+      - run: upm --version
       - run: pnpm install
       - run: pnpm lint
         if: ${{ matrix.os == 'ubuntu-latest' }}

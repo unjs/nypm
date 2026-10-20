@@ -1,0 +1,11 @@
+{
+  "name": "fixture-upm-workspace",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "consola": "3.2.2"
+  },
+  "packageManager": "upm@1.3.1"
+}

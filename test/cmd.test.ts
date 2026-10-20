@@ -129,6 +129,26 @@ const fixtures = [
     },
   },
   {
+    name: "upm",
+    packageManager: "upm",
+    opts: {},
+    commands: {
+      install: "upm install",
+      installShort: "upm i",
+      installFrozen: "upm install --frozen-lockfile",
+      add: "upm add name",
+      addShort: "upm add name",
+      addDev: "upm add --dev name",
+      addGlobal: "upm add -g name", // TODO: global not supported
+      addWorkspace: "upm add -w workspace name",
+      runScript: "upm run test --arg",
+      dlx: "upm exec test --arg",
+      dlxShort: "upx test --arg",
+      dlxWithPkg: "upm exec --package=dep1 --package=dep2 test --arg",
+      dlxWithPkgShort: "upx --package=dep1 --package=dep2 test --arg",
+    },
+  },
+  {
     name: "yarn classic",
     packageManager: "yarn",
     opts: {},
@@ -237,6 +257,11 @@ describe("commands", () => {
       expect(addDependencyCommand(packageManager, "name", { workspace: true })).toBe(
         `${packageManager} add --workspace-root name`,
       );
+    });
+
+    // upm `add` targets the root unless `-w` selects a workspace
+    it("upm", () => {
+      expect(addDependencyCommand("upm", "name", { workspace: true })).toBe("upm add name");
     });
   });
 

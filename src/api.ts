@@ -39,6 +39,7 @@ export async function installDependencies(
     deno: ["install", "--frozen"],
     aube: ["install", "--frozen-lockfile"],
     nub: ["install", "--frozen-lockfile"],
+    upm: ["install", "--frozen-lockfile"],
   };
 
   const commandArgs = options.frozenLockFile
@@ -235,7 +236,8 @@ export async function removeDependency(
       : [
           resolvedOptions.packageManager.name === "npm" ? "uninstall" : "remove",
           ...getWorkspaceArgs(resolvedOptions),
-          resolvedOptions.dev ? "-D" : "",
+          // upm removes from all dependency groups and rejects `-D` for `remove`
+          resolvedOptions.dev && resolvedOptions.packageManager.name !== "upm" ? "-D" : "",
           resolvedOptions.global ? "-g" : "",
           ...names,
         ]
@@ -302,6 +304,10 @@ export async function dedupeDependencies(
     const lockfiles = Array.isArray(resolvedOptions.packageManager.lockFile)
       ? resolvedOptions.packageManager.lockFile
       : [resolvedOptions.packageManager.lockFile];
+    // upm restores a missing `upm.lock` from its `node_modules/.upm.lock` copy
+    if (resolvedOptions.packageManager.name === "upm") {
+      lockfiles.push("node_modules/.upm.lock");
+    }
     for (const lockfile of lockfiles) {
       if (lockfile) fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
     }
