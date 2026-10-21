@@ -61,4 +61,15 @@ describe("dedupe", () => {
       );
     });
   }
+
+  describe("dry run", () => {
+    for (const fixture of fixtures.filter((f) => !f.workspace)) {
+      it(`keeps the ${fixture.name} lockfile`, async () => {
+        rmSync.mockClear();
+        await dedupeDependencies({ cwd: fixture.dir, dry: true });
+        await dedupeDependencies({ cwd: fixture.dir, dry: true, recreateLockfile: true });
+        expect(rmSync).not.toHaveBeenCalled();
+      });
+    }
+  });
 });
