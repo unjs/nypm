@@ -41,9 +41,9 @@
     "changelogen": "^0.6.2",
     "expect-type": "^1.4.0",
     "obuild": "^0.4.45",
-    "oxfmt": "^0.73.0",
-    "oxlint": "^1.88.0",
-    "pkg-types": "^2.3.3",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
+    "pkg-types": "^2.4.0",
     "std-env": "^4.3.0",
     "typescript": "^7.0.2",
     "ufo": "^1.6.4",
@@ -52,5 +52,5 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@11.28.6"
+  "packageManager": "pnpm@11.28.7"
 }
