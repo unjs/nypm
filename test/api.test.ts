@@ -171,6 +171,29 @@ describe("api", () => {
     });
   }
 
+  it("passes dlx args containing spaces as single arguments", async () => {
+    const npmResult = await dlx("cowsay", {
+      packageManager: "npm",
+      dry: true,
+      args: ["Hello world", "--flag"],
+    });
+    expect(npmResult.exec).toEqual({
+      command: "npm",
+      args: ["exec", "cowsay", "--", "Hello world", "--flag"],
+    });
+
+    const pnpmResult = await dlx("cowsay", {
+      packageManager: "pnpm",
+      dry: true,
+      packages: ["cowsay"],
+      args: ["Hello world"],
+    });
+    expect(pnpmResult.exec).toEqual({
+      command: "pnpm",
+      args: ["dlx", "--package=cowsay", "cowsay", "Hello world"],
+    });
+  });
+
   afterAll(() => {
     for (const fixture of fixtures.filter((f) => !f.workspace)) {
       const testFilePath = join(fixture.dir, "test-file.txt");
