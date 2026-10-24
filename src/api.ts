@@ -7,8 +7,8 @@ import {
   readPackageJSON,
   readInstalledPackageJSON,
   readPackageJSONFromResolver,
+  dlxArgs,
 } from "./_utils.ts";
-import { dlxCommand } from "./cmd.ts";
 import type { OperationOptions, OperationResult, PackageManagerName } from "./types.ts";
 import * as fs from "node:fs";
 import { resolve } from "pathe";
@@ -410,13 +410,11 @@ export async function dlx(
 ): Promise<OperationResult> {
   const resolvedOptions = await resolveOperationOptions(options);
 
-  const commandStr = dlxCommand(resolvedOptions.packageManager.name, name, {
+  const [command, ...args] = dlxArgs(resolvedOptions.packageManager.name, name, {
     args: options.args,
     short: options.short,
     packages: options.packages,
   });
-
-  const [command, ...args] = commandStr.split(" ");
 
   if (!resolvedOptions.dry) {
     await executeCommand(command!, args, {
