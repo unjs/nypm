@@ -1,6 +1,30 @@
 # Changelog
 
 
+## v0.6.11
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.10...v0.6.11)
+
+### 🚀 Enhancements
+
+- Add upm package manager support ([#269](https://github.com/unjs/nypm/pull/269))
+
+### 🩹 Fixes
+
+- **utils:** Resolve a relative `cwd` before handing it to `createRequire` ([#265](https://github.com/unjs/nypm/pull/265))
+
+### 🏡 Chore
+
+- Apply automated updates ([5ba5a99](https://github.com/unjs/nypm/commit/5ba5a99))
+- Update deps ([470bf68](https://github.com/unjs/nypm/commit/470bf68))
+- Remove unused eslint-config-unjs ([d505df2](https://github.com/unjs/nypm/commit/d505df2))
+
+### ❤️ Contributors
+
+- Mochammad Fadhlan Al-Ghiffari
+- Pi0x <x@pi0.io>
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+
 ## v0.6.10
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.9...v0.6.10)
