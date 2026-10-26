@@ -282,6 +282,54 @@ export function getWorkspaceArgs2(options: {
   return [];
 }
 
+export function dlxArgs(
+  packageManager: PackageManagerName,
+  name: string,
+  options: {
+    args?: string[];
+    short?: boolean;
+    packages?: string[];
+  } = {},
+): string[] {
+  const pmToDlxCommand: Record<PackageManagerName, string> = {
+    npm: options.short ? "npx" : "npm exec",
+    yarn: "yarn dlx",
+    pnpm: options.short ? "pnpx" : "pnpm dlx",
+    bun: options.short ? "bunx" : "bun x",
+    deno: "deno run -A",
+    aube: options.short ? "aubx" : "aube dlx",
+    nub: options.short ? "nubx" : "nub dlx",
+    upm: options.short ? "upx" : "upm exec",
+  };
+
+  const command = pmToDlxCommand[packageManager];
+
+  let packages: string[] = options.packages || [];
+
+  if (packageManager === "deno") {
+    if (!name.startsWith("npm:")) {
+      name = `npm:${name}`;
+    }
+    packages = packages.map((pkg) => (pkg.startsWith("npm:") ? pkg : `npm:${pkg}`));
+  }
+
+  const packageArgs: string[] = [];
+
+  // https://github.com/denoland/deno/issues/30737
+  if (packages.length > 0 && packageManager !== "deno") {
+    const packageFlag = options.short && /^npm|yarn$/.test(packageManager) ? "-p" : "--package";
+    for (const pkg of packages) {
+      packageArgs.push(`${packageFlag}=${pkg}`);
+    }
+  }
+
+  const argSep = packageManager === "npm" && !options.short ? "--" : "";
+
+  return [...command.split(" "), ...packageArgs, name, argSep, ...(options.args || [])].filter(
+    Boolean,
+  );
+}
+
 export function fmtCommand(args: string[]): string {
   return args
     .filter(Boolean)
