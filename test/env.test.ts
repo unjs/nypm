@@ -1,13 +1,20 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const { x } = vi.hoisted(() => ({ x: vi.fn() }));
+const { x, rmSync } = vi.hoisted(() => ({ x: vi.fn(), rmSync: vi.fn() }));
 
 vi.mock("tinyexec", () => ({ x }));
+
+// `recreateLockfile` removes lockfiles before reinstalling
+vi.mock("node:fs", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("node:fs")>()),
+  rmSync,
+}));
 
 const {
   installDependencies,
   addDependency,
   addDevDependency,
+  ensureDependencyInstalled,
   removeDependency,
   dedupeDependencies,
   runScript,
@@ -25,14 +32,18 @@ const options = {
 describe("forwards env to the package manager", () => {
   afterEach(() => {
     x.mockReset();
+    rmSync.mockReset();
   });
 
   const operations: Record<string, () => Promise<unknown>> = {
     installDependencies: () => installDependencies(options),
     addDependency: () => addDependency("pathe", options),
     addDevDependency: () => addDevDependency("pathe", options),
+    ensureDependencyInstalled: () => ensureDependencyInstalled("pathe", options),
     removeDependency: () => removeDependency("pathe", options),
     dedupeDependencies: () => dedupeDependencies(options),
+    "dedupeDependencies (recreateLockfile)": () =>
+      dedupeDependencies({ ...options, recreateLockfile: true }),
     runScript: () => runScript("build", options),
     dlx: () => dlx("envinfo", options),
   };
@@ -42,6 +53,10 @@ describe("forwards env to the package manager", () => {
       x.mockResolvedValue({ exitCode: 0, stdout: "", stderr: "" });
 
       await run();
+
+      if (name.includes("recreateLockfile")) {
+        expect(rmSync).toHaveBeenCalled();
+      }
 
       expect(x).toHaveBeenCalledWith(
         expect.any(String),

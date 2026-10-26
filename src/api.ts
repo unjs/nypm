@@ -275,12 +275,13 @@ export async function removeDependency(
  * @param name - Name of the dependency.
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the command execution.
  * @param options.dev - Whether to install as dev dependency (if not already installed).
  * @param options.workspace - The name of the workspace to install dependency in (if not already installed).
  */
 export async function ensureDependencyInstalled(
   name: string,
-  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {},
+  options: Pick<OperationOptions, "cwd" | "env" | "dev" | "workspace"> = {},
 ): Promise<true | undefined> {
   const resolvedOptions = await resolveOperationOptions(options);
 
