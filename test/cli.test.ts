@@ -27,6 +27,9 @@ describe.skipIf(!process.features.typescript)("cli", () => {
     [["--recreateLockfile"], "pnpm install"],
     [["--recreate-lockfile"], "pnpm install"],
     [["--no-recreateLockFile"], "pnpm dedupe"],
+    [["--recreateLockfile=false"], "pnpm dedupe"],
+    [["--recreate-lockfile=false"], "pnpm dedupe"],
+    [["--recreateLockFile", "--recreateLockfile=false"], "pnpm dedupe"],
   ];
 
   for (const [flags, command] of cases) {
