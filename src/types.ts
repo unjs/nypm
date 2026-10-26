@@ -27,3 +27,23 @@ export type OperationOptions = {
 export type OperationResult = {
   exec?: { command: string; args: string[] };
 };
+
+export type PackageInfo = {
+  name: string;
+  version: string;
+  description?: string;
+  license?: string;
+  homepage?: string;
+  repository?: { type?: string; url?: string } | string;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+  dist?: { tarball: string; shasum: string; integrity?: string };
+  versions?: string[];
+  distTags?: Record<string, string>;
+  [key: string]: unknown;
+};
+
+export type GetPackageInfoOptions = {
+  registry?: string;
+};
