@@ -323,8 +323,10 @@ export async function dedupeDependencies(
     if (resolvedOptions.packageManager.name === "upm") {
       lockfiles.push("node_modules/.upm.lock");
     }
-    for (const lockfile of lockfiles) {
-      if (lockfile) fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
+    if (!resolvedOptions.dry) {
+      for (const lockfile of lockfiles) {
+        if (lockfile) fs.rmSync(resolve(resolvedOptions.cwd, lockfile), { force: true });
+      }
     }
     return await installDependencies(resolvedOptions);
   }
