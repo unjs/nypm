@@ -19,12 +19,16 @@ import { join } from "node:path";
  *
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the command execution.
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.frozenLockFile - Whether to install dependencies with frozen lock file.
  */
 export async function installDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dry" | "corepack"> & {
+  options: Pick<
+    OperationOptions,
+    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack"
+  > & {
     frozenLockFile?: boolean;
     ignoreWorkspace?: boolean;
   } = {},
@@ -53,6 +57,7 @@ export async function installDependencies(
   if (!resolvedOptions.dry) {
     await executeCommand(resolvedOptions.packageManager.command, commandArgs, {
       cwd: resolvedOptions.cwd,
+      env: resolvedOptions.env,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
     });
@@ -72,6 +77,7 @@ export async function installDependencies(
  * @param name - Name of the dependency to add.
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the command execution.
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.dev - Whether to add the dependency as dev dependency.
@@ -123,6 +129,7 @@ export async function addDependency(
   if (!resolvedOptions.dry) {
     await executeCommand(resolvedOptions.packageManager.command, args, {
       cwd: resolvedOptions.cwd,
+      env: resolvedOptions.env,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
     });
@@ -183,6 +190,7 @@ export async function addDependency(
  * @param name - Name of the dev dependency to add.
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the command execution.
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.workspace - The name of the workspace to use.
@@ -202,6 +210,7 @@ export async function addDevDependency(
  * @param name - Name of the dependency to remove.
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the command execution.
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.dev - Whether to remove dev dependency.
@@ -246,6 +255,7 @@ export async function removeDependency(
   if (!resolvedOptions.dry) {
     await executeCommand(resolvedOptions.packageManager.command, args, {
       cwd: resolvedOptions.cwd,
+      env: resolvedOptions.env,
       silent: resolvedOptions.silent,
       corepack: resolvedOptions.corepack,
     });
@@ -265,12 +275,13 @@ export async function removeDependency(
  * @param name - Name of the dependency.
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the command execution.
  * @param options.dev - Whether to install as dev dependency (if not already installed).
  * @param options.workspace - The name of the workspace to install dependency in (if not already installed).
  */
 export async function ensureDependencyInstalled(
   name: string,
-  options: Pick<OperationOptions, "cwd" | "dev" | "workspace"> = {},
+  options: Pick<OperationOptions, "cwd" | "env" | "dev" | "workspace"> = {},
 ): Promise<true | undefined> {
   const resolvedOptions = await resolveOperationOptions(options);
 
@@ -288,12 +299,16 @@ export async function ensureDependencyInstalled(
  *
  * @param options - Options to pass to the API call.
  * @param options.cwd - The directory to run the command in.
+ * @param options.env - Additional environment variables to set for the command execution.
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.recreateLockfile - Whether to recreate the lockfile instead of deduping.
  */
 export async function dedupeDependencies(
-  options: Pick<OperationOptions, "cwd" | "silent" | "packageManager" | "dry" | "corepack"> & {
+  options: Pick<
+    OperationOptions,
+    "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack"
+  > & {
     recreateLockfile?: boolean;
   } = {},
 ): Promise<OperationResult> {
@@ -324,6 +339,7 @@ export async function dedupeDependencies(
         [isyarnv1 ? "install" : "dedupe"],
         {
           cwd: resolvedOptions.cwd,
+          env: resolvedOptions.env,
           silent: resolvedOptions.silent,
           corepack: resolvedOptions.corepack,
         },
