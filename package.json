@@ -1,6 +1,6 @@
 {
   "name": "nypm",
-  "version": "0.6.11",
+  "version": "0.6.12",
   "description": "Unified Package Manager for Node.js",
   "license": "MIT",
   "repository": "unjs/nypm",

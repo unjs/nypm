@@ -1,6 +1,32 @@
 # Changelog
 
 
+## v0.6.12
+
+[compare changes](https://github.com/unjs/nypm/compare/v0.6.11...v0.6.12)
+
+### 🩹 Fixes
+
+- Forward `env` option to package manager for all operations ([#280](https://github.com/unjs/nypm/pull/280))
+- **dedupeDependencies:** Do not remove lockfiles in dry mode ([#272](https://github.com/unjs/nypm/pull/272))
+- **dlx:** Pass args containing spaces as single arguments ([#277](https://github.com/unjs/nypm/pull/277))
+- **cli:** Pass `--recreateLockFile` through to `dedupeDependencies` ([#274](https://github.com/unjs/nypm/pull/274))
+- **cli:** Treat `--recreateLockfile=false` as false ([7d028c8](https://github.com/unjs/nypm/commit/7d028c8))
+
+### 🏡 Chore
+
+- Update lcokfiles ([7100aed](https://github.com/unjs/nypm/commit/7100aed))
+- Lint ([e17268e](https://github.com/unjs/nypm/commit/e17268e))
+- Update lockfiles ([1db844a](https://github.com/unjs/nypm/commit/1db844a))
+- Fmt ([04c1455](https://github.com/unjs/nypm/commit/04c1455))
+
+### ❤️ Contributors
+
+- Pooya Parsa <pooya@pi0.io>
+- Ibrahim Aly <hi@ibrly.dev>
+- Raphael Fakhri <rjf11@mail.aub.edu>
+- Pi0x <x@pi0.io>
+
 ## v0.6.11
 
 [compare changes](https://github.com/unjs/nypm/compare/v0.6.10...v0.6.11)
