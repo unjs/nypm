@@ -23,6 +23,7 @@ import { join } from "node:path";
  * @param options.silent - Whether to run the command in silent mode.
  * @param options.packageManager - The package manager info to use (auto-detected).
  * @param options.frozenLockFile - Whether to install dependencies with frozen lock file.
+ * @param options.preferOffline - Prefer using the local package cache when available.
  */
 export async function installDependencies(
   options: Pick<
@@ -30,6 +31,7 @@ export async function installDependencies(
     "cwd" | "env" | "silent" | "packageManager" | "dry" | "corepack"
   > & {
     frozenLockFile?: boolean;
+    preferOffline?: boolean;
     ignoreWorkspace?: boolean;
   } = {},
 ): Promise<OperationResult> {
@@ -52,6 +54,14 @@ export async function installDependencies(
 
   if (options.ignoreWorkspace && resolvedOptions.packageManager.name === "pnpm") {
     commandArgs.push("--ignore-workspace");
+  }
+
+  // See installDependenciesCommand for per-PM prefer-offline mapping (Berry/Deno skip).
+  const yarnBerry =
+    resolvedOptions.packageManager.name === "yarn" &&
+    resolvedOptions.packageManager.majorVersion !== "1";
+  if (options.preferOffline && resolvedOptions.packageManager.name !== "deno" && !yarnBerry) {
+    commandArgs.push("--prefer-offline");
   }
 
   if (!resolvedOptions.dry) {

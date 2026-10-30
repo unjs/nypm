@@ -9,6 +9,9 @@ export function installDependenciesCommand(
   options: {
     short?: boolean;
     frozenLockFile?: boolean;
+    preferOffline?: boolean;
+    /** Yarn Berry has no soft `--prefer-offline` for install (flag is deprecated). */
+    yarnBerry?: boolean;
   } = {},
 ): string {
   // aube has no `i` alias for install
@@ -28,6 +31,17 @@ export function installDependenciesCommand(
   const commandArgs = options.frozenLockFile
     ? pmToFrozenLockfileInstallCommand[packageManager]
     : [installCmd];
+
+  // npm/pnpm/bun/yarn classic (and aube/nub/upm) support `--prefer-offline`.
+  // Yarn Berry deprecated it (uses cache by default; hard offline is `enableOfflineMode`).
+  // Deno has no soft prefer-offline equivalent (`--cached-only` is hard offline).
+  if (
+    options.preferOffline &&
+    packageManager !== "deno" &&
+    !(packageManager === "yarn" && options.yarnBerry)
+  ) {
+    commandArgs.push("--prefer-offline");
+  }
 
   return fmtCommand([packageManager, ...commandArgs]);
 }
