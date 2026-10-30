@@ -15,6 +15,8 @@ const fixtures = [
       install: "npm install",
       installShort: "npm i",
       installFrozen: "npm ci",
+      installPreferOffline: "npm install --prefer-offline",
+      installFrozenPreferOffline: "npm ci --prefer-offline",
       add: "npm install name",
       addShort: "npm i name",
       addDev: "npm install --save-dev name",
@@ -35,6 +37,8 @@ const fixtures = [
       install: "pnpm install",
       installShort: "pnpm i",
       installFrozen: "pnpm install --frozen-lockfile",
+      installPreferOffline: "pnpm install --prefer-offline",
+      installFrozenPreferOffline: "pnpm install --frozen-lockfile --prefer-offline",
       add: "pnpm add name",
       addShort: "pnpm add name",
       addDev: "pnpm add --save-dev name",
@@ -55,6 +59,8 @@ const fixtures = [
       install: "bun install",
       installShort: "bun i",
       installFrozen: "bun install --frozen-lockfile",
+      installPreferOffline: "bun install --prefer-offline",
+      installFrozenPreferOffline: "bun install --frozen-lockfile --prefer-offline",
       add: "bun add name",
       addShort: "bun add name",
       addDev: "bun add --dev name",
@@ -75,6 +81,8 @@ const fixtures = [
       install: "deno install",
       installShort: "deno i",
       installFrozen: "deno install --frozen",
+      installPreferOffline: "deno install",
+      installFrozenPreferOffline: "deno install --frozen",
       add: "deno add npm:name",
       addShort: "deno add npm:name",
       addDev: "deno add --dev npm:name",
@@ -96,6 +104,8 @@ const fixtures = [
       install: "aube install",
       installShort: "aube install", // aube has no `i` alias
       installFrozen: "aube install --frozen-lockfile",
+      installPreferOffline: "aube install --prefer-offline",
+      installFrozenPreferOffline: "aube install --frozen-lockfile --prefer-offline",
       add: "aube add name",
       addShort: "aube add name",
       addDev: "aube add --save-dev name",
@@ -116,6 +126,8 @@ const fixtures = [
       install: "nub install",
       installShort: "nub i",
       installFrozen: "nub install --frozen-lockfile",
+      installPreferOffline: "nub install --prefer-offline",
+      installFrozenPreferOffline: "nub install --frozen-lockfile --prefer-offline",
       add: "nub add name",
       addShort: "nub add name",
       addDev: "nub add --save-dev name",
@@ -136,6 +148,8 @@ const fixtures = [
       install: "upm install",
       installShort: "upm i",
       installFrozen: "upm install --frozen-lockfile",
+      installPreferOffline: "upm install --prefer-offline",
+      installFrozenPreferOffline: "upm install --frozen-lockfile --prefer-offline",
       add: "upm add name",
       addShort: "upm add name",
       addDev: "upm add --dev name",
@@ -156,6 +170,8 @@ const fixtures = [
       install: "yarn install",
       installShort: "yarn i",
       installFrozen: "yarn install --immutable",
+      installPreferOffline: "yarn install --prefer-offline",
+      installFrozenPreferOffline: "yarn install --immutable --prefer-offline",
       add: "yarn add name",
       addShort: "yarn add name",
       addDev: "yarn add --dev name",
@@ -176,6 +192,8 @@ const fixtures = [
       install: "yarn install",
       installShort: "yarn i",
       installFrozen: "yarn install --immutable",
+      installPreferOffline: "yarn install",
+      installFrozenPreferOffline: "yarn install --immutable",
       add: "yarn add name",
       addShort: "yarn add name",
       addDev: "yarn add --dev name",
@@ -207,6 +225,23 @@ describe("commands", () => {
           }),
           "frozenLockFile",
         ).toBe(fixture.commands.installFrozen);
+
+        expect(
+          installDependenciesCommand(fixture.packageManager, {
+            preferOffline: true,
+            ...fixture.opts,
+          }),
+          "preferOffline",
+        ).toBe(fixture.commands.installPreferOffline);
+
+        expect(
+          installDependenciesCommand(fixture.packageManager, {
+            frozenLockFile: true,
+            preferOffline: true,
+            ...fixture.opts,
+          }),
+          "frozenLockFile+preferOffline",
+        ).toBe(fixture.commands.installFrozenPreferOffline);
       });
     }
   });

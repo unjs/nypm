@@ -57,9 +57,17 @@ const install = defineCommand({
       alias: "g",
       description: "Add globally",
     },
-    "frozen-lockfile": {
+    // Use camelCase so `installDependencies` reads `frozenLockFile` (citty kebab of
+    // `frozen-lockfile` is `frozenLockfile`, which would silently ignore the flag).
+    frozenLockFile: {
       type: "boolean",
       description: "Install dependencies with frozen lock file",
+      alias: ["frozen-lockfile"],
+    },
+    preferOffline: {
+      type: "boolean",
+      description: "Prefer offline installation from the local package cache",
+      alias: ["prefer-offline"],
     },
     "install-peer-dependencies": {
       type: "boolean",

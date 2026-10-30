@@ -42,4 +42,23 @@ describe.skipIf(!process.features.typescript)("cli", () => {
       expect(output.trim()).toBe(command);
     });
   }
+  const installCases: [flags: string[], command: string][] = [
+    [[], "pnpm install"],
+    [["--preferOffline"], "pnpm install --prefer-offline"],
+    [["--prefer-offline"], "pnpm install --prefer-offline"],
+    [["--frozenLockFile"], "pnpm install --frozen-lockfile"],
+    [["--frozen-lockfile"], "pnpm install --frozen-lockfile"],
+    [["--frozen-lockfile", "--prefer-offline"], "pnpm install --frozen-lockfile --prefer-offline"],
+  ];
+
+  for (const [flags, command] of installCases) {
+    it(`install ${flags.join(" ") || "without flags"} runs ${command}`, () => {
+      const output = execFileSync(
+        process.execPath,
+        [cli, "install", "--dry", ...flags, "--cwd", cwd],
+        { encoding: "utf8", stdio: "pipe" },
+      );
+      expect(output.trim()).toBe(command);
+    });
+  }
 });
